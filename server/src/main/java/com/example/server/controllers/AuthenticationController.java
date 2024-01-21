@@ -24,20 +24,20 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity register(
+    public ResponseEntity<Object> register(
             @RequestBody RegisterRequest request
     ) {
-//        try {
+       try {
             System.out.println(request);
             Object data = service.register(request);
             return Respond.success(200,"I002",data);
-//        }
-//        catch (Exception e) {
-//            return Respond.fail(500,"E101",e);
-//        }
+       }
+       catch (Exception e) {
+           return Respond.fail(500,"E101",e.getStackTrace());
+       }
     }
     @PostMapping("/authenticate")
-    public ResponseEntity authenticate(
+    public ResponseEntity<Object> authenticate(
             @RequestBody Account request
     ) {
         return service.authenticate(request);

@@ -15,6 +15,7 @@ import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -60,11 +61,16 @@ public class User implements UserDetails {
     private Profile profile;
     @Relationship(type = "FRIEND", direction = Relationship.Direction.OUTGOING)
     private Set<User> friends;
+    @Relationship(type = "FRIEND_REQUEST_SENT", direction = Relationship.Direction.OUTGOING)
+    private Set<FriendRequest> friendRequestsSent = new HashSet<>();
+    @Relationship(type = "FRIEND_REQUEST_RECEIVED", direction = Relationship.Direction.INCOMING)
+    private Set<FriendRequest> friendRequestsReceived = new HashSet<>();
+    @Relationship(type = "CONTAINS_ATTACHMENT", direction = Relationship.Direction.OUTGOING)
+    private Set<PostAttachment> attachments = new HashSet<>();
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }
-
     @Override
     public boolean isAccountNonExpired() {
         return false;
@@ -84,4 +90,24 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
+
+    public void addFriend(User friend) {
+        this.friends.add(friend);
+    }
+
+    // Phương thức xóa bạn bè
+    public void removeFriend(User friend) {
+        this.friends.remove(friend);
+    }
+
+    public void sendFriendRequest(User friend, String status) {
+        FriendRequest friendRequest = FriendRequest.builder()
+                .createdAt(LocalDateTime.now())
+                .receiver(friend)
+                .status(status)
+                .build();
+        this.friendRequestsSent.add(friendRequest);
+        friend.friendRequestsReceived.add(friendRequest);
+    }
+
 }

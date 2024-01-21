@@ -57,17 +57,12 @@ public class AuthenticationService {
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("access_token",jwtToken);
         data.put("refresh_token",refreshToken);
+        data.put("user_id",savedUser.getId());
         return data;
     }
 
-    public ResponseEntity authenticate(Account request) {
+    public ResponseEntity<Object> authenticate(Account request) {
         System.out.println(request);
-//        authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(
-//                        request.getEmail(),
-//                        request.getPassword()
-//                )
-//        );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
         System.out.println(request.getEmail());
@@ -79,6 +74,7 @@ public class AuthenticationService {
             Map<String, Object> data = new HashMap<String, Object>();
             data.put("access_token",jwtToken);
             data.put("refresh_token",refreshToken);
+            data.put("user_id",user.getId());
             return Respond.success(200,"I001",data);
         }
         else {
