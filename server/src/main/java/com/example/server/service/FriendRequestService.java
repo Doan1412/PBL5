@@ -1,10 +1,12 @@
 package com.example.server.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
+import com.example.server.models.FriendRequest;
 import org.springframework.stereotype.Service;
 
-import com.example.server.models.FriendRequest;
 import com.example.server.models.User;
 import com.example.server.repositories.FriendRequestRepository;
 import com.example.server.repositories.UserRepository;
@@ -20,12 +22,14 @@ public class FriendRequestService {
     public void addFriend(String request_id){
         FriendRequest friendRequest = friendRequestRepository.findById(request_id).orElseThrow();
         friendRequest.accept();
-        friendRequestRepository.save(friendRequest);
-        Map<String,Object> users = friendRequestRepository.findUsersByFriendRequestId(request_id).orElseThrow();
-        User user_1 = (User) users.get("u1");
-        User user_2 = (User) users.get("u2");
+        System.out.println(friendRequest.getSenderId());
+        User user_1 = repository.findById(friendRequest.getSenderId()).orElseThrow();
+        User user_2 = repository.findById(friendRequest.getReceiverrId()).orElseThrow();
+        System.out.println(user_1);
+////        System.out.println(user_2);
         user_1.addFriend(user_2);
-        user_2.addFriend(user_1);
+//        user_2.addFriend(user_1);
+        friendRequestRepository.save(friendRequest);
         repository.save(user_1);
         repository.save(user_2);
     }
@@ -42,8 +46,13 @@ public class FriendRequestService {
     public void sendFriendRequest(String user_id, String friend_id) {
         User user = repository.findById(user_id).orElseThrow();
         User friend = repository.findById(friend_id).orElseThrow();
-        user.sendFriendRequest(friend, "PENDING");
-        repository.save(user);
+        FriendRequest friendRequest = FriendRequest.builder()
+                .created_at(LocalDateTime.now())
+                .status("PENDING")
+                .sender(user)
+                .receiver(friend)
+                .build();
+        friendRequestRepository.save(friendRequest);
     }
 
     public void rejectFriendRequest(String request_id){
@@ -54,5 +63,10 @@ public class FriendRequestService {
 
     public void deleteFriendRequest(String request_id){
         friendRequestRepository.deleteById(request_id);
+    }
+
+    public List<FriendRequest> getListFriendRequest(String user_id){
+        System.out.println(user_id);
+        return friendRequestRepository.findByReceiverId(user_id);
     }
 }

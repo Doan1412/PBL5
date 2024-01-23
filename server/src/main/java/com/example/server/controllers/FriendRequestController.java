@@ -1,16 +1,17 @@
 package com.example.server.controllers;
 
+import com.example.server.DTO.FriendRequestDTO;
+import com.example.server.models.FriendRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.server.service.FriendRequestService;
 import com.example.server.utils.Respond;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/friend")
@@ -18,14 +19,14 @@ import lombok.RequiredArgsConstructor;
 public class FriendRequestController {
     private final FriendRequestService service;
 
-    @PostMapping("/add_friend")
-    public ResponseEntity<Object> add_friend(@RequestBody String request_id) {
+    @PostMapping("/add_friend/{request_id}")
+    public ResponseEntity<Object> add_friend(@PathVariable String request_id) {
         try {
             service.addFriend(request_id);
             return Respond.success(200,"I001","");
         }
         catch (Exception e){
-            return Respond.fail(500,"E001",e.getStackTrace());
+            return Respond.fail(500,"E001",e.getMessage());
         }
     }
 
@@ -60,5 +61,16 @@ public class FriendRequestController {
             return Respond.fail(500,"E001",e.getStackTrace());
         }
     }
-    
+    @GetMapping("/request/user/{user_id}")
+    public ResponseEntity<Object> getListFriendRequest(@PathVariable String user_id){
+        try {
+            System.out.println(user_id);
+            List<FriendRequestDTO> data = service.getListFriendRequest(user_id).stream().map(FriendRequest::toDto).collect(Collectors.toList());
+            System.out.println(data);
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
 }

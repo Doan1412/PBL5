@@ -1,6 +1,8 @@
 package com.example.server.models;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
@@ -30,4 +32,10 @@ public class Post {
     private LocalDateTime updated_at;
     @Relationship(type = "POSTED_BY", direction = Relationship.Direction.INCOMING)
     private User user;
+    @Relationship(type = "CONTAINS", direction = Relationship.Direction.OUTGOING)
+    private Set<PostAttachment> attachments = new HashSet<>();
+
+    public void addAttachment(PostAttachment attachment) {
+        this.attachments.add(attachment);
+    }
 }

@@ -25,5 +25,5 @@ public class Token {
     public boolean revoked;
     public boolean expired;
     @Relationship(type = "HAS_TOKEN", direction = Relationship.Direction.INCOMING)
-    private User user;
+    private Account account;
 }

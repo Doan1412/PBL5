@@ -10,9 +10,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account {
+public class AccountDTO {
     @NotBlank
     private String email;
     @NotBlank
     private String password;
+    public String getUsername(){
+        return this.email;
+    }
 }

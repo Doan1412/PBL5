@@ -1,8 +1,7 @@
 package com.example.server.controllers;
 
-import com.example.server.DTO.Account;
+import com.example.server.DTO.AccountDTO;
 import com.example.server.DTO.RegisterRequest;
-import com.example.server.models.User;
 import com.example.server.service.AuthenticationService;
 import com.example.server.utils.Respond;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,7 +37,7 @@ public class AuthenticationController {
     }
     @PostMapping("/authenticate")
     public ResponseEntity<Object> authenticate(
-            @RequestBody Account request
+            @RequestBody AccountDTO request
     ) {
         return service.authenticate(request);
     }

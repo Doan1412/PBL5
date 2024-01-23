@@ -1,5 +1,7 @@
 package com.example.server.models;
 
+import java.time.LocalDateTime;
+
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Id;
@@ -21,4 +23,5 @@ public class PostAttachment {
     private String id;
     private String url;
     private String type;
+    private LocalDateTime created_at;
 }

@@ -1,7 +1,9 @@
 package com.example.server.service;
 
+import com.example.server.models.Profile;
 import com.example.server.models.User;
 import com.example.server.repositories.FriendRequestRepository;
+import com.example.server.repositories.ProfileRepository;
 import com.example.server.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

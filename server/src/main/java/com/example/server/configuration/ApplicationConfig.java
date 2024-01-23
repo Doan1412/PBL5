@@ -1,5 +1,7 @@
 package com.example.server.configuration;
 
+import com.example.server.models.Account;
+import com.example.server.repositories.AccountRepository;
 import com.example.server.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UserRepository repository;
+    private final AccountRepository repository;
 
     @Bean
     public UserDetailsService userDetailsService() {
