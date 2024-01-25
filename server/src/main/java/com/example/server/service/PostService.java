@@ -2,6 +2,7 @@ package com.example.server.service;
 
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class PostService {
                         .created_at(LocalDateTime.now())
                         .updated_at(LocalDateTime.now())
                         .user(user)
+                        .attachments(new HashSet<>())
                         .build();
         for (MultipartFile attachment : attachments) {
             String attachmentUrl = saveAttachment(attachment);
@@ -39,8 +41,8 @@ public class PostService {
                                                         .type(determineAttachmentType(attachment))
                                                         .created_at(LocalDateTime.now())
                                                         .build();
-            attachmentRepository.save(postAttachment);
-            post.addAttachment(postAttachment);
+            PostAttachment savedAttachment = attachmentRepository.save(postAttachment);
+            post.addAttachment(savedAttachment);
         }
         userRepository.save(user);
         return repository.save(post);

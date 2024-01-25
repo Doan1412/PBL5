@@ -3,10 +3,7 @@ package com.example.server.controllers;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Paths;
 
@@ -17,6 +14,7 @@ import com.example.server.service.PostService;
 import com.example.server.utils.Respond;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/post")
@@ -47,6 +45,17 @@ public class PostController {
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getStackTrace());
+        }
+    }
+
+    @PostMapping("/{user_id}")
+    public ResponseEntity<Object> post(@PathVariable String user_id,@RequestParam("attach") MultipartFile[] file, @RequestParam String content) {
+        try {
+            Object data = service.create(user_id,content,file);
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
         }
     }
 }

@@ -49,8 +49,6 @@ public class User {
     private Account account;
     @Relationship(type = "FRIEND", direction = Relationship.Direction.OUTGOING)
     private Set<User> friends;
-    @Relationship(type = "POSTED_BY", direction = Relationship.Direction.OUTGOING)
-    private Set<Post> posts = new HashSet<>();
 
     public void addFriend(User friend) {
         this.friends.add(friend);
