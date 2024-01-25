@@ -17,6 +17,7 @@ import com.example.server.repositories.UserRepository;
 import org.springframework.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
+import org.webjars.NotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,13 @@ public class PostService {
     private final PostRepository repository;
     private final UserRepository userRepository;
     private final PostAttachmentRepository attachmentRepository;
+    public int getLikeCount(String postId) {
+        return repository.getLikeCount(postId);
+    }
+
+    public int getShareCount(String postId) {
+        return repository.getShareCount(postId);
+    }
 
     public Object create(String user_id, String content, MultipartFile[] attachments) {
         User user = userRepository.findById(user_id).orElseThrow();
@@ -58,27 +66,39 @@ public class PostService {
         }
     }
     private String saveAttachment(MultipartFile file) {
-    try {
-        // Lưu trữ tệp trong thư mục resources/static
-        String uploadDir = "src/main/resources/static/attachments/";
+        try {
+            // Lưu trữ tệp trong thư mục resources/static
+            String uploadDir = "src/main/resources/static/attachments/";
 
-        // Đảm bảo thư mục tồn tại, nếu không tạo mới
-        java.nio.file.Path uploadPath = java.nio.file.Paths.get(uploadDir).toAbsolutePath().normalize();
-        java.nio.file.Files.createDirectories(uploadPath);
+            // Đảm bảo thư mục tồn tại, nếu không tạo mới
+            java.nio.file.Path uploadPath = java.nio.file.Paths.get(uploadDir).toAbsolutePath().normalize();
+            java.nio.file.Files.createDirectories(uploadPath);
 
-        // Đặt lại tên tệp để tránh trùng lặp
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String newFileName = UUID.randomUUID().toString() + "-" + StringUtils.cleanPath(fileName);
+            // Đặt lại tên tệp để tránh trùng lặp
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            String newFileName = UUID.randomUUID().toString() + "-" + StringUtils.cleanPath(fileName);
 
-        // Lưu tệp
-        java.nio.file.Path filePath = uploadPath.resolve(newFileName).normalize();
-        java.nio.file.Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            // Lưu tệp
+            java.nio.file.Path filePath = uploadPath.resolve(newFileName).normalize();
+            java.nio.file.Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-        // Trả về đường dẫn tương đối
-        return "/attachments/" + newFileName;
-    } catch (Exception ex) {
-        throw new RuntimeException("Lỗi khi lưu tệp đính kèm: " + ex.getMessage());
+            // Trả về đường dẫn tương đối
+            return newFileName;
+        } catch (Exception ex) {
+            throw new RuntimeException("Lỗi khi lưu tệp đính kèm: " + ex.getMessage());
+        }
     }
-}
+    public void likePost(String postId, String user_id) {
+        Post post = repository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));
+        User user = userRepository.findById(user_id).orElseThrow(()->new NotFoundException("User not found"));
+        post.getLikes().add(user);
+        repository.save(post);
+    }
 
+    public void sharePost(String postId, String user_id) {
+        Post post = repository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));
+        User user = userRepository.findById(user_id).orElseThrow(()->new NotFoundException("User not found"));
+        post.getShares().add(user);
+        repository.save(post);
+    }
 }

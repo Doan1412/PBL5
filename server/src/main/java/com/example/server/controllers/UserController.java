@@ -1,5 +1,6 @@
 package com.example.server.controllers;
 
+import com.example.server.DTO.UserDTO;
 import com.example.server.models.User;
 import com.example.server.service.UserService;
 import com.example.server.utils.Respond;
@@ -36,14 +37,15 @@ public class UserController {
         }
     }
 
-    @PutMapping("{id}/update")
-    public ResponseEntity<Object> update(User user) {
+    @PutMapping("/update")
+    public ResponseEntity<Object> update( @RequestBody  UserDTO user) {
         try {
+            System.out.println(user);
             User u = service.updateInfo(user);
-            return Respond.success(200,"I001",u);
+            return Respond.success(200,"I001","");
         }
         catch (Exception e){
-            return Respond.fail(500,"E001",e.getStackTrace());
+            return Respond.fail(500,"E001",e.getMessage());
         }
     }
 

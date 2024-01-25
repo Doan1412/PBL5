@@ -21,4 +21,8 @@ public interface FriendRequestRepository extends Neo4jRepository<FriendRequest, 
     List<FriendRequest> getReceivedFriendRequests(@Param("userId") String userId);
 //    @Query("MATCH (f:FriendRequest)-[:RECEIVE_FRIEND_REQUEST]->(u:User{id: $user_id}) RETURN f,other")
     List<FriendRequest> findByReceiverId( String user_id);
+    @Query("MATCH (user1:User)-[r:Friend]->(user2:User) " +
+            "WHERE ( user1.id = $id1 AND user2.id = $id2 ) OR ( user1.id = $id2 AND user2.id = $id1 ) " +
+            "DETACH DELETE r")
+    void deleteByUserId(@Param("id1") String id1,@Param("id2") String id2);
 }

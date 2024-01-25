@@ -1,5 +1,6 @@
 package com.example.server.service;
 
+import com.example.server.DTO.UserDTO;
 import com.example.server.models.Profile;
 import com.example.server.models.User;
 import com.example.server.repositories.FriendRequestRepository;
@@ -22,8 +23,15 @@ public class UserService {
         return repository.findById(id).orElseThrow();
     }
 
-    public User updateInfo(User user){
-        return repository.save(user);
+    public User updateInfo(UserDTO user){
+        User u = repository.findById(user.getId()).orElseThrow();
+        u.setFirstname(user.getFirstname());
+        u.setBirth(user.getBirth());
+        u.setGender(user.getGender());
+        u.setPhone(user.getPhone());
+        u.setLastname(user.getLastname());
+        u.setUsername(user.getUsername());
+        return repository.save(u);
     }
 
     public void delete(String id) {

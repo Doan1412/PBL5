@@ -30,8 +30,8 @@ public class FriendRequestController {
         }
     }
 
-    @PostMapping("/unfriend")
-    public ResponseEntity<Object> unfriend(@RequestBody String id1, String id2) {
+    @PostMapping("/unfriend/{id1}/{id2}")
+    public ResponseEntity<Object> unfriend(@PathVariable String id1, @PathVariable String id2) {
         try {
             service.unfriend(id1,id2);
             return Respond.success(200,"I001","");
@@ -68,6 +68,17 @@ public class FriendRequestController {
             List<FriendRequestDTO> data = service.getListFriendRequest(user_id).stream().map(FriendRequest::toDto).collect(Collectors.toList());
             System.out.println(data);
             return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/cancel/{request_id}")
+    public  ResponseEntity<Object> cancel(@PathVariable String request_id) {
+        try {
+            service.deleteFriendRequest(request_id);
+            return Respond.success(200,"I001","");
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getMessage());

@@ -34,6 +34,12 @@ public class Post {
     private User user;
     @Relationship(type = "CONTAINS", direction = Relationship.Direction.OUTGOING)
     private Set<PostAttachment> attachments = new HashSet<>();
+    @Relationship(type = "LIKED_BY", direction = Relationship.Direction.INCOMING)
+    private Set<User> likes = new HashSet<>();
+    @Relationship(type = "SHARED_BY", direction = Relationship.Direction.INCOMING)
+    private Set<User> shares = new HashSet<>();
+//    @Relationship(type = "COMMENTED_BY", direction = Relationship.Direction.OUTGOING)
+//    private Set<Comment> comments = new HashSet<>();
 
     public void addAttachment(PostAttachment attachment) {
         this.attachments.add(attachment);

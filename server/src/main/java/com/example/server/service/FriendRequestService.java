@@ -37,8 +37,9 @@ public class FriendRequestService {
     public void unfriend(String id1, String id2){
         User user_1 = repository.findById(id1).orElseThrow();
         User user_2 = repository.findById(id2).orElseThrow();
-        user_1.removeFriend(user_2);
-        user_2.removeFriend(user_1);
+        friendRequestRepository.deleteByUserId(user_1.getId(), user_2.getId());
+        user_1.getFriends().remove(user_2);
+        user_2.getFriends().remove(user_1);
         repository.save(user_1);
         repository.save(user_2);
     }
