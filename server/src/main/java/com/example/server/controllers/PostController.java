@@ -1,5 +1,6 @@
 package com.example.server.controllers;
 
+import com.example.server.models.Post;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +55,37 @@ public class PostController {
     public ResponseEntity<Object> post(@PathVariable String user_id,@RequestParam("attach") MultipartFile[] file, @RequestParam String content) {
         try {
             Object data = service.create(user_id,content,file);
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+
+    @PostMapping("{post_id}/like/{user_id}")
+    public ResponseEntity<Object> like (@PathVariable String post_id, @PathVariable String user_id){
+        try {
+            service.likePost(post_id,user_id);
+            return Respond.success(200,"I001","");
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @PostMapping("{post_id}/share/{user_id}")
+    public ResponseEntity<Object> share (@PathVariable String post_id, @PathVariable String user_id){
+        try {
+            service.sharePost(post_id,user_id);
+            return Respond.success(200,"I001","");
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @GetMapping("/{post_id}")
+    public ResponseEntity<Object> get_by_id(@PathVariable String post_id){
+        try {
+            Post data = service.get_by_id(post_id);
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){

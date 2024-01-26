@@ -1,5 +1,6 @@
 package com.example.server.controllers;
 
+import com.example.server.DTO.PostDTO;
 import com.example.server.DTO.UserDTO;
 import com.example.server.models.User;
 import com.example.server.service.UserService;
@@ -54,6 +55,16 @@ public class UserController {
         try {
             service.delete(id);
             return Respond.success(200,"I001","");
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getStackTrace());
+        }
+    }
+    @GetMapping("/{user_id}/post")
+    public ResponseEntity<Object> get_post_by_user(@PathVariable String user_id){
+        try {
+            List<PostDTO> data = service.get_post_by_user(user_id);
+            return Respond.success(200,"I001",data);
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getStackTrace());

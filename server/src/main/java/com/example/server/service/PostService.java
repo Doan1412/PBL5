@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.UUID;
 
+import com.example.server.DTO.PostDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -100,5 +101,9 @@ public class PostService {
         User user = userRepository.findById(user_id).orElseThrow(()->new NotFoundException("User not found"));
         post.getShares().add(user);
         repository.save(post);
+    }
+    public Post get_by_id(String post_id){
+        Post post = repository.findById(post_id).orElseThrow(() -> new NotFoundException("Post not found"));
+        return post;
     }
 }
