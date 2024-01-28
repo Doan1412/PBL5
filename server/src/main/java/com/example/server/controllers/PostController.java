@@ -1,9 +1,11 @@
 package com.example.server.controllers;
 
+import com.example.server.models.Account;
 import com.example.server.models.Post;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,10 +53,10 @@ public class PostController {
         }
     }
 
-    @PostMapping("/{user_id}")
-    public ResponseEntity<Object> post(@PathVariable String user_id,@RequestParam("attach") MultipartFile[] file, @RequestParam String content) {
+    @PostMapping("/create")
+    public ResponseEntity<Object> post(@RequestParam("attach") MultipartFile[] file, @RequestParam String content,@AuthenticationPrincipal Account account) {
         try {
-            Object data = service.create(user_id,content,file);
+            Object data = service.create(account.getId(), content,file);
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
@@ -62,20 +64,20 @@ public class PostController {
         }
     }
 
-    @PostMapping("{post_id}/like/{user_id}")
-    public ResponseEntity<Object> like (@PathVariable String post_id, @PathVariable String user_id){
+    @PostMapping("{post_id}/like")
+    public ResponseEntity<Object> like (@PathVariable String post_id, @AuthenticationPrincipal Account account){
         try {
-            service.likePost(post_id,user_id);
+            service.likePost(post_id, account.getId());
             return Respond.success(200,"I001","");
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
-    @PostMapping("{post_id}/share/{user_id}")
-    public ResponseEntity<Object> share (@PathVariable String post_id, @PathVariable String user_id){
+    @PostMapping("{post_id}/share")
+    public ResponseEntity<Object> share (@PathVariable String post_id,@RequestParam String caption, @AuthenticationPrincipal Account account){
         try {
-            service.sharePost(post_id,user_id);
+            service.sharePost(post_id, account.getId(),caption);
             return Respond.success(200,"I001","");
         }
         catch (Exception e){
@@ -87,6 +89,17 @@ public class PostController {
         try {
             Post data = service.get_by_id(post_id);
             return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @DeleteMapping("/{post_id}")
+    public ResponseEntity<Object> delete (@PathVariable String post_id){
+        try {
+            System.out.println(post_id);
+            service.delete_post(post_id);
+            return Respond.success(200,"I001","");
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getMessage());

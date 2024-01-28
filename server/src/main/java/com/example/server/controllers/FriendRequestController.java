@@ -1,8 +1,14 @@
 package com.example.server.controllers;
 
+import com.example.server.DTO.DisplayUserDTO;
 import com.example.server.DTO.FriendRequestDTO;
+import com.example.server.DTO.UserDTO;
+import com.example.server.models.Account;
 import com.example.server.models.FriendRequest;
+import com.example.server.models.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.server.service.FriendRequestService;
@@ -10,6 +16,7 @@ import com.example.server.utils.Respond;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,20 +37,20 @@ public class FriendRequestController {
         }
     }
 
-    @PostMapping("/unfriend/{id1}/{id2}")
-    public ResponseEntity<Object> unfriend(@PathVariable String id1, @PathVariable String id2) {
+    @PostMapping("/unfriend/{id1}")
+    public ResponseEntity<Object> unfriend(@PathVariable String id1,  @AuthenticationPrincipal Account account) {
         try {
-            service.unfriend(id1,id2);
+            service.unfriend(account.getId(),id1);
             return Respond.success(200,"I001","");
         }
         catch (Exception e){
-            return Respond.fail(500,"E001",e.getStackTrace());
+            return Respond.fail(500,"E001",e.getMessage());
         }
     }
-    @PostMapping("/{user_id}/send_friend_request/{friend_id}")
-    public ResponseEntity<Object> sendFriendRequest(@PathVariable String user_id, @PathVariable String friend_id){
+    @PostMapping("/send_friend_request/{friend_id}")
+    public ResponseEntity<Object> sendFriendRequest(@PathVariable String friend_id,@AuthenticationPrincipal Account account){
         try {
-            service.sendFriendRequest(user_id,friend_id);
+            service.sendFriendRequest(account.getId(),friend_id);
             return Respond.success(200,"I001","");
         }
         catch (Exception e){
@@ -61,11 +68,11 @@ public class FriendRequestController {
             return Respond.fail(500,"E001",e.getStackTrace());
         }
     }
-    @GetMapping("/request/user/{user_id}")
-    public ResponseEntity<Object> getListFriendRequest(@PathVariable String user_id){
+    @GetMapping("/request")
+    public ResponseEntity<Object> getListFriendRequest(@AuthenticationPrincipal Account account){
         try {
-            System.out.println(user_id);
-            List<FriendRequestDTO> data = service.getListFriendRequest(user_id).stream().map(FriendRequest::toDto).collect(Collectors.toList());
+//            System.out.println(user_id);
+            List<FriendRequestDTO> data = service.getListFriendRequest(account.getId()).stream().map(FriendRequest::toDto).collect(Collectors.toList());
             System.out.println(data);
             return Respond.success(200,"I001",data);
         }
@@ -79,6 +86,17 @@ public class FriendRequestController {
         try {
             service.deleteFriendRequest(request_id);
             return Respond.success(200,"I001","");
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @GetMapping("/list/{user_id}")
+    public ResponseEntity<Object> get_list_friend(@PathVariable String user_id){
+        try {
+            System.out.println(user_id);
+            List<DisplayUserDTO> data = service.get_list_friend(user_id);
+            return Respond.success(200,"I001",data);
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getMessage());

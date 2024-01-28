@@ -37,10 +37,10 @@ public class Post {
     private Set<PostAttachment> attachments = new HashSet<>();
     @Relationship(type = "LIKED_BY", direction = Relationship.Direction.INCOMING)
     private Set<User> likes = new HashSet<>();
-    @Relationship(type = "SHARED_BY", direction = Relationship.Direction.INCOMING)
-    private Set<User> shares = new HashSet<>();
-//    @Relationship(type = "COMMENTED_BY", direction = Relationship.Direction.OUTGOING)
-//    private Set<Comment> comments = new HashSet<>();
+    @Relationship(type = "SHARED_POST", direction = Relationship.Direction.OUTGOING)
+    private Set<SharedPost> sharedPosts = new HashSet<>();
+    @Relationship(type = "COMMENTED_ON", direction = Relationship.Direction.INCOMING)
+    private Set<Comment> comments = new HashSet<>();
 
     public void addAttachment(PostAttachment attachment) {
         this.attachments.add(attachment);

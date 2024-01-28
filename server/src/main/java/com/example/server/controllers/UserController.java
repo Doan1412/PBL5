@@ -7,6 +7,8 @@ import com.example.server.service.UserService;
 import com.example.server.utils.Respond;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,6 +67,15 @@ public class UserController {
         try {
             List<PostDTO> data = service.get_post_by_user(user_id);
             return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getStackTrace());
+        }
+    }
+    @GetMapping("/test")
+    public ResponseEntity<Object> test( @AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            return Respond.success(200,"I001",userDetails);
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getStackTrace());

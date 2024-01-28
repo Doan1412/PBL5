@@ -24,30 +24,27 @@ public class User {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
     private String id;
-    @NotNull
     @NotBlank
     private String firstname;
-    @NotNull
     @NotBlank
     private String lastname;
-    @NotNull
     @NotBlank
     private String username;
     @JsonFormat(pattern="yyyy-MM-dd",timezone="Indochina")
-    @NotNull
     @NotBlank
     private Date birth;
-    @NotNull
     @NotBlank
     private String gender; //gioi tinh
-    @NotNull
     @NotBlank
     private String phone;
     @Relationship(type = "HAS_PROFILE", direction = Relationship.Direction.OUTGOING)
     private Profile profile;
     @Relationship(type = "HAS_ACCOUNT", direction = Relationship.Direction.OUTGOING)
+    @JsonIgnore
     private Account account;
+
     @Relationship(type = "FRIEND", direction = Relationship.Direction.OUTGOING)
+    @JsonIgnore
     private Set<User> friends;
 
     public void addFriend(User friend) {

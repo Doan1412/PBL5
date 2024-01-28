@@ -62,7 +62,7 @@ public class UserService {
                     .fullName(post.getUser().getFirstname()+" "+post.getUser().getLastname())
                     .id(post.getId())
                     .like_count(post.getLikes().size())
-                    .share_count(post.getShares().size())
+                    .share_count(post.getSharedPosts().size())
             .build();
             data.add(p);
         }));

@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.UUID;
 
 import com.example.server.DTO.PostDTO;
+import com.example.server.models.SharedPost;
+import com.example.server.repositories.SharePostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +28,7 @@ public class PostService {
     private final PostRepository repository;
     private final UserRepository userRepository;
     private final PostAttachmentRepository attachmentRepository;
+    private final SharePostRepository sharePostRepository;
     public int getLikeCount(String postId) {
         return repository.getLikeCount(postId);
     }
@@ -34,14 +37,15 @@ public class PostService {
         return repository.getShareCount(postId);
     }
 
-    public Object create(String user_id, String content, MultipartFile[] attachments) {
-        User user = userRepository.findById(user_id).orElseThrow();
+    public Object create(String account_id, String content, MultipartFile[] attachments) {
+        User user = userRepository.findByAccount_Id(account_id).orElseThrow();
         Post post = Post.builder()
                         .content(content)
                         .created_at(LocalDateTime.now())
                         .updated_at(LocalDateTime.now())
                         .user(user)
                         .attachments(new HashSet<>())
+                        .sharedPosts(new HashSet<>())
                         .build();
         for (MultipartFile attachment : attachments) {
             String attachmentUrl = saveAttachment(attachment);
@@ -89,21 +93,34 @@ public class PostService {
             throw new RuntimeException("Lỗi khi lưu tệp đính kèm: " + ex.getMessage());
         }
     }
-    public void likePost(String postId, String user_id) {
+    public void likePost(String postId, String acc_id) {
         Post post = repository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));
-        User user = userRepository.findById(user_id).orElseThrow(()->new NotFoundException("User not found"));
+        User user = userRepository.findByAccount_Id(acc_id).orElseThrow(()->new NotFoundException("User not found"));
         post.getLikes().add(user);
         repository.save(post);
     }
 
-    public void sharePost(String postId, String user_id) {
-        Post post = repository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));
-        User user = userRepository.findById(user_id).orElseThrow(()->new NotFoundException("User not found"));
-        post.getShares().add(user);
-        repository.save(post);
+    public void sharePost(String postId, String acc_id, String caption) {
+        User user = userRepository.findByAccount_Id(acc_id).orElseThrow();
+        Post originalPost = repository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));
+
+        SharedPost sharedPost = new SharedPost();
+        sharedPost.setCaption(caption);
+        sharedPost.setOriginalPost(originalPost);
+        sharedPost.setSharedBy(user);
+
+        originalPost.getSharedPosts().add(sharedPost);
+
+        sharePostRepository.save(sharedPost);
+        repository.save(originalPost);
     }
     public Post get_by_id(String post_id){
         Post post = repository.findById(post_id).orElseThrow(() -> new NotFoundException("Post not found"));
         return post;
     }
+    public void delete_post(String post_id){
+        attachmentRepository.deleteByPostId(post_id);
+        repository.deleteById(post_id);
+    }
+
 }

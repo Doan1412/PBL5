@@ -1,7 +1,9 @@
 package com.example.server.service;
 
 import com.example.server.models.Profile;
+import com.example.server.models.User;
 import com.example.server.repositories.ProfileRepository;
+import com.example.server.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,9 +17,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProfileService {
     private final ProfileRepository repository;
-
-    public Object update(String profile_id, String bio, MultipartFile avatar, MultipartFile cover){
-        Profile profile = repository.findById(profile_id).orElseThrow();
+    private final UserRepository userRepository;
+    public Object update(String acc_id, String bio, MultipartFile avatar, MultipartFile cover){
+        User user = userRepository.findByAccount_Id(acc_id).orElseThrow();
+        Profile profile = user.getProfile();
         String avatar_url = save(avatar,"avatar");
         String cover_url = save(cover,"cover");
         profile.setBio(bio);
