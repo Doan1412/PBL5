@@ -1,7 +1,11 @@
+'use client'
 import React from "react";
 import loginImage from "@/static/images";
 import Image from "next/image";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google';
+import http from "../utils/http";
+
+const clientId = 'YOUR_GOOGLE_CLIENT_ID';
 
 export default function LoginPage() {
   // const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
@@ -29,9 +33,15 @@ export default function LoginPage() {
   //   return value;
   // };
 
-  // const handleGoogleButtonClick = () => {
-  //   window.location.href = "http://localhost:8080/oauth2/authorization/google";
-  // };
+  const responseGoogle = async (response: any) => {
+    const res = await http.post("/auth/google", response.credential, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+    });
+    //Xu ly luu accesstoken, refreshtoken nhu bth
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center">
@@ -64,9 +74,11 @@ export default function LoginPage() {
             <p className="text-center text-sm">OR</p>
             <hr className="border-gray-400" />
           </div>
-
-          <GoogleLogin onSuccess={() => {}} />
-
+          <GoogleOAuthProvider clientId="YOUR CLIENT ID">
+            <GoogleLogin
+              onSuccess={responseGoogle}
+            />
+          </GoogleOAuthProvider>
           <div className="mt-5 text-xs border-b border-[#002D74] py-4 text-[#002D74]">
             <a href="#">Forgot your password?</a>
           </div>
