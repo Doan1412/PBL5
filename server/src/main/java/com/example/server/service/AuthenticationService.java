@@ -43,7 +43,6 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final ProfileRepository profileRepository;
-    private final RestTemplate restTemplate;
 
     public Object register(RegisterRequest request) {
         var account = Account.builder()
@@ -143,6 +142,7 @@ public class AuthenticationService {
     }
 
     public ResponseEntity<Object> loginOAuthGoogle(String googleToken) {
+        RestTemplate restTemplate= new RestTemplate();
         JSONObject jsonObject = restTemplate
                 .exchange(
                         "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + googleToken,
