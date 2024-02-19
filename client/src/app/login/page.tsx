@@ -5,8 +5,6 @@ import Image from "next/image";
 import { GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google';
 import http from "../utils/http";
 
-const clientId = 'YOUR_GOOGLE_CLIENT_ID';
-
 export default function LoginPage() {
   // const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
   //   e.preventDefault();
@@ -34,7 +32,7 @@ export default function LoginPage() {
   // };
 
   const responseGoogle = async (response: any) => {
-    const res = await http.post("/auth/google", response.credential, {
+    const res = await http.post(`${process.env.BACKEND_URL}/api/v1/auth/google?google_token=${response.credential}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json;charset=UTF-8",
@@ -74,11 +72,16 @@ export default function LoginPage() {
             <p className="text-center text-sm">OR</p>
             <hr className="border-gray-400" />
           </div>
-          <GoogleOAuthProvider clientId="YOUR CLIENT ID">
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}> {/* chỉnh lại giúp chỗ ni zới éc o éc hong bíc chỉnh className */}
+            <GoogleOAuthProvider clientId={process.env.clientId}>
             <GoogleLogin
-              onSuccess={responseGoogle}
-            />
-          </GoogleOAuthProvider>
+                onSuccess={responseGoogle}
+                onError={() => {
+                  console.log('Login Failed');
+                }}
+              />
+            </GoogleOAuthProvider>
+          </div>
           <div className="mt-5 text-xs border-b border-[#002D74] py-4 text-[#002D74]">
             <a href="#">Forgot your password?</a>
           </div>

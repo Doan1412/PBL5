@@ -142,6 +142,7 @@ public class AuthenticationService {
     }
 
     public ResponseEntity<Object> loginOAuthGoogle(String googleToken) {
+        try{
         RestTemplate restTemplate= new RestTemplate();
         JSONObject jsonObject = restTemplate
                 .exchange(
@@ -154,7 +155,6 @@ public class AuthenticationService {
         if (jsonObject != null) {
             email = jsonObject.get("email").toString();
         }
-
         if (email != null) {
             Optional<Account> accountOptional = repository.findByEmail(email);
             if (accountOptional.isPresent()) {
@@ -198,6 +198,9 @@ public class AuthenticationService {
         } else {
             // Handle case when email is null
             return Respond.fail(400,"E001","Email null");
+        }}
+        catch (Exception e) {
+            return Respond.fail(400,"E001",e.getStackTrace());
         }
     }
 
