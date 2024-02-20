@@ -4,10 +4,14 @@ import loginImage from "@/static/images";
 import Image from "next/image";
 import { GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google';
 import http from "../utils/http";
+import { hasCookie, setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
+
 
 const clientId = 'YOUR_GOOGLE_CLIENT_ID';
 
 export default function LoginPage() {
+  const router = useRouter();
   // const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
   //   e.preventDefault();
   //   const payload = await AuthService.login(email, password);
@@ -33,14 +37,28 @@ export default function LoginPage() {
   //   return value;
   // };
 
-  const responseGoogle = async (response: any) => {
-    const res = await http.post("/auth/google", response.credential, {
+  const responseGoogle = (response: any) => {
+    const res = fetch(`http://localhost:8080/api/v1/auth/google?google_token=`+response.credential, {
+      method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json;charset=UTF-8",
       },
+    }).then((r) => r.json())
+    .then((d) => {
+      if (d.status == 200) {
+        // dispatch(successPopUp(d.message));
+        setCookie("access_token", d.data.token, { maxAge: 60 * 60 * 24 * 7 });
+        setCookie("refresh_token", d.data.token, { maxAge: 60 * 60 * 24 * 7 });
+        setCookie("user_id", d.data.user_id, { maxAge: 60 * 60 * 24 * 7 });
+        // if (d.data.role == 2) router.push("/admin");
+        router.push("/home");
+      } else {
+        // dispatch(failPopUp(d.message));
+        // dispatch(resetLoading());
+      }
     });
-    //Xu ly luu accesstoken, refreshtoken nhu bth
+    console.log(res);
   };
 
   return (
@@ -74,7 +92,7 @@ export default function LoginPage() {
             <p className="text-center text-sm">OR</p>
             <hr className="border-gray-400" />
           </div>
-          <GoogleOAuthProvider clientId="YOUR CLIENT ID">
+          <GoogleOAuthProvider clientId="303942813242-uge6doerks1rcdckfshsurfmos97019a.apps.googleusercontent.com">
             <GoogleLogin
               onSuccess={responseGoogle}
             />
