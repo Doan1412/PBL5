@@ -96,10 +96,9 @@ public class PostService {
     public void likePost(String postId, String acc_id) {
         Post post = repository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));
         User user = userRepository.findByAccount_Id(acc_id).orElseThrow(()->new NotFoundException("User not found"));
-        post.getLikes().add(user);
+        post.setLikes(post.getLikes()+1);
         repository.save(post);
     }
-
     public void sharePost(String postId, String acc_id, String caption) {
         User user = userRepository.findByAccount_Id(acc_id).orElseThrow();
         Post originalPost = repository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));

@@ -31,12 +31,11 @@ public class Post {
     private String content;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
+    private int likes;
     @Relationship(type = "POSTED_BY", direction = Relationship.Direction.INCOMING)
     private User user;
     @Relationship(type = "CONTAINS", direction = Relationship.Direction.OUTGOING)
     private Set<PostAttachment> attachments = new HashSet<>();
-    @Relationship(type = "LIKED_BY", direction = Relationship.Direction.INCOMING)
-    private Set<User> likes = new HashSet<>();
     @Relationship(type = "SHARED_POST", direction = Relationship.Direction.OUTGOING)
     private Set<SharedPost> sharedPosts = new HashSet<>();
     @Relationship(type = "COMMENTED_ON", direction = Relationship.Direction.INCOMING)

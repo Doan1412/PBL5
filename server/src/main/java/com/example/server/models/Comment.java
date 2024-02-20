@@ -27,6 +27,8 @@ public class Comment {
 
     private String content;
 
+    private int likes;
+
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="Indochina")
     private LocalDateTime createdAt;
 
@@ -35,6 +37,5 @@ public class Comment {
 
     @Relationship(type = "COMMENTED_BY", direction = Relationship.Direction.OUTGOING)
     private User user;
-    @Relationship(type = "LIKED_BY", direction = Relationship.Direction.INCOMING)
-    private Set<User> likes = new HashSet<>();
+
 }
