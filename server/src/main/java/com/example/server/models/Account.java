@@ -29,9 +29,7 @@ public class Account implements UserDetails {
     @NotNull
     @NotBlank
     private String email;
-    @NotNull
     @JsonIgnore
-    @NotBlank
     private String password;
 
     @Override

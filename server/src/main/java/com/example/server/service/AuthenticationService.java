@@ -18,15 +18,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.json.simple.JSONObject;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -86,16 +90,7 @@ public class AuthenticationService {
         System.out.println(acc);
         System.out.println(passwordEncoder.encode(request.getPassword()));
         if(passwordEncoder.matches(request.getPassword(), acc.getPassword())){
-            var jwtToken = jwtService.generateToken(acc);
-            var refreshToken = jwtService.generateRefreshToken(acc);
-            revokeAllUserTokens(acc);
-            saveUserToken(acc, jwtToken);
-            Map<String, Object> data = new HashMap<String, Object>();
-            data.put("access_token",jwtToken);
-            data.put("refresh_token",refreshToken);
-            String user_id = repository.findUserIdByAccountId(acc.getId());
-            data.put("user_id",user_id);
-            return Respond.success(200,"I001",data);
+            return createAuthRes(acc);
         }
         else {
             return Respond.fail(400,"E001","Wrong password");
@@ -144,5 +139,81 @@ public class AuthenticationService {
                 new ObjectMapper().writeValue(response.getOutputStream(), Respond.success(200,"I002",data));
             }
         }
+    }
+
+    public ResponseEntity<Object> loginOAuthGoogle(String googleToken) {
+        try{
+        RestTemplate restTemplate= new RestTemplate();
+        JSONObject jsonObject = restTemplate
+                .exchange(
+                        "https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + googleToken,
+                        HttpMethod.GET,
+                        null,
+                        JSONObject.class)
+                .getBody();
+        String email = null;
+        if (jsonObject != null) {
+            email = jsonObject.get("email").toString();
+        }
+        if (email != null) {
+            Optional<Account> accountOptional = repository.findByEmail(email);
+            if (accountOptional.isPresent()) {
+                return createAuthRes(accountOptional.get());
+            } else {
+                var account = Account.builder()
+                        .email(email)
+                        .build();
+                var profile = Profile.builder()
+                        .avatar_url(jsonObject.get("picture") != null
+                                ? jsonObject.get("picture").toString()
+                                : "")
+                        .bio("")
+                        .cover_url("")
+                        .build();
+                var savedProfile = profileRepository.save(profile);
+                var user = User.builder()
+                        .birth(null)
+                        .account(account)
+                        .phone(jsonObject.get("phoneNumber") != null
+                                ? jsonObject.get("phoneNumber").toString()
+                                : "")
+                        .gender(jsonObject.get("gender") != null
+                                ? jsonObject.get("gender").toString()
+                                : "")
+                        .firstname(jsonObject.get("given_name") != null
+                                ? jsonObject.get("given_name").toString()
+                                : "")
+                        .lastname(jsonObject.get("family_name") != null
+                                ? jsonObject.get("family_name").toString()
+                                : "")
+                        .username(jsonObject.get("name") != null
+                                ? jsonObject.get("name").toString()
+                                : "")
+                        .profile(savedProfile)
+                        .build();
+                var savedUser = userRepository.save(user);
+                var savedAccount = repository.save(account);
+                return createAuthRes(savedAccount);
+            }
+        } else {
+            // Handle case when email is null
+            return Respond.fail(400,"E001","Email null");
+        }}
+        catch (Exception e) {
+            return Respond.fail(400,"E001",e.getStackTrace());
+        }
+    }
+
+    private ResponseEntity<Object> createAuthRes(Account acc) {
+        var jwtToken = jwtService.generateToken(acc);
+        var refreshToken = jwtService.generateRefreshToken(acc);
+        revokeAllUserTokens(acc);
+        saveUserToken(acc, jwtToken);
+        Map<String, Object> data = new HashMap<String, Object>();
+        data.put("access_token",jwtToken);
+        data.put("refresh_token",refreshToken);
+        String user_id = repository.findUserIdByAccountId(acc.getId());
+        data.put("user_id",user_id);
+        return Respond.success(200,"I001",data);
     }
 }
