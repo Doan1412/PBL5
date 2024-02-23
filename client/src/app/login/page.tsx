@@ -4,34 +4,6 @@ import Image from "next/image";
 import { GoogleLogin } from "@react-oauth/google";
 
 export default function LoginPage() {
-  // const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   const payload = await AuthService.login(email, password);
-  //   if (payload) {
-  //     const { access_token, refresh_token, auth_user } = payload;
-  //     setCookie("access_token", access_token, {
-  //       maxAge: ACCESS_TOKEN_EXPIRE,
-  //     });
-  //     setCookie("refresh_token", refresh_token, {
-  //       maxAge: REFRESH_TOKEN_EXPIRE,
-  //     });
-  //     setUser(auth_user);
-  //     navigate("/courses");
-  //   } else {
-  //     setLoginFail(true);
-  //     return;
-  //   }
-  // };
-
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setLoginFail(false);
-  //   const value = e.target.value;
-  //   return value;
-  // };
-
-  // const handleGoogleButtonClick = () => {
-  //   window.location.href = "http://localhost:8080/oauth2/authorization/google";
-  // };
 
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center">
@@ -65,7 +37,7 @@ export default function LoginPage() {
             <hr className="border-gray-400" />
           </div>
 
-          <GoogleLogin onSuccess={() => {}} />
+          {/* <GoogleLogin onSuccess={() => {}} /> */}
 
           <div className="mt-5 text-xs border-b border-[#002D74] py-4 text-[#002D74]">
             <a href="#">Forgot your password?</a>
