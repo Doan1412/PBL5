@@ -1,9 +1,61 @@
+'use client'
 import React from "react";
 import loginImage from "@/static/images";
 import Image from "next/image";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google';
+import http from "../utils/http";
+import { hasCookie, setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
+
 
 export default function LoginPage() {
+  const router = useRouter();
+  // const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   const payload = await AuthService.login(email, password);
+  //   if (payload) {
+  //     const { access_token, refresh_token, auth_user } = payload;
+  //     setCookie("access_token", access_token, {
+  //       maxAge: ACCESS_TOKEN_EXPIRE,
+  //     });
+  //     setCookie("refresh_token", refresh_token, {
+  //       maxAge: REFRESH_TOKEN_EXPIRE,
+  //     });
+  //     setUser(auth_user);
+  //     navigate("/courses");
+  //   } else {
+  //     setLoginFail(true);
+  //     return;
+  //   }
+  // };
+
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setLoginFail(false);
+  //   const value = e.target.value;
+  //   return value;
+  // };
+
+  const responseGoogle = async (response: any) => {
+    const res = await http.post(`${process.env.BACKEND_URL}/api/v1/auth/google?google_token=${response.credential}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+    });
+    console.log(res);
+    if (res.data.status === 200) {
+      // dispatch(successPopUp(d.message));
+      setCookie("access_token", res.data.data.access_token, { maxAge: 60 * 60 * 24 * 7 });
+      setCookie("refresh_token", res.data.data.refresh_token      , { maxAge: 60 * 60 * 24 * 7 });
+      setCookie("user_id", res.data.data.user_id, { maxAge: 60 * 60 * 24 * 7 });
+      // if (d.data.role == 2) router.push("/admin");
+      router.push("/home");
+    } else {
+      // dispatch(failPopUp(d.message));
+      // dispatch(resetLoading());
+    };
+    console.log(res);
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center">
@@ -36,9 +88,16 @@ export default function LoginPage() {
             <p className="text-center text-sm">OR</p>
             <hr className="border-gray-400" />
           </div>
-
-          {/* <GoogleLogin onSuccess={() => {}} /> */}
-
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}> {/* chỉnh lại giúp chỗ ni zới éc o éc hong bíc chỉnh className */}
+            <GoogleOAuthProvider clientId={process.env.clientId}>
+            <GoogleLogin
+                onSuccess={responseGoogle}
+                onError={() => {
+                  console.log('Login Failed');
+                }}
+              />
+            </GoogleOAuthProvider>
+          </div>
           <div className="mt-5 text-xs border-b border-[#002D74] py-4 text-[#002D74]">
             <a href="#">Forgot your password?</a>
           </div>
