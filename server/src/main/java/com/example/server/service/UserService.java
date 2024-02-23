@@ -61,7 +61,7 @@ public class UserService {
                     .created_at(post.getCreated_at())
                     .fullName(post.getUser().getFirstname()+" "+post.getUser().getLastname())
                     .id(post.getId())
-                    .like_count(post.getLikes().size())
+                    .like_count(post.getLikes())
                     .share_count(post.getSharedPosts().size())
             .build();
             data.add(p);

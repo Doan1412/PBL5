@@ -36,7 +36,7 @@ export default function LoginPage() {
   // };
 
   const responseGoogle = async (response: any) => {
-    const res = await http.post(`${process.env.BACKEND_URL}/api/v1/auth/google?google_token=${response.credential}`, {
+    const res = await http.post(`${process.env.BACKEND_URL}/auth/google?google_token=${response.credential}`, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json;charset=UTF-8",
