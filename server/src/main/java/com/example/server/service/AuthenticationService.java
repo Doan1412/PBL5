@@ -186,9 +186,7 @@ public class AuthenticationService {
                         .lastname(jsonObject.get("family_name") != null
                                 ? jsonObject.get("family_name").toString()
                                 : "")
-                        .username(jsonObject.get("name") != null
-                                ? jsonObject.get("name").toString()
-                                : "")
+                        .username(String.format("%s_%s", jsonObject.get("given_name"), jsonObject.get("family_name")))
                         .profile(savedProfile)
                         .build();
                 var savedUser = userRepository.save(user);
