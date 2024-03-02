@@ -1,163 +1,110 @@
 "use client";
-import React, { useState } from "react";
-import {
-  AppstoreOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  ShopOutlined,
-  TeamOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-} from "@ant-design/icons";
-import { Layout, Menu, theme } from "antd";
-import type { MenuProps } from "antd";
+import React, { useState, useRef } from "react";
+import { MdSettings, MdInsertPhoto, MdEmojiEmotions } from "react-icons/md";
+import { BsFillCameraVideoFill } from "react-icons/bs";
+import Sidebar from "@/components/Sidebar";
+import userData from "../data/UserData";
+import Post from "@/components/Post";
+import Navigation from "@/components/Navigation";
 
-const { Header, Content, Sider } = Layout;
+interface User {
+  name: string;
+  username: string;
+  profilePic: string;
+  storyImage: string;
+  postImg: string;
+}
 
-const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}));
-
-const items: MenuProps["items"] = [
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  BarChartOutlined,
-  CloudOutlined,
-  AppstoreOutlined,
-  TeamOutlined,
-  ShopOutlined,
-].map((icon, index) => ({
-  key: String(index + 1),
-  icon: React.createElement(icon),
-  label: `nav ${index + 1}`,
-}));
-
-const items2: MenuProps["items"] = [
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-].map((icon, index) => {
-  const key = String(index + 1);
-
-  return {
-    key: `sub${key}`,
-    icon: React.createElement(icon),
-    label: `subnav ${key}`,
-
-    children: new Array(4).fill(null).map((_, j) => {
-      const subKey = index * 4 + j + 1;
-      return {
-        key: subKey,
-        label: `option${subKey}`,
-      };
-    }),
-  };
-});
-
-export default function Homepage () {
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
-
-  const [isHoveredLeft, setIsHoveredLeft] = useState(false);
-  const [isHoveredRight, setIsHoveredRight] = useState(false);
+const Page: React.FC = () => {
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const ref = useRef<HTMLDivElement>(null);
+  //   useClickOutside(() => setIsFocused(false), ref);
 
   return (
-      <Layout>
-        <Header
-          style={{
-            display: "flex",
-            alignItems: "center",
-            position: "sticky",
-            top: 0,
-            zIndex: 1,
-          }}
-        >
-          <div className="demo-logo" />
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            defaultSelectedKeys={["2"]}
-            items={items1}
-            style={{ flex: 1, minWidth: 0 }}
-          />
-        </Header>
-        <Layout style={{ marginLeft: 200, marginRight: 200 }}>
-          <Sider
-            width={200}
-            style={{
-              overflow: isHoveredLeft ? "auto" : "hidden",
-              height: "100vh",
-              position: "fixed",
-              left: 0,
-              top: 64,
-              bottom: 0,
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(204, 204, 204, 0.5) transparent",
-              overscrollBehaviorY: "none",
-            }}
-            onMouseEnter={() => setIsHoveredLeft(true)}
-            onMouseLeave={() => setIsHoveredLeft(false)}
-          >
-            <div className="demo-logo-vertical" />
-            <Menu
-              theme="dark"
-              mode="inline"
-              defaultSelectedKeys={["4"]}
-              items={items}
-            />
-          </Sider>
-          <Layout style={{ padding: "0 24px 24px" }}>
-            <Content
-              style={{
-                margin: "24px 16px 0",
-                overflow: "initial",
-                background: colorBgContainer,
-                borderRadius: borderRadiusLG,
-              }}
+    <>
+      <nav className="fixed z-40 w-full">
+        <Navigation />
+      </nav>
+      <main className="flex justify-between pt-3">
+        <section className="">
+          <Sidebar />
+        </section>
+        <section className="flex-1 flex flex-col max-w-2xl">
+          <div className="mainSection mt-20">
+            <div
+              ref={ref}
+              className={`createPostWidget ${isFocused ? "active" : ""}`}
             >
-              <div style={{ padding: 24, textAlign: "center" }}>
-                <p>nội dung dài</p>
-                {Array.from({ length: 100 }, (_, index) => (
-                  <React.Fragment key={index}>
-                    {index % 20 === 0 && index ? "thêm" : "..."}
-                    <br />
-                  </React.Fragment>
-                ))}
+              <div className="createInput">
+                {/* <img src="/assets/image/avatar_default.jpg" alt="" /> */}
+                <input
+                  type="text"
+                  placeholder="What's on your mind, Jhon Doe?"
+                  id="createNewPost"
+                  onFocus={() => setIsFocused(true)}
+                />
+                <button className="inBtn">Post</button>
               </div>
-            </Content>
-          </Layout>
-          <Sider
-            width={200}
-            style={{
-              overflow: isHoveredRight ? "auto" : "hidden",
-              height: "100vh",
-              position: "fixed",
-              right: 0,
-              top: 64,
-              bottom: 0,
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(204, 204, 204, 0.5) transparent",
-              overscrollBehaviorY: "none",
-            }}
-            onMouseEnter={() => setIsHoveredRight(true)}
-            onMouseLeave={() => setIsHoveredRight(false)}
-          >
-            <div className="demo-logo-vertical" />
-            <Menu
-              theme="dark"
-              mode="inline"
-              defaultSelectedKeys={["4"]}
-              items={items}
-            />
-          </Sider>
-        </Layout>
-      </Layout>
-
+              <div className="otherOptions">
+                <div className="option">
+                  <BsFillCameraVideoFill />
+                  <span>Go Live</span>
+                </div>
+                <div className="option">
+                  <MdInsertPhoto />
+                  <span>Photo/Video</span>
+                </div>
+                <div className="option">
+                  <MdEmojiEmotions />
+                  <span>Feeling/Activity</span>
+                </div>
+              </div>
+            </div>
+            {userData.map((user: User, index: number) => {
+              return <Post key={index} userData={user} />;
+            })}
+          </div>
+        </section>
+        <section className="">
+          <div className="rightSection mt-16">
+            <div className="requestWidget">
+              <h3>Requests</h3>
+              <div className="requestProfile">
+                <div className="details">
+                  <div className="profileImage">
+                    {/* <img src={"/assets/image/avatar_default.jpg"} alt="" /> */}
+                  </div>
+                  <div className="userDetails">
+                    <div className="name">Sophie Alexander</div>
+                    <div className="username">@johndoe</div>
+                  </div>
+                </div>
+                <div className="actions">
+                  <button className="actionBtn">Accept</button>
+                  <button className="actionBtn">Reject</button>
+                </div>
+              </div>
+              <div className="requestProfile">
+                <div className="details">
+                  <div className="profileImage">
+                    {/* <img src={"https://images.unsplash.com/photo-1505695716405-61e75ecc5bab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybCxib3l8fHx8fHwxNjg5NzcxMTE5&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"} alt="" /> */}
+                  </div>
+                  <div className="userDetails">
+                    <div className="name">Phillip Tønder</div>
+                    <div className="username">@philipTonder</div>
+                  </div>
+                </div>
+                <div className="actions">
+                  <button className="actionBtn">Accept</button>
+                  <button className="actionBtn">Reject</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </>
   );
 };
+
+export default Page;
