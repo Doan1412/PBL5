@@ -1,5 +1,6 @@
 package com.example.server.service;
 
+import com.example.server.DTO.RoomDTO;
 import com.example.server.models.ChatRoom;
 import com.example.server.models.User;
 import com.example.server.repositories.ChatRoomRepository;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -42,5 +44,18 @@ public class ChatRoomService {
                 .orElseThrow(() -> new NotFoundException("Chat room not found"));
 
         return chatRoom.getMembers();
+    }
+
+    public ChatRoom create(String id, RoomDTO roomDTO) {
+        ChatRoom room = ChatRoom.builder()
+                .name(roomDTO.getName())
+                .members(new HashSet<>())
+                .build();
+        roomDTO.getMembers_id().forEach((member_id)->{
+            User user = userRepository.findById(member_id)
+                    .orElseThrow(() -> new NotFoundException("User not found"));
+            room.getMembers().add(user);
+        });
+        return chatRoomRepository.save(room);
     }
 }

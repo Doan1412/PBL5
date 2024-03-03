@@ -23,6 +23,7 @@ public class ChatRoom {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
     private String id;
+    private String name;
     @Relationship(type = "MEMBER_OF", direction = Relationship.Direction.INCOMING)
-    Set<User> members = new HashSet<>();
+    private Set<User> members = new HashSet<>();
 }

@@ -9,6 +9,7 @@ import com.example.server.repositories.ChatRoomRepository;
 import com.example.server.repositories.UserRepository;
 import com.example.server.service.MessageService;
 import com.example.server.utils.Respond;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-@Controller
+@RestController
+@RequestMapping("/messages")
 @RequiredArgsConstructor
 public class MessageController {
     @Autowired
@@ -35,7 +37,7 @@ public class MessageController {
     private UserRepository userRepository; 
     
     @MessageMapping("/message")
-    public void send(@Payload MessageDTO msg {
+    public void send(@Payload MessageDTO msg) {
         Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findById(msg.getRoomId());
         if (chatRoomOptional.isPresent()) {
             Message message = messageService.sendMessage(msg.getSenderId(), msg.getRoomId(), msg.getContent());
