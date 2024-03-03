@@ -5,11 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
-import ch.qos.logback.classic.Logger;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
-
-import org.slf4j.LoggerFactory;
 
 import java.io.DataInputStream;
 import java.net.ServerSocket;
@@ -36,9 +33,9 @@ public class SocketConfiguration {
           try {
             while(true) {
               Socket soc = server.accept();
-              String user = new DataInputStream(soc.getInputStream()).readUTF();
-              log.info("New client connected: " + soc.getLocalAddress() + " " + user);
-              new SocketNotiHandle(soc, user).start();
+              String userId = new DataInputStream(soc.getInputStream()).readUTF();
+              log.info("New client connected: " + soc.getLocalAddress() + " " + userId);
+              new SocketNotiHandle(soc, userId).start();
             }
           } catch (Exception e) {
             // Handle exception here
