@@ -33,9 +33,22 @@ public class SocketConfiguration {
           try {
             while(true) {
               Socket soc = server.accept();
-              String userId = new DataInputStream(soc.getInputStream()).readUTF();
-              log.info("New client connected: " + soc.getLocalAddress() + " " + userId);
-              new SocketNotiHandle(soc, userId).start();
+              soc.setSoTimeout(100); // Set timeout to 100ms
+              try {
+                String token = new DataInputStream(soc.getInputStream()).readUTF();
+                if (token != null && !token.isEmpty()) {  //Check token here
+                  String userId = "";
+                  log.info("New client connected: " + soc.getLocalAddress() + " " + userId);
+                  new SocketNotiHandle(soc, userId).start();
+                }
+                else {
+                  soc.close(); // Close the connection if token is not received within 100ms
+                }
+              } catch (Exception e) {
+                // Handle exception here
+                log.error("Error reading user id: " + e.getMessage());
+                soc.close(); // Close the connection if user id is not received within 100ms
+              }
             }
           } catch (Exception e) {
             // Handle exception here
