@@ -32,5 +32,6 @@ public class SharedPost {
 
     @Relationship(type = "SHARED_BY", direction = Relationship.Direction.OUTGOING)
     private User sharedBy;
-    private int likes;
+    @Relationship(type = "LIKED_BY", direction = Relationship.Direction.INCOMING)
+    private Set<User> likes = new HashSet<>();
 }

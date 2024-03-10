@@ -31,7 +31,8 @@ public class Post {
     private String content;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
-    private int likes;
+    @Relationship(type = "LIKED_BY", direction = Relationship.Direction.INCOMING)
+    private Set<User> likes = new HashSet<>();
     @Relationship(type = "POSTED_BY", direction = Relationship.Direction.INCOMING)
     private User user;
     @Relationship(type = "CONTAINS", direction = Relationship.Direction.OUTGOING)

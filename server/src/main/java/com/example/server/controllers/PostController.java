@@ -1,15 +1,16 @@
 package com.example.server.controllers;
 
+import com.example.server.DTO.PostDTO;
 import com.example.server.models.Account;
 import com.example.server.models.Post;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.springframework.core.io.Resource;
 
@@ -104,5 +105,15 @@ public class PostController {
         catch (Exception e){
             return Respond.fail(500,"E001",e.getMessage());
         }
+    }
+    @GetMapping("/homepage")
+    public ResponseEntity<Object> getTimelinePosts(
+            @RequestParam int skip,
+            @RequestParam int limit,
+            @AuthenticationPrincipal Account account
+    ) {
+        System.out.println("on");
+        List<PostDTO> timelinePosts = service.getTimelinePosts(account.getId(), skip, limit);
+        return Respond.success(200,"I001",timelinePosts);
     }
 }

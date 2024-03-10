@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +33,7 @@ public class CommentService {
 
         comment.setPost(post);
         comment.setUser(user);
-        comment.setLikes(0);
+        comment.setLikes(new HashSet<>());
         return commentRepository.save(comment);
     }
 

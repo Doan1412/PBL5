@@ -2,21 +2,18 @@ package com.example.server.service;
 
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import com.example.server.DTO.DisplayUserDTO;
 import com.example.server.DTO.PostDTO;
-import com.example.server.models.SharedPost;
-import com.example.server.repositories.SharePostRepository;
+import com.example.server.models.*;
+import com.example.server.repositories.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.server.models.Post;
-import com.example.server.models.PostAttachment;
-import com.example.server.models.User;
-import com.example.server.repositories.PostAttachmentRepository;
-import com.example.server.repositories.PostRepository;
-import com.example.server.repositories.UserRepository;
 import org.springframework.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -29,9 +26,9 @@ public class PostService {
     private final UserRepository userRepository;
     private final PostAttachmentRepository attachmentRepository;
     private final SharePostRepository sharePostRepository;
-    public int getLikeCount(String postId) {
-        return repository.getLikeCount(postId);
-    }
+//    public int getLikeCount(String postId) {
+//        return repository.getLikeCount(postId);
+//    }
 
     public int getShareCount(String postId) {
         return repository.getShareCount(postId);
@@ -96,7 +93,7 @@ public class PostService {
     public void likePost(String postId, String acc_id) {
         Post post = repository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));
         User user = userRepository.findByAccount_Id(acc_id).orElseThrow(()->new NotFoundException("User not found"));
-        post.setLikes(post.getLikes()+1);
+        post.getLikes().add(user);
         repository.save(post);
     }
     public void sharePost(String postId, String acc_id, String caption) {
@@ -121,5 +118,37 @@ public class PostService {
         attachmentRepository.deleteByPostId(post_id);
         repository.deleteById(post_id);
     }
+    public List<PostDTO> getTimelinePosts(String acc_id, int skip, int limit) {
+        System.out.println(acc_id);
 
+        User user = userRepository.findByAccount_Id(acc_id).orElseThrow(()->new NotFoundException("User not found"));
+        List<String> list = repository.getTimelinePosts(user.getId(), skip, limit);
+        List<PostDTO> data = new ArrayList<>();
+        list.forEach((post_id -> {
+            Post post = repository.findById(post_id).orElseThrow();
+            Set like = new HashSet<>();
+            post.getLikes().forEach(u -> {
+                DisplayUserDTO userDTO = DisplayUserDTO.builder()
+                        .id(u.getId())
+                        .avatar_url(u.getProfile().getAvatar_url())
+                        .fullname(u.getFirstname()+" "+u.getLastname())
+                        .username(u.getUsername())
+                        .build();
+                like.add(userDTO);
+            });
+            PostDTO p = PostDTO.builder()
+                    .userId(post.getUser().getId())
+                    .attachments(post.getAttachments())
+                    .avatarUrl(post.getUser().getProfile().getAvatar_url())
+                    .content(post.getContent())
+                    .created_at(post.getCreated_at())
+                    .fullName(post.getUser().getFirstname()+" "+post.getUser().getLastname())
+                    .id(post.getId())
+                    .like(like)
+                    .share_count(post.getSharedPosts().size())
+                    .build();
+            data.add(p);
+        }));
+        return data;
+    }
 }

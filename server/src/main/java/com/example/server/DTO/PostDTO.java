@@ -1,6 +1,7 @@
 package com.example.server.DTO;
 
 import com.example.server.models.PostAttachment;
+import com.example.server.models.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +24,7 @@ public class PostDTO {
     private String userId;
     private String fullName;
     private String avatarUrl;
-    private int like_count;
+    private Set<Object> like;
     private int share_count;
     private Set<PostAttachment> attachments = new HashSet<>();
 }

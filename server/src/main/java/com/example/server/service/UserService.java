@@ -1,5 +1,6 @@
 package com.example.server.service;
 
+import com.example.server.DTO.DisplayUserDTO;
 import com.example.server.DTO.PostDTO;
 import com.example.server.DTO.UserDTO;
 import com.example.server.models.Post;
@@ -12,8 +13,8 @@ import com.example.server.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -50,9 +51,21 @@ public class UserService {
         repository.deleteById(id);
     }
     public List<PostDTO> get_post_by_user (String user_id){
-        List<Post> list = postRepository.findByUserId(user_id);
+        List<Post> list = postRepository.findByUserId(user_id).stream()
+                .sorted(Comparator.comparing(Post::getCreated_at))
+                .collect(Collectors.toList());;
         List<PostDTO> data = new ArrayList<>();
         list.forEach((post -> {
+            Set<Object> like = new HashSet<>();
+            post.getLikes().forEach(user -> {
+                DisplayUserDTO userDTO = DisplayUserDTO.builder()
+                        .id(user.getId())
+                        .avatar_url(user.getProfile().getAvatar_url())
+                        .fullname(user.getFirstname()+" "+user.getLastname())
+                        .username(user.getUsername())
+                        .build();
+                like.add(userDTO);
+            });
             PostDTO p = PostDTO.builder()
                     .userId(post.getUser().getId())
                     .attachments(post.getAttachments())
@@ -61,7 +74,7 @@ public class UserService {
                     .created_at(post.getCreated_at())
                     .fullName(post.getUser().getFirstname()+" "+post.getUser().getLastname())
                     .id(post.getId())
-                    .like_count(post.getLikes())
+                    .like(like)
                     .share_count(post.getSharedPosts().size())
             .build();
             data.add(p);
