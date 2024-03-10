@@ -25,7 +25,7 @@ const Page: React.FC = () => {
       <nav className="fixed z-40 w-full">
         <Navigation />
       </nav>
-      <main className="flex justify-between pt-3">
+      <main className="flex justify-between pt-3 bg-gray-100">
         <section className="">
           <Sidebar />
         </section>

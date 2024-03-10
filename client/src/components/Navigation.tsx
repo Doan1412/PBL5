@@ -1,10 +1,5 @@
 import React from "react";
 import {
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-  Link,
   Input,
   DropdownItem,
   DropdownTrigger,
@@ -17,15 +12,16 @@ import {
 import logoImage from "@/static/images/logoImage.png";
 import SearchIcon from "./SearchIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
-import { faBell } from "@fortawesome/free-solid-svg-icons";
-import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
+// import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
+import { FaFacebookMessenger } from "react-icons/fa";
+import { FaBell } from "react-icons/fa";
+import { FaUserGroup } from "react-icons/fa6";
 
 export default function Navigation() {
   return (
     <div>
       <nav className="bg-white p-0">
-        <ul className="flex items-center justify-between px-2 shadow-md">
+        <ul className="hidden lg:flex items-center justify-between px-2 shadow-md">
           <li>
             <Image
               className="mx-auto mr-3 ml-3"
@@ -53,7 +49,7 @@ export default function Navigation() {
           <li>
             <div
               id="home"
-              className="tooltip active w-24 h-12 flex justify-center items-center ml-72 hover:bg-gray-300 hover:border rounded-lg"
+              className="tooltip active w-24 h-12 flex justify-center items-center ml-72 hover:bg-gray-300 hover:border rounded-lg "
               data-tooltip="Home"
             >
               <button className="button hover:translate-y-[-3px]">
@@ -73,7 +69,7 @@ export default function Navigation() {
             </div>
           </li>
           <li>
-            <div className="w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg">
+            <div className="w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg shrink">
               <button className="button hover:translate-y-[-3px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -126,17 +122,17 @@ export default function Navigation() {
           <li id="space1" className="flex-1"></li>
           <li>
             <button className="w-12 h-12 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 mr-1">
-              <FontAwesomeIcon icon={faUserGroup} className="text-xl" />
+              <FaUserGroup size={23} />
             </button>
           </li>
           <li>
             <button className="w-12 h-12 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 mr-1">
-              <FontAwesomeIcon icon={faFacebookMessenger} className="text-xl" />
+              <FaFacebookMessenger size={23} />
             </button>
           </li>
           <li>
             <button className="w-12 h-12 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200">
-              <FontAwesomeIcon className="text-xl" icon={faBell} />
+              <FaBell size={23} />
             </button>
           </li>
           <li>
