@@ -36,7 +36,7 @@ public class CommentService {
 
         comment.setPost(post);
         comment.setUser(user);
-        comment.setLikes(new HashSet<>());
+        comment.setLikes(0);
         return commentRepository.save(comment);
     }
 
