@@ -1,6 +1,5 @@
 package com.example.server.repositories;
 
-import com.example.server.models.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import com.example.server.models.Post;

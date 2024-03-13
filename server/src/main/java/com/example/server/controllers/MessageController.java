@@ -2,21 +2,16 @@ package com.example.server.controllers;
 
 import com.example.server.DTO.MessageDTO;
 import com.example.server.models.ChatRoom;
-import com.example.server.models.Comment;
 import com.example.server.models.Message;
 import com.example.server.models.User;
 import com.example.server.repositories.ChatRoomRepository;
 import com.example.server.repositories.UserRepository;
 import com.example.server.service.MessageService;
-import com.example.server.utils.Respond;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -5,7 +5,6 @@ import com.example.server.models.User;
 import com.example.server.repositories.ProfileRepository;
 import com.example.server.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;

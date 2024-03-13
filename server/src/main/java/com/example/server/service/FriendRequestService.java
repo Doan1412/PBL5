@@ -1,12 +1,9 @@
 package com.example.server.service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.example.server.DTO.DisplayUserDTO;
-import com.example.server.DTO.UserDTO;
 import com.example.server.models.FriendRequest;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +12,6 @@ import com.example.server.repositories.FriendRequestRepository;
 import com.example.server.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
-import org.webjars.NotFoundException;
 
 @Service
 @RequiredArgsConstructor

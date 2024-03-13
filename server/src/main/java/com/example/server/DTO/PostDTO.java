@@ -1,7 +1,6 @@
 package com.example.server.DTO;
 
 import com.example.server.models.PostAttachment;
-import com.example.server.models.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
