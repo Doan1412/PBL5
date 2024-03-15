@@ -42,7 +42,7 @@ public class PostService {
                         .updated_at(LocalDateTime.now())
                         .user(user)
                         .attachments(new HashSet<>())
-                        .sharedPosts(new HashSet<>())
+//                        .sharedPosts(new HashSet<>())
                         .build();
         for (MultipartFile attachment : attachments) {
             String attachmentUrl = saveAttachment(attachment);
@@ -105,7 +105,7 @@ public class PostService {
         sharedPost.setOriginalPost(originalPost);
         sharedPost.setSharedBy(user);
 
-        originalPost.getSharedPosts().add(sharedPost);
+//        originalPost.getSharedPosts().add(sharedPost);
 
         sharePostRepository.save(sharedPost);
         repository.save(originalPost);
@@ -136,6 +136,7 @@ public class PostService {
                         .build();
                 like.add(userDTO);
             });
+            int share_count = repository.getShareCount(post_id);
             PostDTO p = PostDTO.builder()
                     .userId(post.getUser().getId())
                     .attachments(post.getAttachments())
@@ -145,7 +146,7 @@ public class PostService {
                     .fullName(post.getUser().getFirstname()+" "+post.getUser().getLastname())
                     .id(post.getId())
                     .like(like)
-                    .share_count(post.getSharedPosts().size())
+                    .share_count(share_count)
                     .build();
             data.add(p);
         }));

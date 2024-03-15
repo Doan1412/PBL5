@@ -56,6 +56,7 @@ public class UserService {
                 .collect(Collectors.toList());;
         List<PostDTO> data = new ArrayList<>();
         list.forEach((post -> {
+            int share_count = postRepository.getShareCount(post.getId());
             Set<Object> like = new HashSet<>();
             post.getLikes().forEach(user -> {
                 DisplayUserDTO userDTO = DisplayUserDTO.builder()
@@ -75,7 +76,7 @@ public class UserService {
                     .fullName(post.getUser().getFirstname()+" "+post.getUser().getLastname())
                     .id(post.getId())
                     .like(like)
-                    .share_count(post.getSharedPosts().size())
+                    .share_count(share_count)
             .build();
             data.add(p);
         }));

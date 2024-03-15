@@ -37,8 +37,6 @@ public class Post {
     private User user;
     @Relationship(type = "CONTAINS", direction = Relationship.Direction.OUTGOING)
     private Set<PostAttachment> attachments = new HashSet<>();
-    @Relationship(type = "SHARED_POST", direction = Relationship.Direction.OUTGOING)
-    private Set<SharedPost> sharedPosts = new HashSet<>();
     @Relationship(type = "COMMENTED_ON", direction = Relationship.Direction.INCOMING)
     private Set<Comment> comments = new HashSet<>();
 

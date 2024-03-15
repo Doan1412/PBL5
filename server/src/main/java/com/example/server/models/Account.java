@@ -10,6 +10,7 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,6 +18,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 @Node("Account")
 @Data
 @NoArgsConstructor
@@ -31,10 +35,14 @@ public class Account implements UserDetails {
     private String email;
     @JsonIgnore
     private String password;
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Set<GrantedAuthority> authorities=new HashSet<>();
+        var sga=new SimpleGrantedAuthority(role.name());
+        authorities.add(sga);
+        return authorities;
     }
 
     @Override
