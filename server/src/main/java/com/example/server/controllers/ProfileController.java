@@ -1,6 +1,6 @@
 package com.example.server.controllers;
 
-import com.example.server.models.Account;
+import com.example.server.models.Entity.Account;
 import com.example.server.service.ProfileService;
 import com.example.server.utils.Respond;
 import lombok.RequiredArgsConstructor;

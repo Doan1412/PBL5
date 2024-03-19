@@ -3,15 +3,16 @@ package com.example.server.service;
 import com.example.server.DTO.AccountDTO;
 import com.example.server.DTO.RegisterRequest;
 import com.example.server.configuration.JwtService;
-import com.example.server.models.Account;
-import com.example.server.models.Profile;
-import com.example.server.models.Token;
-import com.example.server.models.User;
+import com.example.server.models.Entity.Account;
+import com.example.server.models.Entity.Profile;
+import com.example.server.models.Entity.Token;
+import com.example.server.models.Entity.User;
+import com.example.server.models.Enum.AccountStatus;
+import com.example.server.models.Enum.Role;
 import com.example.server.repositories.AccountRepository;
 import com.example.server.repositories.ProfileRepository;
 import com.example.server.repositories.TokenRepository;
 import com.example.server.repositories.UserRepository;
-import com.example.server.utils.PasswordUtil;
 import com.example.server.utils.Respond;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +22,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.json.simple.JSONObject;
@@ -45,9 +45,14 @@ public class AuthenticationService {
     private final ProfileRepository profileRepository;
 
     public Object register(RegisterRequest request) {
+        if (repository.findByEmail(request.getEmail()).isPresent()) {
+            throw new RuntimeException("Email đã tồn tại trong hệ thống");
+        }
         var account = Account.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .role(String.valueOf(Role.USER))
+                .status(AccountStatus.ACTIVE.toString())
                 .build();
         var profile = Profile.builder()
                 .avatar_url("")

@@ -1,8 +1,8 @@
 package com.example.server.controllers;
 
 import com.example.server.DTO.PostDTO;
-import com.example.server.models.Account;
-import com.example.server.models.Post;
+import com.example.server.models.Entity.Account;
+import com.example.server.models.Entity.Post;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -115,5 +115,16 @@ public class PostController {
         System.out.println("on");
         List<PostDTO> timelinePosts = service.getTimelinePosts(account.getId(), skip, limit);
         return Respond.success(200,"I001",timelinePosts);
+    }
+
+    @PostMapping("/comment")
+    public ResponseEntity<Object> reply(@RequestParam("attach") MultipartFile[] file,@RequestParam String post_id,  @RequestParam String content,@AuthenticationPrincipal Account account) {
+        try {
+            Object data = service.comment(post_id,account.getId(), content,file);
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
     }
 }

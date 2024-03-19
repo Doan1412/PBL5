@@ -1,9 +1,9 @@
 package com.example.server.service;
 
 import com.example.server.DTO.CommentDTO;
-import com.example.server.models.Comment;
-import com.example.server.models.Post;
-import com.example.server.models.User;
+import com.example.server.models.Entity.Comment;
+import com.example.server.models.Entity.Post;
+import com.example.server.models.Entity.User;
 import com.example.server.repositories.CommentRepository;
 import com.example.server.repositories.PostRepository;
 import com.example.server.repositories.UserRepository;

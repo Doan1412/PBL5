@@ -1,6 +1,9 @@
 package com.example.server.configuration;
 
 
+import com.example.server.models.Entity.Account;
+import com.example.server.models.Enum.AccountStatus;
+import com.example.server.repositories.AccountRepository;
 import com.example.server.repositories.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,6 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final TokenRepository tokenRepository;
+    private final AccountRepository accountRepository;
 
     @Override
     protected void doFilterInternal(
@@ -50,6 +54,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
         userEmail = jwtService.extractUsername(jwt);
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            Account acc = accountRepository.findByEmail(userEmail).orElseThrow();
+            if (acc != null && acc.getStatus() == AccountStatus.BANNED.name()) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
             System.out.println(userEmail);
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             var isTokenValid = tokenRepository.findByToken(jwt)

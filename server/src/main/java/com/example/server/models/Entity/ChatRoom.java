@@ -1,4 +1,4 @@
-package com.example.server.models;
+package com.example.server.models.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,16 +10,19 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
-@Node("Profile")
+import java.util.HashSet;
+import java.util.Set;
+
+@Node("room")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Profile {
+public class ChatRoom {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
     private String id;
-    private String avatar_url;
-    private String bio;
-    private String cover_url;
+    private String name;
+    @Relationship(type = "MEMBER_OF", direction = Relationship.Direction.INCOMING)
+    private Set<User> members = new HashSet<>();
 }

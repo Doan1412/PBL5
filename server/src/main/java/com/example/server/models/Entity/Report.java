@@ -1,4 +1,4 @@
-package com.example.server.models;
+package com.example.server.models.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,8 +17,9 @@ public class Report {
     @GeneratedValue
     private Long id;
     private Post post;
-    private String userId;
+    private User user;
     private String reason;
     private LocalDateTime createdAt;
+    private String status;
 }
 

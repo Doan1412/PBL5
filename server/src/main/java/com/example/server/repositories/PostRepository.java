@@ -1,9 +1,8 @@
 package com.example.server.repositories;
 
-import com.example.server.models.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
-import com.example.server.models.Post;
+import com.example.server.models.Entity.Post;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,6 +23,6 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
             "SKIP $skip LIMIT $limit")
     List<String> getTimelinePosts(String id, int skip, int limit);
 
-
-
+    @Query("MATCH (p1:Post {id: $postId}), (p2:Post {id: $commentId}) CREATE (p1)-[:COMMENTED_ON]->(p2)")
+    void addCommentToPost(@Param("postId") String postId,@Param("commentId") String commentId);
 }

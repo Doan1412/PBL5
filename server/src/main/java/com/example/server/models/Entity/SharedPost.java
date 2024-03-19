@@ -1,4 +1,4 @@
-package com.example.server.models;
+package com.example.server.models.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

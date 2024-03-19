@@ -1,11 +1,9 @@
-package com.example.server.models;
+package com.example.server.models.Entity;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.example.server.DTO.PostDTO;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -38,7 +36,7 @@ public class Post {
     @Relationship(type = "CONTAINS", direction = Relationship.Direction.OUTGOING)
     private Set<PostAttachment> attachments = new HashSet<>();
     @Relationship(type = "COMMENTED_ON", direction = Relationship.Direction.INCOMING)
-    private Set<Comment> comments = new HashSet<>();
+    private Set<Post> comments = new HashSet<>();
 
     public void addAttachment(PostAttachment attachment) {
         this.attachments.add(attachment);

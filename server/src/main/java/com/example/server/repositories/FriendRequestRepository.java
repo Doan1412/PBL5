@@ -1,19 +1,15 @@
 package com.example.server.repositories;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import com.example.server.DTO.DisplayUserDTO;
-import com.example.server.DTO.UserDTO;
-import com.example.server.models.User;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.example.server.models.FriendRequest;
+import com.example.server.models.Entity.FriendRequest;
 
 @Repository
 public interface FriendRequestRepository extends Neo4jRepository<FriendRequest, String> {

@@ -1,15 +1,12 @@
 package com.example.server.controllers;
 
 import com.example.server.DTO.RoomDTO;
-import com.example.server.models.Account;
-import com.example.server.models.User;
+import com.example.server.models.Entity.Account;
 import com.example.server.service.ChatRoomService;
-import com.example.server.service.UserService;
 import com.example.server.utils.Respond;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

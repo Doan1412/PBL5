@@ -1,5 +1,4 @@
-package com.example.server.models;
-
+package com.example.server.models.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,21 +10,20 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
-import java.util.Date;
-
-@Node("message")
+@Node("Token")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class Message {
+public class Token {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
     private String id;
-    @Relationship(type = "SENT_MESSAGE", direction = Relationship.Direction.INCOMING)
-    private User sender;
-    @Relationship(type = "RECIPIENT_MESSAGE", direction = Relationship.Direction.INCOMING)
-    private ChatRoom room;
-    private String content;
-    private Date timestamp;
+
+    private String token;
+    public String tokenType = "BEARER";
+    public boolean revoked;
+    public boolean expired;
+    @Relationship(type = "HAS_TOKEN", direction = Relationship.Direction.INCOMING)
+    private Account account;
 }

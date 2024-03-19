@@ -3,14 +3,13 @@ package com.example.server.service;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import com.example.server.DTO.DisplayUserDTO;
 import com.example.server.DTO.PostDTO;
-import com.example.server.models.*;
+import com.example.server.models.Entity.Post;
+import com.example.server.models.Entity.PostAttachment;
+import com.example.server.models.Entity.SharedPost;
+import com.example.server.models.Entity.User;
 import com.example.server.repositories.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +33,7 @@ public class PostService {
         return repository.getShareCount(postId);
     }
 
-    public Object create(String account_id, String content, MultipartFile[] attachments) {
+    public Post create(String account_id, String content, MultipartFile[] attachments) {
         User user = userRepository.findByAccount_Id(account_id).orElseThrow();
         Post post = Post.builder()
                         .content(content)
@@ -42,6 +41,7 @@ public class PostService {
                         .updated_at(LocalDateTime.now())
                         .user(user)
                         .attachments(new HashSet<>())
+                        .comments(new HashSet<>())
 //                        .sharedPosts(new HashSet<>())
                         .build();
         for (MultipartFile attachment : attachments) {
@@ -57,6 +57,21 @@ public class PostService {
         userRepository.save(user);
         return repository.save(post);
     }
+    public Post comment(String post_id, String account_id, String content, MultipartFile[] attachments) {
+        Post comment = create(account_id,content,attachments);
+        repository.addCommentToPost(post_id,comment.getId());
+        return comment;
+    }
+//    public List<PostDTO> get_comment(String post_id){
+//        Post post = repository.findById(post_id).orElseThrow();
+//        List<PostDTO> comments = new ArrayList<>();
+//        post.getComments().forEach(cmt -> {
+//            PostDTO dto = new PostDTO();
+//            cmt.getLikes()
+//            dto.loadFromEntity(cmt,);
+//
+//        });
+//    }
     private String determineAttachmentType(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         if (fileName != null && (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png"))) {
@@ -120,34 +135,16 @@ public class PostService {
     }
     public List<PostDTO> getTimelinePosts(String acc_id, int skip, int limit) {
         System.out.println(acc_id);
-
         User user = userRepository.findByAccount_Id(acc_id).orElseThrow(()->new NotFoundException("User not found"));
+        System.out.println("on");
         List<String> list = repository.getTimelinePosts(user.getId(), skip, limit);
+        System.out.println(list);
         List<PostDTO> data = new ArrayList<>();
         list.forEach((post_id -> {
             Post post = repository.findById(post_id).orElseThrow();
-            Set like = new HashSet<>();
-            post.getLikes().forEach(u -> {
-                DisplayUserDTO userDTO = DisplayUserDTO.builder()
-                        .id(u.getId())
-                        .avatar_url(u.getProfile().getAvatar_url())
-                        .fullname(u.getFirstname()+" "+u.getLastname())
-                        .username(u.getUsername())
-                        .build();
-                like.add(userDTO);
-            });
             int share_count = repository.getShareCount(post_id);
-            PostDTO p = PostDTO.builder()
-                    .userId(post.getUser().getId())
-                    .attachments(post.getAttachments())
-                    .avatarUrl(post.getUser().getProfile().getAvatar_url())
-                    .content(post.getContent())
-                    .created_at(post.getCreated_at())
-                    .fullName(post.getUser().getFirstname()+" "+post.getUser().getLastname())
-                    .id(post.getId())
-                    .like(like)
-                    .share_count(share_count)
-                    .build();
+            PostDTO p = new PostDTO();
+            p.loadFromEntity(post,share_count,user);
             data.add(p);
         }));
         return data;

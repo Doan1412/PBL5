@@ -2,7 +2,8 @@ package com.example.server.controllers;
 
 import com.example.server.DTO.PostDTO;
 import com.example.server.DTO.UserDTO;
-import com.example.server.models.User;
+import com.example.server.models.Entity.User;
+import com.example.server.models.Enum.AccountStatus;
 import com.example.server.service.UserService;
 import com.example.server.utils.Respond;
 import lombok.RequiredArgsConstructor;
@@ -78,6 +79,15 @@ public class UserController {
             return Respond.success(200,"I001",userDetails);
         }
         catch (Exception e){
+            return Respond.fail(500,"E001",e.getStackTrace());
+        }
+    }
+    @PutMapping("/{userId}/ban")
+    public ResponseEntity<Object> banUser(@PathVariable("userId") String userId) {
+        try {
+            service.updateUserStatus(userId);
+            return Respond.success(200,"I001","");
+        } catch (Exception e) {
             return Respond.fail(500,"E001",e.getStackTrace());
         }
     }

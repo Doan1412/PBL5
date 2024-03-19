@@ -2,8 +2,8 @@ package com.example.server.configuration;
 
 import org.springframework.stereotype.Component;
 
-import com.example.server.models.SocketNoti;
-import com.example.server.models.User;
+import com.example.server.models.Entity.SocketNoti;
+import com.example.server.models.Entity.User;
 import com.example.server.service.ChatRoomService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
