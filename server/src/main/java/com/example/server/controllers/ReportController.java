@@ -3,10 +3,12 @@ package com.example.server.controllers;
 import com.example.server.DTO.ReportRequest;
 import com.example.server.models.Entity.Account;
 import com.example.server.models.Entity.Report;
+import com.example.server.models.Enum.ReportStatus;
 import com.example.server.service.ReportService;
 import com.example.server.utils.Respond;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +33,7 @@ public class ReportController {
     }
 
     @GetMapping("")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> get(){
         try {
             List<Report> data = reportService.getAll();
@@ -39,5 +42,16 @@ public class ReportController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
-
+    @PutMapping("/{reportId}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> updateReportStatus(@PathVariable Long reportId, @RequestParam ReportStatus newStatus) {
+        reportService.updateReportStatus(reportId, newStatus);
+        return ResponseEntity.ok("Report status updated successfully");
+    }
+    @DeleteMapping("/{reportId}")
+    public ResponseEntity<String> deleteReport(@PathVariable Long reportId) {
+        // Gọi phương thức deleteReport từ ReportService
+        reportService.deleteReportById(reportId);
+        return ResponseEntity.ok("Report deleted successfully");
+    }
 }
