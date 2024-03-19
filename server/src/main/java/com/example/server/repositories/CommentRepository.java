@@ -1,6 +1,6 @@
 package com.example.server.repositories;
 
-import com.example.server.models.Comment;
+import com.example.server.models.Entity.Comment;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
