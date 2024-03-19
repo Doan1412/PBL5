@@ -3,6 +3,8 @@ package com.example.server.controllers;
 import com.example.server.DTO.PostDTO;
 import com.example.server.models.Entity.Account;
 import com.example.server.models.Entity.Post;
+import com.example.server.models.Entity.PostAttachment;
+
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -55,9 +57,9 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Object> post(@RequestParam("attach") MultipartFile[] file, @RequestParam String content,@AuthenticationPrincipal Account account) {
+    public ResponseEntity<Object> post(@RequestBody List<PostAttachment> attachments, @RequestParam String content,@AuthenticationPrincipal Account account) {
         try {
-            Object data = service.create(account.getId(), content,file);
+            Object data = service.create(account.getId(), content,attachments);
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
@@ -118,9 +120,9 @@ public class PostController {
     }
 
     @PostMapping("/comment")
-    public ResponseEntity<Object> reply(@RequestParam("attach") MultipartFile[] file,@RequestParam String post_id,  @RequestParam String content,@AuthenticationPrincipal Account account) {
+    public ResponseEntity<Object> reply(@RequestBody List<PostAttachment> attachments,@RequestParam String post_id,  @RequestParam String content,@AuthenticationPrincipal Account account) {
         try {
-            Object data = service.comment(post_id,account.getId(), content,file);
+            Object data = service.comment(post_id,account.getId(), content,attachments);
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
