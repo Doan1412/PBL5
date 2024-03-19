@@ -8,32 +8,8 @@ import { hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { Button, Image, Input } from "@nextui-org/react";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
-  // const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   const payload = await AuthService.login(email, password);
-  //   if (payload) {
-  //     const { access_token, refresh_token, auth_user } = payload;
-  //     setCookie("access_token", access_token, {
-  //       maxAge: ACCESS_TOKEN_EXPIRE,
-  //     });
-  //     setCookie("refresh_token", refresh_token, {
-  //       maxAge: REFRESH_TOKEN_EXPIRE,
-  //     });
-  //     setUser(auth_user);
-  //     navigate("/courses");
-  //   } else {
-  //     setLoginFail(true);
-  //     return;
-  //   }
-  // };
-
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setLoginFail(false);
-  //   const value = e.target.value;
-  //   return value;
-  // };
 
   const responseGoogle = async (response: any) => {
     const res = await http.post(
@@ -72,18 +48,22 @@ export default function LoginPage() {
             className="flex mx-auto ml-3 rounded-2xl"
             src={RImage.src}
             alt="Login"
-            width={200}
-            height={200}
+            width={180}
+            height={180}
           />
           <p className="text-xs mt-4 text-[#002D74]">
-            If you are already a member, easily log in
+            Sign up to see photos and videos from your friends.
           </p>
           <div className="flex flex-col gap-4 mt-4">
+            <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+              <Input size="sm" type="text" label="FistName" />
+              <Input size="sm" type="text" label="LastName" />
+            </div>
             <Input size="sm" type="email" label="Email" />
             <Input size="sm" type="password" label="Password" />
           </div>
           <Button className="bg-[#002D74] rounded-xl text-white py-2 hover:scale-105 duration-300 flex flex-col gap-4 mt-4 mx-auto">
-            Login
+            Register
           </Button>
           <div className="mt-6 grid grid-cols-3 items-center text-gray-400">
             <hr className="border-gray-400" />
@@ -106,14 +86,14 @@ export default function LoginPage() {
           </div>
           <div className="mt-3 text-xs flex justify-between items-center text-[#002D74]">
             {/* eslint-disable-next-line */}
-            <p>Don't have an account?</p>
+            <p>Have an account?</p>
             <button
               className="py-2 px-5 bg-white border rounded-xl hover:scale-110 duration-300"
               onClick={() => {
-                router.push("/register");
+                router.push("/login");
               }}
             >
-              Register
+              Login
             </button>
           </div>
         </div>

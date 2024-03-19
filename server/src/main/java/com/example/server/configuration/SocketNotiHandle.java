@@ -2,9 +2,12 @@ package com.example.server.configuration;
 
 import org.springframework.stereotype.Component;
 
-import com.example.server.models.Entity.SocketNoti;
+import com.example.server.DTO.MessageDTO;
+import com.example.server.models.Entity.ChatRoom;
 import com.example.server.models.Entity.User;
+import com.example.server.repositories.ChatRoomRepository;
 import com.example.server.service.ChatRoomService;
+import com.example.server.service.MessageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,7 @@ import java.util.Date;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -22,6 +26,8 @@ import java.util.Set;
 public class SocketNotiHandle extends Thread{
 	private static List<SocketNotiHandle> clients = new ArrayList<>();
 	private static ChatRoomService chatRoomService;
+	private static MessageService messageService;
+	private static ChatRoomRepository chatRoomRepository;
 	private Socket soc;
 	private DataInputStream dis;
 	private DataOutputStream dos;
@@ -42,16 +48,20 @@ public class SocketNotiHandle extends Thread{
 				if (rec != null && !rec.isEmpty())
 				{
 					ObjectMapper mapper = new ObjectMapper();
-					SocketNoti socketNoti = mapper.readValue(rec, SocketNoti.class);
-					Set<User> members = chatRoomService.getMembersOfChatRoom(socketNoti.getGroup());
-					for (User member : members) {
-						for (SocketNotiHandle client : clients) {
-							if (client.userId.equals(member.getId())) {
-								client.dos.writeUTF(rec);
+					MessageDTO messageDTO = mapper.readValue(rec, MessageDTO.class);
+					Optional<ChatRoom> chatRoomOptional = chatRoomRepository.findById(messageDTO.getRoomId());
+					if (chatRoomOptional.isPresent()){
+						messageService.sendMessage(messageDTO.getSenderId(), messageDTO.getRoomId(), messageDTO.getContent());
+						Set<User> members = chatRoomService.getMembersOfChatRoom(messageDTO.getRoomId());
+						for (User member : members) {
+							for (SocketNotiHandle client : clients) {
+								if (client.userId.equals(member.getId())) {
+									client.dos.writeUTF(rec);
+								}
 							}
 						}
+						this.dos.writeUTF(new Date().toString());
 					}
-					this.dos.writeUTF(new Date().toString());
 				}
 			else {
 					this.dos.writeUTF("Bad request");
