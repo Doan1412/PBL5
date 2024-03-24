@@ -2,13 +2,10 @@ package com.example.server.controllers;
 
 import com.example.server.DTO.DisplayUserDTO;
 import com.example.server.DTO.FriendRequestDTO;
-import com.example.server.DTO.UserDTO;
-import com.example.server.models.Account;
-import com.example.server.models.FriendRequest;
-import com.example.server.models.User;
+import com.example.server.models.Entity.Account;
+import com.example.server.models.Entity.FriendRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.server.service.FriendRequestService;
@@ -16,7 +13,6 @@ import com.example.server.utils.Respond;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
