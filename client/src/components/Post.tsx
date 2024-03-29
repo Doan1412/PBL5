@@ -25,7 +25,7 @@ const Post: React.FC<PostProps> = ({ userData }) => {
 
   return (
     <>
-      <div className="postWrapper">
+      <div className="postWrapper dark:bg-[#3c4761]">
         <div className="header">
           <div className="left">
             <Image
@@ -35,15 +35,16 @@ const Post: React.FC<PostProps> = ({ userData }) => {
             />
             <div className="userDetails">
               <div className="name">{userData.name}</div>
-              <div className="feeling">Hello Word</div>
+              <div className="feeling">@johndoe</div>
             </div>
           </div>
           <div className="right">
-            <div className="option">
+            <div className="option ">
               <FaEllipsisH />
             </div>
           </div>
         </div>
+        <div className="feeling">Hello Word</div>
         <div className="mainPostContent cursor-zoom-in hover:skew-y-1">
           <motion.img
             src={userData.postImg}

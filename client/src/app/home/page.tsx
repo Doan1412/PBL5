@@ -15,7 +15,7 @@ interface User {
   postImg: string;
 }
 
-const Page: React.FC = () => {
+const Home: React.FC = () => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
   //   useClickOutside(() => setIsFocused(false), ref);
@@ -25,17 +25,19 @@ const Page: React.FC = () => {
       <nav className="fixed z-40 w-full">
         <Navigation />
       </nav>
-      <main className="flex justify-between pt-3 bg-gray-100">
+      <main className="flex justify-between pt-3 bg-gray-100 dark:bg-medium">
         <section className="">
           <Sidebar />
         </section>
         <section className="flex-1 flex flex-col max-w-2xl">
-          <div className="mainSection mt-20">
+          <div className="mainSection mt-20 ">
             <div
               ref={ref}
-              className={`createPostWidget ${isFocused ? "active" : ""}`}
+              className={`createPostWidget dark:bg-[#353a50] ${
+                isFocused ? "active" : ""
+              }`}
             >
-              <div className="createInput">
+              <div className="createInput dark:bg-[#353a50] rounded-lg">
                 {/* <img src="/assets/image/avatar_default.jpg" alt="" /> */}
                 <input
                   type="text"
@@ -45,7 +47,7 @@ const Page: React.FC = () => {
                 />
                 <button className="inBtn">Post</button>
               </div>
-              <div className="otherOptions">
+              <div className="otherOptions dark:bg-[#353a50] rounded-lg">
                 <div className="option">
                   <BsFillCameraVideoFill />
                   <span>Go Live</span>
@@ -66,9 +68,9 @@ const Page: React.FC = () => {
           </div>
         </section>
         <section className="">
-          <div className="rightSection mt-16">
+          <div className="rightSection mt-16 ">
             <div className="requestWidget">
-              <h3>Requests</h3>
+              <h1 className="dark:text-white font-semibold">Requests</h1>
               <div className="requestProfile">
                 <div className="details">
                   <div className="profileImage">
@@ -107,4 +109,4 @@ const Page: React.FC = () => {
   );
 };
 
-export default Page;
+export default Home;
