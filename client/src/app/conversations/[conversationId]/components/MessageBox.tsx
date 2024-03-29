@@ -4,8 +4,12 @@ import { Avatar, Image } from "@nextui-org/react";
 import { format } from "date-fns";
 import avatarr from "@/static/images/avatar.jpg";
 
-export default function MessageBox() {
-  const isOwn = false;
+interface MessageBoxProps {
+  isOwn: boolean;
+}
+
+export default function MessageBox({isOwn} : MessageBoxProps ) {
+  // const isOwn = false;
   const image = false;
 
   const container = clsx("flex gap-3 p-4", isOwn && "justify-end");
