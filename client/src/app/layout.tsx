@@ -15,13 +15,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Providers>
-          {children}
-        </Providers>
+      <body className={`${inter.className} dark:bg-medium`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

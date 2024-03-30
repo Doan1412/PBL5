@@ -8,20 +8,12 @@ body,
   @apply h-full;
 }
 
-.inNavbar {
-  @apply bg-white w-full h-[4rem] flex justify-between items-center px-4 shadow-lg;
-}
-
 .inIcon {
   @apply text-gray-600;
 }
 
 .inBtn {
-  @apply bg-primary px-6 py-2 cursor-pointer rounded-full text-white hover:opacity-100 opacity-95 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-within:ring-offset-2;
-}
-
-.inNavRightOptions {
-  @apply flex items-center;
+  @apply bg-[#45d4a4] px-6 py-2 cursor-pointer rounded-full text-white hover:opacity-100 opacity-95 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-within:ring-offset-2;
 }
 
 .userProfile {
@@ -112,12 +104,12 @@ body,
 
 .leftSection .userProfileWidget .userDetails .name,
 .rightSection .requestWidget .requestProfile .userDetails .name {
-  @apply text-base text-gray-700 font-bold hover:text-primary hover:cursor-pointer;
+  @apply text-base text-gray-700 font-bold hover:text-primary hover:cursor-pointer dark:text-white;
 }
 
 .leftSection .userProfileWidget .userDetails .username,
 .rightSection .requestWidget .requestProfile .userDetails .username {
-  @apply text-xs text-gray-600;
+  @apply text-xs text-gray-600 dark:text-white;
 }
 
 .profileImage img {
@@ -129,19 +121,19 @@ body,
 }
 
 .inSidebar .link {
-  @apply my-2 flex px-4 items-center py-3 hover:bg-gray-50 cursor-pointer;
+  @apply my-2 flex px-4 items-center rounded-lg py-3 hover:bg-gray-50 cursor-pointer dark:hover:bg-slate-700 dark:hover:text-white dark:hover:rounded-lg;
 }
 
 .inSidebar .link svg {
-  @apply mr-5 ml-1 text-xl text-gray-600;
+  @apply mr-5 ml-1 text-xl text-gray-400;
 }
 
 .inSidebar .link:hover :is(svg, h3) {
-  @apply text-primary;
+  @apply text-primary dark:text-white;
 }
 
 .inSidebar .link h3 {
-  @apply text-base text-gray-600 font-semibold;
+  @apply text-base text-gray-400 font-semibold;
 }
 
 .sidebarCreateBtn {
@@ -165,11 +157,11 @@ body,
 }
 
 .rightSection .requestWidget .requestProfile {
-  @apply my-3 scale-95 bg-white shadow-md p-1 rounded-xl pt-5;
+  @apply my-3 scale-95 bg-white shadow-md p-1 rounded-xl pt-5 dark:bg-[#353a50];
 }
 
 .rightSection .requestWidget .requestProfile .userDetails .name {
-  @apply !text-gray-600 !font-semibold;
+  @apply text-gray-600 !font-semibold dark:text-[#b0b3b8];
 }
 
 .rightSection .requestWidget .requestProfile img {
@@ -185,7 +177,7 @@ body,
 }
 
 .rightSection .requestWidget .requestProfile .actions .actionBtn {
-  @apply mx-2 w-[6rem] text-sm first:bg-primary first:opacity-90 first:hover:opacity-100  first:text-white last:bg-gray-200 py-1.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-within:ring-offset-2 last:hover:bg-rose-600 last:hover:text-white;
+  @apply mx-2 w-[6rem] text-sm first:bg-primary first:opacity-90 first:hover:opacity-100 first:text-white last:bg-gray-200 last:dark:bg-[#444546] py-1.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-within:ring-offset-2 last:hover:bg-rose-600 last:hover:text-white;
 }
 
 /* --------------------------- Right Section End --------------------------- */
@@ -293,7 +285,7 @@ body,
 }
 
 .postWrapper .header .left .userDetails .name {
-  @apply font-semibold text-gray-600 hover:text-primary cursor-pointer;
+  @apply font-semibold text-gray-600 hover:text-primary cursor-pointer dark:text-white dark:hover:text-primary;
 }
 
 .postWrapper .header .left .userDetails .feeling {

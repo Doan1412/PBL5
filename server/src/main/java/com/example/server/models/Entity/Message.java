@@ -1,4 +1,5 @@
-package com.example.server.models;
+package com.example.server.models.Entity;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,16 +11,21 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
-@Node("Profile")
+import java.util.Date;
+
+@Node("message")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class Profile {
+public class Message {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
     private String id;
-    private String avatar_url;
-    private String bio;
-    private String cover_url;
+    @Relationship(type = "SENT_MESSAGE", direction = Relationship.Direction.INCOMING)
+    private User sender;
+    @Relationship(type = "RECIPIENT_MESSAGE", direction = Relationship.Direction.INCOMING)
+    private ChatRoom room;
+    private String content;
+    private Date timestamp;
 }

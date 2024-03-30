@@ -50,20 +50,20 @@ const links: LinkItem[] = [
 
 const Sidebar: React.FC = () => {
   return (
-    <div className="leftSection">
-      <div className="userProfileWidget">
+    <div className="leftSection dark:text-white">
+      <div className="userProfileWidget dark:bg-[#353a50] dark:text-white dark:shadow-lg">
         <div className="profileImage">
           <Image src={avatar.src} alt="" />
         </div>
-        <div className="userDetails">
-          <Link href={"/Profile"} className="name">
+        <div className="userDetails dark:text-white">
+          <Link href={"/Profile"} className="name dark:text-white">
             John Doe
           </Link>
-          <div className="username">@johndoe</div>
+          <div className="username dark:text-white">@johndoe</div>
         </div>
       </div>
 
-      <div className="inSidebar">
+      <div className="inSidebar dark:bg-[#353a50] dark:text-white">
         {links.map((link, index) => (
           <div className="link" key={index}>
             <div className="icon">{link.icon}</div>

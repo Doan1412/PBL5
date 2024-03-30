@@ -1,8 +1,8 @@
 package com.example.server.service;
 
-import com.example.server.models.ChatRoom;
-import com.example.server.models.Message;
-import com.example.server.models.User;
+import com.example.server.models.Entity.ChatRoom;
+import com.example.server.models.Entity.Message;
+import com.example.server.models.Entity.User;
 import com.example.server.repositories.ChatRoomRepository;
 import com.example.server.repositories.MessageRepository;
 import com.example.server.repositories.UserRepository;

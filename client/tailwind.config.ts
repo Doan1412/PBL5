@@ -10,6 +10,7 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       backgroundImage: {
@@ -19,6 +20,8 @@ const config: Config = {
       },
       colors: {
         primary: { ...colors.rose, DEFAULT: colors.rose[600] },
+        dark: "#232A3C",
+        medium: "#293245",
       },
       screens: {
         mobile: "960px",
@@ -30,9 +33,8 @@ const config: Config = {
       },
     },
   },
-  darkMode: "class",
   plugins: [nextui()],
-  
+
   // plugins: [],
 };
 export default config;

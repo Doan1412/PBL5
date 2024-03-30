@@ -16,22 +16,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { FaBell } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navigation() {
   return (
     <div>
-      <nav className="bg-white p-0">
-        <ul className="hidden lg:flex items-center justify-between px-2 shadow-md">
-          <li>
+      <nav className="hidden lg:flex bg-white p-0 dark:bg-dark justify-between">
+        <div className="flex">
+          <div>
             <Image
-              className="mx-auto mr-3 ml-3"
+              className="mx-auto mr-3 ml-3 dark:filter dark:invert"
               src={logoImage.src}
               alt="Login"
               width={50}
               height={50}
             />
-          </li>
-          <li>
+          </div>
+          <div className="flex items-center">
             <Input
               classNames={{
                 base: "max-w-full sm:max-w-[18rem] h-10 ml-4",
@@ -45,11 +46,13 @@ export default function Navigation() {
               startContent={<SearchIcon size={18} />}
               type="search"
             />
-          </li>
+          </div>
+        </div>
+        <ul className="hidden lg:flex items-center px-2 justify-evenly">
           <li>
             <div
               id="home"
-              className="tooltip active w-24 h-12 flex justify-center items-center ml-72 hover:bg-gray-300 hover:border rounded-lg "
+              className="tooltip active w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg dark:hover:bg-medium dark:hover:border-none"
               data-tooltip="Home"
             >
               <button className="button hover:translate-y-[-3px]">
@@ -69,7 +72,7 @@ export default function Navigation() {
             </div>
           </li>
           <li>
-            <div className="w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg shrink">
+            <div className="w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg shrink dark:hover:bg-medium dark:hover:border-none">
               <button className="button hover:translate-y-[-3px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +95,7 @@ export default function Navigation() {
             </div>
           </li>
           <li>
-            <div className="w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg">
+            <div className="w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg dark:hover:bg-medium dark:hover:border-none">
               <button className="hover:translate-y-[-3px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -109,71 +112,71 @@ export default function Navigation() {
               </button>
             </div>
           </li>
-          {/* <li>
-            <a
-              href="#"
-              id="friend"
-              className="tooltip w-24 h-12 flex justify-center items-center"
-              data-tooltip="Friend"
-            >
-              <i className="fas fa-user-alt"></i>
-            </a>
-          </li> */}
-          <li id="space1" className="flex-1"></li>
-          <li>
-            <button className="w-12 h-12 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 mr-1">
-              <FaUserGroup size={23} />
-            </button>
-          </li>
-          <li>
-            <button className="w-12 h-12 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 mr-1">
-              <FaFacebookMessenger size={23} />
-            </button>
-          </li>
-          <li>
-            <button className="w-12 h-12 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200">
-              <FaBell size={23} />
-            </button>
-          </li>
-          <li>
-            <Dropdown placement="bottom-end" className="">
-              <DropdownTrigger>
-                <div className="flex items-center relative">
-                  <Avatar
-                    isBordered
-                    as="button"
-                    className="transition-transform w-10 h-10 flex justify-center items-center rounded-full mx-2"
-                    color="secondary"
-                    name="Jason Hughes"
-                    size="sm"
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                  />
-                  <span className=" absolute flex h-3 w-3 top-0 right-1">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-red-600"></span>
-                  </span>
-                </div>
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Profile Actions" variant="flat">
-                <DropdownItem key="profile" className="h-14 gap-2">
-                  <p className="font-semibold">Signed in as</p>
-                  <p className="font-semibold">zoey@example.com</p>
-                </DropdownItem>
-                <DropdownItem key="settings">My Settings</DropdownItem>
-                <DropdownItem key="team_settings">Team Settings</DropdownItem>
-                <DropdownItem key="analytics">Analytics</DropdownItem>
-                <DropdownItem key="system">System</DropdownItem>
-                <DropdownItem key="configurations">Configurations</DropdownItem>
-                <DropdownItem key="help_and_feedback">
-                  Help & Feedback
-                </DropdownItem>
-                <DropdownItem key="logout" color="danger">
-                  Log Out
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </li>
         </ul>
+        <div className="flex items-center">
+          <ul className="flex">
+            <li>
+              <div className="mr-2 mt-2">
+                <ThemeToggle />
+              </div>
+            </li>
+            <li>
+              <button className="w-12 h-12 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 mr-1 dark:bg-medium">
+                <FaUserGroup size={23} />
+              </button>
+            </li>
+            <li>
+              <button className="w-12 h-12 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 mr-1 dark:bg-medium">
+                <FaFacebookMessenger size={23} />
+              </button>
+            </li>
+            <li>
+              <button className="w-12 h-12 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 dark:bg-medium">
+                <FaBell size={23} />
+              </button>
+            </li>
+            <li className="mt-1">
+              <Dropdown placement="bottom-end" className="">
+                <DropdownTrigger>
+                  <div className="flex items-center relative">
+                    <Avatar
+                      isBordered
+                      as="button"
+                      className="transition-transform w-10 h-10 flex justify-center items-center rounded-full mx-2"
+                      color="secondary"
+                      name="Jason Hughes"
+                      size="sm"
+                      src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                    />
+                    <span className=" absolute flex h-3 w-3 top-0 right-1">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-red-600"></span>
+                    </span>
+                  </div>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Profile Actions" variant="flat">
+                  <DropdownItem key="profile" className="h-14 gap-2">
+                    <p className="font-semibold">Signed in as</p>
+                    <p className="font-semibold">zoey@example.com</p>
+                  </DropdownItem>
+                  <DropdownItem key="settings">My Settings</DropdownItem>
+                  <DropdownItem key="team_settings">Team Settings</DropdownItem>
+                  <DropdownItem key="analytics">Analytics</DropdownItem>
+                  <DropdownItem key="system">System</DropdownItem>
+                  <DropdownItem key="configurations">
+                    Configurations
+                  </DropdownItem>
+                  <DropdownItem key="help_and_feedback">
+                    Help & Feedback
+                  </DropdownItem>
+                  <DropdownItem key="logout" color="danger">
+                    Log Out
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </li>
+          </ul>
+        </div>
       </nav>
     </div>
   );

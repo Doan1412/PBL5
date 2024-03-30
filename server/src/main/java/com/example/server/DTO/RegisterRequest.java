@@ -1,10 +1,8 @@
 package com.example.server.DTO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.Date;
 @Data

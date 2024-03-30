@@ -40,28 +40,14 @@ export default function UserBox() {
           </div>
 
           <div className="flex flex-col gap-1 items-start justify-center">
-            <div className="flex">
-              <h4 className="text-small font-semibold leading-none text-default-600 mr-0.5">
+            <div>
+              <h4 className="text-small font-semibold leading-none text-default-600 mr-0.5 mb-2">
                 Zoey Lang
               </h4>
               <h5 className="text-small tracking-tight text-default-400 leading-none mr-2">
                 @zoeylang
               </h5>
-              <h5 className=" text-xs text-gray-400 font-light leading-none">
-                {format(new Date(), "p")}
-              </h5>
             </div>
-            <h5
-              className={clsx(
-                `
-              truncate 
-              text-sm
-              `,
-                hasSeen ? "text-gray-500" : "text-black font-medium"
-              )}
-            >
-              Started a conversation
-            </h5>
           </div>
         </div>
       </CardHeader>

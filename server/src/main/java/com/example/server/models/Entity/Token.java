@@ -1,4 +1,4 @@
-package com.example.server.models;
+package com.example.server.models.Entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,27 +10,20 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-
-@Node("Share_post")
+@Node("Token")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SharedPost {
+public class Token {
     @Id
     @GeneratedValue(UUIDStringGenerator.class)
     private String id;
 
-    private String caption;
-    private LocalDateTime created_at;
-
-    @Relationship(type = "SHARED_POST", direction = Relationship.Direction.INCOMING)
-    private Post originalPost;
-
-    @Relationship(type = "SHARED_BY", direction = Relationship.Direction.OUTGOING)
-    private User sharedBy;
-    private int likes;
+    private String token;
+    public String tokenType = "BEARER";
+    public boolean revoked;
+    public boolean expired;
+    @Relationship(type = "HAS_TOKEN", direction = Relationship.Direction.INCOMING)
+    private Account account;
 }

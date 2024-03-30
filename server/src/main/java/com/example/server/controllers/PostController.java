@@ -1,15 +1,18 @@
 package com.example.server.controllers;
 
-import com.example.server.models.Account;
-import com.example.server.models.Post;
+import com.example.server.DTO.PostDTO;
+import com.example.server.models.Entity.Account;
+import com.example.server.models.Entity.Post;
+import com.example.server.models.Entity.PostAttachment;
+
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.springframework.core.io.Resource;
 
@@ -27,36 +30,10 @@ public class PostController {
     private final PostService service;
     private final PostAttachmentService postAttachmentService;
 
-    @GetMapping("/attachment/img/{url}")
-    public ResponseEntity<Object> serveFile(@PathVariable String url) {
-        try {
-            // Đường dẫn đến thư mục chứa các tệp
-            String directoryPath = "src/main/resources/static/attachments/";
-
-            // Tạo một đối tượng Resource cho tệp cụ thể
-            Resource resource = new UrlResource(Paths.get(directoryPath+url).toUri());
-            System.out.println(resource.getURI());
-            // Kiểm tra xem tệp có tồn tại không
-            if (resource.exists() && resource.isReadable()) {
-                // Trả về ResponseEntity chứa tệp và các HTTP headers
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_PNG)
-                        .header("Content-Disposition", "attachment; filename=" + url)
-                        .body(resource);
-            } else {
-                // Trả về 404 Not Found nếu tệp không tồn tại
-                return Respond.fail(404,"E002","Not found");
-            }
-        }
-        catch (Exception e){
-            return Respond.fail(500,"E001",e.getStackTrace());
-        }
-    }
-
     @PostMapping("/create")
-    public ResponseEntity<Object> post(@RequestParam("attach") MultipartFile[] file, @RequestParam String content,@AuthenticationPrincipal Account account) {
+    public ResponseEntity<Object> post(@RequestBody List<PostAttachment> attachments, @RequestParam String content,@AuthenticationPrincipal Account account) {
         try {
-            Object data = service.create(account.getId(), content,file);
+            Object data = service.create(account.getId(), content,attachments);
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
@@ -100,6 +77,27 @@ public class PostController {
             System.out.println(post_id);
             service.delete_post(post_id);
             return Respond.success(200,"I001","");
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @GetMapping("/homepage")
+    public ResponseEntity<Object> getTimelinePosts(
+            @RequestParam int skip,
+            @RequestParam int limit,
+            @AuthenticationPrincipal Account account
+    ) {
+        System.out.println("on");
+        List<PostDTO> timelinePosts = service.getTimelinePosts(account.getId(), skip, limit);
+        return Respond.success(200,"I001",timelinePosts);
+    }
+
+    @PostMapping("/comment")
+    public ResponseEntity<Object> reply(@RequestBody List<PostAttachment> attachments,@RequestParam String post_id,  @RequestParam String content,@AuthenticationPrincipal Account account) {
+        try {
+            Object data = service.comment(post_id,account.getId(), content,attachments);
+            return Respond.success(200,"I001",data);
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getMessage());

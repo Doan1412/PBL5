@@ -1,4 +1,4 @@
-package com.example.server.models;
+package com.example.server.models.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -27,8 +27,8 @@ public class Comment {
 
     private String content;
 
-    private int likes;
-
+    @Relationship(type = "LIKED_BY", direction = Relationship.Direction.INCOMING)
+    private Set<User> likes = new HashSet<>();
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="Indochina")
     private LocalDateTime createdAt;
 

@@ -1,9 +1,9 @@
 package com.example.server.service;
 
 import com.example.server.DTO.CommentDTO;
-import com.example.server.models.Comment;
-import com.example.server.models.Post;
-import com.example.server.models.User;
+import com.example.server.models.Entity.Comment;
+import com.example.server.models.Entity.Post;
+import com.example.server.models.Entity.User;
 import com.example.server.repositories.CommentRepository;
 import com.example.server.repositories.PostRepository;
 import com.example.server.repositories.UserRepository;
@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +33,7 @@ public class CommentService {
 
         comment.setPost(post);
         comment.setUser(user);
-        comment.setLikes(0);
+        comment.setLikes(new HashSet<>());
         return commentRepository.save(comment);
     }
 
