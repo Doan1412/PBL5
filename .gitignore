@@ -3,4 +3,4 @@ client/.yarn
 client/.yarnrc.yml
 client/yarn.lock
 client/yarn.lock
-server/src/main/resources/static/attachments
+/server/src/main/resources/static
