@@ -6,14 +6,8 @@ import Sidebar from "@/components/Sidebar";
 import userData from "../data/UserData";
 import Post from "@/components/Post";
 import Navigation from "@/components/Navigation";
-
-interface User {
-  name: string;
-  username: string;
-  profilePic: string;
-  storyImage: string;
-  postImg: string;
-}
+import ListPost from "@/components/ListPost";
+import { User } from "../types";
 
 const Home: React.FC = () => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -31,37 +25,11 @@ const Home: React.FC = () => {
         </section>
         <section className="flex-1 flex flex-col max-w-2xl">
           <div className="mainSection mt-20 ">
-            <div
-              ref={ref}
-              className={`createPostWidget dark:bg-[#353a50] ${
-                isFocused ? "active" : ""
-              }`}
-            >
-              <div className="createInput dark:bg-[#353a50] rounded-lg">
-                {/* <img src="/assets/image/avatar_default.jpg" alt="" /> */}
-                <input
-                  type="text"
-                  placeholder="What's on your mind, Jhon Doe?"
-                  id="createNewPost"
-                  onFocus={() => setIsFocused(true)}
-                />
-                <button className="inBtn">Post</button>
-              </div>
-              <div className="otherOptions dark:bg-[#353a50] rounded-lg">
-                <div className="option">
-                  <BsFillCameraVideoFill />
-                  <span>Go Live</span>
-                </div>
-                <div className="option">
-                  <MdInsertPhoto />
-                  <span>Photo/Video</span>
-                </div>
-                <div className="option">
-                  <MdEmojiEmotions />
-                  <span>Feeling/Activity</span>
-                </div>
-              </div>
-            </div>
+            <ListPost
+              reff={ref}
+              isFocused={isFocused}
+              setIsFocused={setIsFocused}
+            />
             {userData.map((user: User, index: number) => {
               return <Post key={index} userData={user} />;
             })}

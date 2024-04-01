@@ -221,7 +221,7 @@ body,
 }
 
 .createPostWidget {
-  @apply h-auto my-3 mx-4 bg-white rounded-full relative;
+  @apply h-auto my-3 mx-4 bg-[#f0f2f5] rounded-full relative;
 }
 
 .createPostWidget.active {
@@ -265,7 +265,7 @@ body,
 /* --------------------------- Post --------------------------- */
 
 .postWrapper {
-  @apply bg-white rounded-xl overflow-hidden shadow-xl mx-4 px-4 my-6;
+  @apply bg-[#f0f2f5] rounded-xl overflow-hidden shadow-xl mx-4 px-4 my-6;
 }
 
 .postWrapper .header {
