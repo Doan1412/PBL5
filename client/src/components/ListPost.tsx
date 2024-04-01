@@ -3,7 +3,7 @@ import { BsFillCameraVideoFill } from "react-icons/bs";
 import { MdEmojiEmotions, MdInsertPhoto } from "react-icons/md";
 
 interface ListPost {
-  reff: any;
+  reff: React.RefObject<HTMLDivElement>;
   isFocused: boolean;
   setIsFocused: any;
 }
