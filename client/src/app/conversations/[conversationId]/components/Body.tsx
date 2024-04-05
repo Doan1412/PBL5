@@ -1,5 +1,5 @@
 "use client";
-import useConversation from "@/app/hooks/useConversation";
+import useConversation from "@/app/hooks/customs/useConversation";
 import { FullMessageType } from "@/app/types";
 import React, { useRef, useState } from "react";
 import MessageBox from "./MessageBox";

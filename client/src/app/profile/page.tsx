@@ -7,7 +7,7 @@ import UploadButton from "../../components/UploadButton";
 import UploadAvatar from "../../components/UploadAvatar";
 import AddFriendButton from "@/components/AddFriendButton";
 import SidebarProfile from "@/components/SidebarProfile/SidebarProfile";
-import ListPost from "@/components/ListPost";
+import ListPost from "@/components/SatatusPost";
 import userData from "../data/UserData";
 import Post from "@/components/Post";
 import { User } from "../types";

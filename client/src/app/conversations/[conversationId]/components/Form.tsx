@@ -1,5 +1,5 @@
 "use client";
-import useConversation from "@/app/hooks/useConversation";
+import useConversation from "@/app/hooks/customs/useConversation";
 import React from "react";
 import { Field, FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { HiPaperAirplane, HiPhoto } from "react-icons/hi2";

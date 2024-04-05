@@ -6,7 +6,7 @@ import Sidebar from "@/components/Sidebar";
 import userData from "../data/UserData";
 import Post from "@/components/Post";
 import Navigation from "@/components/Navigation";
-import ListPost from "@/components/ListPost";
+import ListPost from "@/components/SatatusPost";
 import { User } from "../types";
 
 const Home: React.FC = () => {
