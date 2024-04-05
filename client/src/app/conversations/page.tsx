@@ -1,5 +1,5 @@
 "use client";
-import useConversation from "@/app/hooks/useConversation";
+import useConversation from "@/app/hooks/customs/useConversation";
 import EmptyState from "@/components/EmptyState";
 import React from "react";
 import clsx from "clsx";

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   Input,
   DropdownItem,
@@ -7,7 +8,6 @@ import {
   DropdownMenu,
   Avatar,
   Image,
-  Badge,
 } from "@nextui-org/react";
 import logoImage from "@/static/images/logoImage.png";
 import SearchIcon from "./SearchIcon";

@@ -1,4 +1,4 @@
-import useConversation from "@/app/hooks/useConversation";
+import useConversation from "@/app/hooks/customs/useConversation";
 import { FullMessageType } from "@/app/types";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
