@@ -1,6 +1,5 @@
 import React from "react";
 import "tailwindcss/tailwind.css"; // Import Tailwind CSS
-import { keyframes } from "@emotion/react";
 import "./style.css";
 import { Image } from "@nextui-org/react";
 import RImage from "@/static/images/RImage.png";

@@ -86,7 +86,7 @@ body,
 /* --------------------------- Left Section --------------------------- */
 
 .leftSection {
-  @apply fixed mt-20 mx-3 ml-10 w-full max-w-[15rem] min-w-[15rem] hidden mobile:block overflow-y-auto max-h-screen top-[1rem];
+  @apply mt-20 mx-3 ml-10 w-full max-w-[15rem] min-w-[15rem] hidden mobile:block overflow-y-auto max-h-screen top-[1rem];
 }
 
 .leftSection .userProfileWidget {
@@ -145,7 +145,7 @@ body,
 /* --------------------------- Right Section --------------------------- */
 
 .rightSection {
-  @apply fixed top-10 right-0 mx-5 w-full max-w-[16rem] hidden mobile:block xl:max-w-[20rem] min-w-[16rem] overflow-y-auto max-h-screen;
+  @apply top-10 right-0 mx-5 w-full max-w-[16rem] hidden mobile:block xl:max-w-[20rem] min-w-[16rem] overflow-y-auto max-h-screen;
 }
 
 .rightSection .requestWidget {
@@ -185,7 +185,7 @@ body,
 /* --------------------------- Main Section --------------------------- */
 
 .mainSection {
-  @apply w-full mobile:max-w-mainSection 0.5xl:max-w-[35rem] !mx-auto;
+  @apply mobile:max-w-mainSection 0.5xl:max-w-[35rem] !mx-auto;
 }
 
 .storiesWidget::-webkit-scrollbar {
@@ -265,7 +265,7 @@ body,
 /* --------------------------- Post --------------------------- */
 
 .postWrapper {
-  @apply bg-[#f0f2f5] rounded-xl overflow-hidden shadow-xl mx-4 px-4 my-6;
+  @apply bg-[#f0f2f5] rounded-xl overflow-hidden shadow-xl mx-4 px-4 my-6 pb-2;
 }
 
 .postWrapper .header {

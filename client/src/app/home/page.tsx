@@ -19,20 +19,25 @@ const Home: React.FC = () => {
       <nav className="fixed z-40 w-full">
         <Navigation />
       </nav>
-      <main className="flex justify-between pt-3 bg-gray-100 dark:bg-medium">
+      <main className="flex justify-center pt-3 bg-gray-100 dark:bg-medium h-screen">
         <section className="">
           <Sidebar />
         </section>
-        <section className="flex-1 flex flex-col max-w-2xl">
-          <div className="mainSection mt-20 ">
+        <section
+          className="flex-1 flex flex-col max-w-3xl h-full w-screen overflow-auto"
+          style={{ scrollbarWidth: "none" }}
+        >
+          <div className="flex flex-col mainSection mt-20 ">
             <ListPost
               reff={ref}
               isFocused={isFocused}
               setIsFocused={setIsFocused}
             />
-            {userData.map((user: User, index: number) => {
-              return <Post key={index} userData={user} />;
-            })}
+            <div>
+              {userData.map((user: User, index: number) => {
+                return <Post key={index} userData={user} />;
+              })}
+            </div>
           </div>
         </section>
         <section className="">
