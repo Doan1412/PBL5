@@ -11,6 +11,7 @@ import ListPost from "@/components/SatatusPost";
 import userData from "../data/UserData";
 import Post from "@/components/Post";
 import { User } from "../types";
+import SidebarImage from "@/components/SidebarProfile/SidebarImage";
 
 interface LinkProfile {
   name: string;
@@ -100,7 +101,7 @@ export default function Profile() {
           <div className="flex justify-center">
             <div className="h-px w-8/12 dark:bg-[#3d3f41] bg-[#ccced2] mx-15" />
           </div>
-          <div className="hidden lg:flex justify-center gap-56 shrink mt-2">
+          <div className="hidden lg:flex justify-center gap-56 shrink mt-2 sticky top-0">
             <div className="flex gap-4">
               {links.map((link, index) => (
                 <div
@@ -120,19 +121,22 @@ export default function Profile() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center h-svh">
           <div className="flex flex-col mt-5">
             <SidebarProfile />
+            <SidebarImage />
           </div>
-          <div className="mt-2">
-            <ListPost
-              reff={ref}
-              isFocused={isFocused}
-              setIsFocused={setIsFocused}
-            />
-            {userData.map((user: User, index: number) => {
-              return <Post key={index} userData={user} />;
-            })}
+          <div className="mt-2 h-full">
+            <div className="flex flex-col">
+              <ListPost
+                reff={ref}
+                isFocused={isFocused}
+                setIsFocused={setIsFocused}
+              />
+              {userData.map((user: User, index: number) => {
+                return <Post key={index} userData={user} />;
+              })}
+            </div>
           </div>
         </div>
       </div>

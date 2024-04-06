@@ -4,48 +4,9 @@ import { FaGraduationCap } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { MdBusinessCenter } from "react-icons/md";
 import { IoHeart } from "react-icons/io5";
-import Avatar1 from "@/static/images/avatar.jpg";
 
 export default function SidebarProfile() {
-  const list = [
-    {
-      title: "Orange",
-      img: Avatar1.src,
-    },
-    {
-      title: "Tangerine",
-      img: Avatar1.src,
-    },
-    {
-      title: "Raspberry",
-      img: Avatar1.src,
-    },
-    {
-      title: "Lemon",
-      img: Avatar1.src,
-    },
-    {
-      title: "Avocado",
-      img: Avatar1.src,
-    },
-    {
-      title: "Lemon 2",
-      img: Avatar1.src,
-    },
-    {
-      title: "Banana",
-      img: Avatar1.src,
-    },
-    {
-      title: "Watermelon",
-      img: Avatar1.src,
-    },
-    {
-      title: "Watermelon",
-      img: Avatar1.src,
-    },
-  ];
-
+ 
   return (
     <>
       <div className="bg-[#f0f2f5] dark:bg-gray-800 rounded-lg mb-4 shrink">
@@ -87,7 +48,7 @@ export default function SidebarProfile() {
           </Button>
         </div>
       </div>
-      <div className="bg-[#f0f2f5] dark:bg-gray-800 rounded-lg shrink">
+      {/* <div className="bg-[#f0f2f5] dark:bg-gray-800 rounded-lg shrink">
         <div className="flex justify-between mr-5">
           <h1 className="ml-5 mt-5 font-bold text-xl">Image</h1>
           <Link href="#" className="text-sky-500 ml-5 mt-5">
@@ -115,7 +76,7 @@ export default function SidebarProfile() {
             </Card>
           ))}
         </div>
-      </div>
+      </div> */}
     </>
   );
 }
