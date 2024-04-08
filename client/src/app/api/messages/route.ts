@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     // const currentUser = await getCurrentUser();
-    console.log(1);
     const body = await request.json();
     const { message, image, conversationId } = body;
     // const { message, image, conversationId } = body;
@@ -60,7 +59,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json(newMessage);
   } catch (error) {
-    console.log(2);
     console.log(error, "ERROR_MESSAGES");
     return new NextResponse("Error", { status: 500 });
   }

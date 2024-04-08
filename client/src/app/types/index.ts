@@ -48,3 +48,11 @@ export type FullConversationType = ConversationType & {
   users: UserType[];
   messages: FullMessageType[];
 };
+
+export interface User {
+  name: string;
+  username: string;
+  profilePic: string;
+  storyImage: string;
+  postImg: string;
+}

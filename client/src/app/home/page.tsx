@@ -6,14 +6,8 @@ import Sidebar from "@/components/Sidebar";
 import userData from "../data/UserData";
 import Post from "@/components/Post";
 import Navigation from "@/components/Navigation";
-
-interface User {
-  name: string;
-  username: string;
-  profilePic: string;
-  storyImage: string;
-  postImg: string;
-}
+import ListPost from "@/components/SatatusPost";
+import { User } from "../types";
 
 const Home: React.FC = () => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -25,46 +19,25 @@ const Home: React.FC = () => {
       <nav className="fixed z-40 w-full">
         <Navigation />
       </nav>
-      <main className="flex justify-between pt-3 bg-gray-100 dark:bg-medium">
+      <main className="flex justify-center pt-3 bg-gray-100 dark:bg-medium h-screen">
         <section className="">
           <Sidebar />
         </section>
-        <section className="flex-1 flex flex-col max-w-2xl">
-          <div className="mainSection mt-20 ">
-            <div
-              ref={ref}
-              className={`createPostWidget dark:bg-[#353a50] ${
-                isFocused ? "active" : ""
-              }`}
-            >
-              <div className="createInput dark:bg-[#353a50] rounded-lg">
-                {/* <img src="/assets/image/avatar_default.jpg" alt="" /> */}
-                <input
-                  type="text"
-                  placeholder="What's on your mind, Jhon Doe?"
-                  id="createNewPost"
-                  onFocus={() => setIsFocused(true)}
-                />
-                <button className="inBtn">Post</button>
-              </div>
-              <div className="otherOptions dark:bg-[#353a50] rounded-lg">
-                <div className="option">
-                  <BsFillCameraVideoFill />
-                  <span>Go Live</span>
-                </div>
-                <div className="option">
-                  <MdInsertPhoto />
-                  <span>Photo/Video</span>
-                </div>
-                <div className="option">
-                  <MdEmojiEmotions />
-                  <span>Feeling/Activity</span>
-                </div>
-              </div>
+        <section
+          className="flex-1 flex flex-col max-w-3xl h-full w-screen overflow-auto"
+          style={{ scrollbarWidth: "none" }}
+        >
+          <div className="flex flex-col mainSection mt-20 ">
+            <ListPost
+              reff={ref}
+              isFocused={isFocused}
+              setIsFocused={setIsFocused}
+            />
+            <div>
+              {userData.map((user: User, index: number) => {
+                return <Post key={index} userData={user} />;
+              })}
             </div>
-            {userData.map((user: User, index: number) => {
-              return <Post key={index} userData={user} />;
-            })}
           </div>
         </section>
         <section className="">
