@@ -23,20 +23,36 @@ export type ConversationType = {
   users: UserType[];
 };
 
+export type Profile = {
+  id?: String;
+  avatar_url?: String;
+  bio?: String;
+  cover_url?: String;
+};
+
 export type UserType = {
-  id: String;
-  name?: String;
-  email: String;
-  emailVerified: Date;
-  image?: String;
-  hashedPassword: String;
-  createdAt: Date;
-  updatedAt: Date;
-  conversationIds: String;
-  conversations: ConversationType[];
-  seenMessageIds: String;
-  seenMessages: MessageType[];
-  messages: MessageType[];
+  data: {
+    id: String;
+    name?: String;
+    email: String;
+    firstname?: String;
+    lastname?: String;
+    username: String;
+    birth?: Date;
+    gender?: String;
+    phone?: String;
+    profile: Profile;
+    emailVerified: Date;
+    image?: String;
+    hashedPassword: String;
+    createdAt: Date;
+    updatedAt: Date;
+    conversationIds: String;
+    conversations: ConversationType[];
+    seenMessageIds: String;
+    seenMessages: MessageType[];
+    messages: MessageType[];
+  };
 };
 
 export type FullMessageType = MessageType & {

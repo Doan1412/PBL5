@@ -13,8 +13,8 @@ export default function Popup({ type, text, close }: PopupProps) {
 
   return (
     <>
-      <div className="w-dvw h-dvh bg-gray-500 opacity-80 fixed top-0 left-0 z-30"></div>
-      <div className="absolute w-dvw h-dvh flex items-center justify-center z-40">
+      <div className="w-dvw h-dvh bg-gray-500 opacity-80 fixed top-0 left-0 z-50"></div>
+      <div className="absolute w-dvw h-dvh flex items-center justify-center z-50">
         <div className="w-80 h-auto text-sm leading-tight flex flex-col gap-4">
           <div className="p-4 rounded-lg bg-green-100">
             <div className="flex">
@@ -53,9 +53,7 @@ export default function Popup({ type, text, close }: PopupProps) {
                       </p>
                     ) : null}
                     {type === "success" ? (
-                      <p className="text-base text-green-500">
-                        Thao tác thành công!
-                      </p>
+                      <p className="text-base text-green-500">{text ? text : "Thao tác thành công!"}</p>
                     ) : null}
                   </div>
                 </div>

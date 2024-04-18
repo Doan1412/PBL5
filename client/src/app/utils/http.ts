@@ -1,5 +1,5 @@
-import axios, { AxiosInstance } from "axios";
-import { getCookie, hasCookie } from "cookies-next";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import { getLocalStorage } from "../actions/localStorage_State";
 
 class Http {
   instance: AxiosInstance;
@@ -8,7 +8,7 @@ class Http {
       baseURL: process.env.BACKEND_URL,
       timeout: 5000,
       headers: {
-        Authorization: hasCookie("token") ? getCookie("token") : "",
+        Authorization: `${getLocalStorage()?.token}`,
       },
     });
   }

@@ -34,11 +34,11 @@ export default function ListPost({ reff, isFocused, setIsFocused }: ListPost) {
     <>
       <div
         ref={reff}
-        className={`createPostWidget dark:bg-[#353a50] shadow-xl ${
+        className={`createPostWidget dark:bg-[#242526] shadow-xl ${
           isFocused ? "active" : ""
         }`}
       >
-        <div className="createInput dark:bg-[#353a50] rounded-lg">
+        <div className="createInput dark:bg-[#242526] rounded-lg">
           {/* <img src="/assets/image/avatar_default.jpg" alt="" /> */}
           <input
             type="text"
@@ -99,7 +99,7 @@ export default function ListPost({ reff, isFocused, setIsFocused }: ListPost) {
                       value={text}
                       onChange={(e) => setText(e.target.value)}
                     />
-                    <div className="otherOptions border border-slate-500 dark:bg-[#18181b] rounded-lg flex justify-between">
+                    <div className="otherOptions border border-slate-500 dark:bg-[#242526] rounded-lg flex justify-between">
                       <div className="m-3">
                         <p className="text-sm">Thêm vào bài đăng của bạn</p>
                       </div>
@@ -131,7 +131,7 @@ export default function ListPost({ reff, isFocused, setIsFocused }: ListPost) {
 
           <button className="inBtn">Post</button>
         </div>
-        <div className="otherOptions dark:bg-[#353a50] rounded-lg">
+        <div className="otherOptions dark:bg-[#242526] rounded-lg">
           <div className="option">
             <BsFillCameraVideoFill />
             <span>Go Live</span>

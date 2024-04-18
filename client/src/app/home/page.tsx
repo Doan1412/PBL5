@@ -8,14 +8,17 @@ import Post from "@/components/Post";
 import Navigation from "@/components/Navigation";
 import ListPost from "@/components/SatatusPost";
 import { User } from "../types";
+import Widget from "../widget";
 
 const Home: React.FC = () => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
   //   useClickOutside(() => setIsFocused(false), ref);
 
+  
+
   return (
-    <>
+    <Widget>
       <nav className="fixed z-40 w-full">
         <Navigation />
       </nav>
@@ -78,7 +81,7 @@ const Home: React.FC = () => {
           </div>
         </section>
       </main>
-    </>
+    </Widget>
   );
 };
 

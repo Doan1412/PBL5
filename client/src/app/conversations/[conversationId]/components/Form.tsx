@@ -7,7 +7,11 @@ import MessageInput from "./MessageInput";
 import http from "@/app/utils/http";
 import { CldUploadButton } from "next-cloudinary";
 
-export default function Form() {
+interface FormProps {
+  onSend: () => void
+}
+
+export default function Form(props: FormProps) {
   const { conversationId } = useConversation();
 
   const {

@@ -12,6 +12,9 @@ import userData from "../data/UserData";
 import Post from "@/components/Post";
 import { User } from "../types";
 import SidebarImage from "@/components/SidebarProfile/SidebarImage";
+import { useAppDispatch } from "../hooks/store";
+import { resetLoading } from "../hooks/features/loading.slice";
+import Widget from "../widget";
 
 interface LinkProfile {
   name: string;
@@ -44,9 +47,11 @@ const links: LinkProfile[] = [
 export default function Profile() {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
+  dispatch(resetLoading());
 
   return (
-    <>
+    <Widget>
       <nav className="fixed z-40 w-full">
         <Navigation />
       </nav>
@@ -140,6 +145,6 @@ export default function Profile() {
           </div>
         </div>
       </div>
-    </>
+    </Widget>
   );
 }
