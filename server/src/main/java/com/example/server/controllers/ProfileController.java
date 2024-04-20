@@ -1,6 +1,7 @@
 package com.example.server.controllers;
 
 import com.example.server.models.Entity.Account;
+import com.example.server.models.Entity.Profile;
 import com.example.server.service.ProfileService;
 import com.example.server.utils.Respond;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +17,9 @@ public class ProfileController {
     private final ProfileService service;
 
     @PutMapping("/update")
-    public ResponseEntity<Object> update(@RequestParam String bio, @RequestParam MultipartFile avatar, @RequestParam MultipartFile cover,@AuthenticationPrincipal Account account){
+    public ResponseEntity<Object> update(@RequestBody Profile profile,@AuthenticationPrincipal Account account){
         try {
-            Object data = service.update(account.getId(),bio,avatar,cover);
+            Object data = service.update(account.getId(),profile);
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
