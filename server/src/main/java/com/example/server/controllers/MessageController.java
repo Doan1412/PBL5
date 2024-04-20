@@ -19,16 +19,9 @@ import java.util.Optional;
 @RequestMapping("/messages")
 @RequiredArgsConstructor
 public class MessageController {
-    @Autowired
     private final MessageService messageService;
-    @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
-
-    @Autowired
     private ChatRoomRepository chatRoomRepository; // Assuming you have a repository for ChatRoom
-
-    @Autowired
-    private UserRepository userRepository; 
     
     @MessageMapping("/message")
     public void send(@Payload MessageDTO msg) {
