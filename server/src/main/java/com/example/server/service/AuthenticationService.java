@@ -118,15 +118,11 @@ public class AuthenticationService {
         tokenRepository.deleteByAccountId(user.getId());
     }
 
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+    public ResponseEntity<Object> refreshToken( String authHeader ) throws IOException {
         final String refreshToken;
         final String userEmail;
         if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-            return;
+            throw new IllegalArgumentException("Token not found");
         }
         refreshToken = authHeader.substring(7);
         userEmail = jwtService.extractUsername(refreshToken);
@@ -141,9 +137,10 @@ public class AuthenticationService {
                 Map<String, Object> data = new HashMap<String, Object>();
                 data.put("access_token",accessToken);
                 data.put("refresh_token",refreshToken);
-                new ObjectMapper().writeValue(response.getOutputStream(), Respond.success(200,"I002",data));
+                return Respond.success(200,"I002",data);
             }
         }
+        return Respond.fail(400,"E001","Token invalid");
     }
 
     public ResponseEntity<Object> loginOAuthGoogle(String googleToken) {
