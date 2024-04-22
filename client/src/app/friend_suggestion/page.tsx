@@ -22,6 +22,7 @@ import { DeleteIcon } from "./icon/DeleteIcon";
 import Navigation from "@/components/Navigation";
 import { useRouter } from "next/navigation";
 import { UserType } from "../types";
+import Widget from "../widget";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -107,7 +108,7 @@ export default function FriendSuggestion() {
   }, []);
 
   return (
-    <>
+    <Widget>
       <nav className="fixed z-40 w-full">
         <Navigation />
       </nav>
@@ -175,6 +176,6 @@ export default function FriendSuggestion() {
           </div>
         </div>
       </div>
-    </>
+    </Widget>
   );
 }

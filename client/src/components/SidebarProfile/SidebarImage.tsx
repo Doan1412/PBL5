@@ -44,10 +44,10 @@ export default function SidebarImage() {
 
   return (
     <>
-      <div className="bg-[#f0f2f5] dark:bg-gray-800 rounded-lg shrink flex flex-col">
+      <div className="bg-[#ffffff] dark:bg-[#242526] rounded-lg shrink flex flex-col drop-shadow-2xl">
         <div className="flex justify-between mr-5">
-          <h1 className="ml-5 mt-5 font-bold text-xl">Image</h1>
-          <Link href="#" className="text-sky-500 ml-5 mt-5">
+          <h1 className="ml-5 mt-5 font-bold text-xl dark:text-white">Image</h1>
+          <Link href="#" className="text-sky-500 ml-5 mt-5 ">
             Xem tất cả ảnh
           </Link>
         </div>

@@ -72,3 +72,25 @@ export interface User {
   storyImage: string;
   postImg: string;
 }
+
+export interface PostType {
+  id?: string;
+  content?: string;
+  created_at?: string;
+  updated_at?: string | null;
+  userId?: string;
+  fullName?: string;
+  avatarUrl?: string;
+  like_count?: number;
+  share_count?: number;
+  attachments?: Attachment[];
+  like?: boolean;
+}
+
+export interface Attachment {
+  id?: string;
+  url?: string;
+  type?: string;
+  created_at?: string;
+}
+

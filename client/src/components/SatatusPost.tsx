@@ -24,7 +24,7 @@ interface ListPost {
   setIsFocused: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ListPost({ reff, isFocused, setIsFocused }: ListPost) {
+export default function SatatusPost({ reff, isFocused, setIsFocused }: ListPost) {
   //   const [isFocused, setIsFocused] = useState<boolean>(false);
   //   const ref = useRef<HTMLDivElement>(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -34,7 +34,7 @@ export default function ListPost({ reff, isFocused, setIsFocused }: ListPost) {
     <>
       <div
         ref={reff}
-        className={`createPostWidget dark:bg-[#242526] shadow-xl ${
+        className={`createPostWidget w-full dark:bg-[#242526] shadow-xl dark:text-white ${
           isFocused ? "active" : ""
         }`}
       >
@@ -105,7 +105,7 @@ export default function ListPost({ reff, isFocused, setIsFocused }: ListPost) {
                       </div>
                       <div className="flex justify-center items-center gap-3 mr-3 relative">
                         <div className="option">
-                          <IoMdImages size={25} className="text-green-700" />
+                          <IoMdImages size={25} className="text-green-700 cursor-pointer" />
                         </div>
                         <div className="option">
                           <FaVideo size={25} className="text-red-700" />

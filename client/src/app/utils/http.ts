@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance } from "axios";
 import { getLocalStorage } from "../actions/localStorage_State";
 
 class Http {
@@ -6,10 +6,13 @@ class Http {
   constructor() {
     this.instance = axios.create({
       baseURL: process.env.BACKEND_URL,
-      timeout: 5000,
-      headers: {
-        Authorization: `${getLocalStorage()?.token}`,
-      },
+      timeout: 15000,
+      // headers: {
+      //   Authorization: `${getLocalStorage()?.token}`,
+      // },
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
     });
   }
 }

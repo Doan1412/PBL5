@@ -17,20 +17,25 @@ import { FaBell } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import ThemeToggle from "./ThemeToggle";
 import { useRouter } from "next/navigation";
-import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
+// import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
 import { getLocalStorage } from "@/app/actions/localStorage_State";
 import { useAppDispatch } from "@/app/hooks/store";
 import { resetLoading, setLoading } from "@/app/hooks/features/loading.slice";
 import { successPopUp } from "@/app/hooks/features/popup.slice";
+import avatarDefault from "@/static/images/avatarDefault.jpg";
+import { UserType } from "@/app/types";
+import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
+
+
 
 export default function Navigation() {
   const router = useRouter();
   const { data, isFetching } = useGetUserInfoQuery(
     getLocalStorage()?.user_id as string
   );
-  console.log(data);
-  const dispatch = useAppDispatch();
 
+
+  const dispatch = useAppDispatch();
   return (
     <div>
       <nav className="hidden lg:flex bg-white p-0 dark:bg-[#242526] justify-between">
@@ -70,7 +75,12 @@ export default function Navigation() {
               className="tooltip active w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg dark:hover:bg-medium dark:hover:border-none"
               data-tooltip="Home"
             >
-              <button className="button hover:translate-y-[-3px]">
+              <button
+                className="button dark:text-white hover:translate-y-[-3px]"
+                onClick={() => {
+                  router.push("/home");
+                }}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="1.6em"
@@ -88,7 +98,7 @@ export default function Navigation() {
           </li>
           <li>
             <div className="w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg shrink dark:hover:bg-medium dark:hover:border-none">
-              <button className="button hover:translate-y-[-3px]">
+              <button className="button dark:text-white hover:translate-y-[-3px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="1.6em"
@@ -111,7 +121,7 @@ export default function Navigation() {
           </li>
           <li>
             <div className="w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg dark:hover:bg-medium dark:hover:border-none">
-              <button className="hover:translate-y-[-3px]">
+              <button className="hover:translate-y-[-3px] dark:text-white">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="1.6em"
@@ -161,7 +171,11 @@ export default function Navigation() {
                       color="secondary"
                       name="Jason Hughes"
                       size="sm"
-                      src={`${process.env.BACKEND_URL}/avatar/${data?.data.profile.avatar_url}`}
+                      src={
+                        data?.data.profile.avatar_url != ""
+                          ? `${data?.data.profile.avatar_url}`
+                          : avatarDefault.src
+                      }
                     />
                     <span className=" absolute flex h-3 w-3 top-0 right-1">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75"></span>

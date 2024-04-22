@@ -11,7 +11,7 @@ export const store = configureStore({
   reducer: {
     loading: loadingReducer,
     popup: popupReducer,
-    [userInfoApi.reducerPath]: userInfoApi.reducer
+    [userInfoApi.reducerPath]: userInfoApi.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(userInfoApi.middleware)
 })

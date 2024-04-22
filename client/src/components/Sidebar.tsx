@@ -9,8 +9,12 @@ import {
   FaHome,
 } from "react-icons/fa";
 import Link from "next/link";
-import { Image } from "@nextui-org/react";
+import { Image, Skeleton } from "@nextui-org/react";
 import avatar from "@/static/images/avatar.jpg";
+import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
+import { getLocalStorage } from "@/app/actions/localStorage_State";
+import avatarDefault from "@/static/images/avatarDefault.jpg";
+import SkeletonUser from "@/app/actions/getSkeleton";
 
 interface LinkItem {
   name: string;
@@ -49,18 +53,38 @@ const links: LinkItem[] = [
 ];
 
 const Sidebar: React.FC = () => {
+  const { data, isFetching } = useGetUserInfoQuery(
+    getLocalStorage()?.user_id as string
+  );
   return (
     <div className="leftSection dark:text-white">
       <div className="userProfileWidget dark:bg-[#242526] dark:text-white dark:shadow-lg">
-        <div className="profileImage">
-          <Image src={avatar.src} alt="" />
-        </div>
-        <div className="userDetails dark:text-white">
-          <Link href={"/profile"} className="name dark:text-white">
-            John Doe
-          </Link>
-          <div className="username dark:text-white">@johndoe</div>
-        </div>
+        {isFetching ? (
+          <SkeletonUser />
+        ) : (
+          <div className="flex">
+            <div className="profileImage">
+              <Image
+                src={
+                  data?.data.profile.avatar_url != ""
+                    ? `${data?.data.profile.avatar_url}`
+                    : avatarDefault.src
+                }
+                alt=""
+              />
+            </div>
+            <div className="userDetails dark:text-white flex items-center">
+              <div className="flex flex-col">
+                <Link href={"/profile"} className="name dark:text-white">
+                  {data?.data.firstname} {data?.data.lastname}
+                </Link>
+                <div className="username dark:text-white">
+                  @{data?.data.username}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="inSidebar dark:bg-[#242526] dark:text-white">

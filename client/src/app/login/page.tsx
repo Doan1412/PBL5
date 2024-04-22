@@ -16,6 +16,8 @@ import {
 } from "../hooks/features/popup.slice";
 import { resetLoading, setLoading } from "../hooks/features/loading.slice";
 import LandingPage from "../landing";
+import { getLocalStorage } from "../actions/localStorage_State";
+import useRefreshToken from "../actions/refreshToken";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,6 +25,8 @@ export default function LoginPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [isLoading, setLoading_login] = useState(false);
+
 
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
@@ -54,21 +58,25 @@ export default function LoginPage() {
       );
 
       if (response.data.status === 200) {
-        // dispatch(resetLoading());
-        // dispatch(successPopUp(response.data.message));
+        dispatch(resetLoading());
+        dispatch(successPopUp("Welcome to Return !!!"));
         const now = new Date();
         // const expirationTime = now.getTime() + 144 * 60 * 1000;
-        const expirationTime = now.getTime() + 20 * 1000;
-        localStorage.setItem(
-          "access_token_expires_at",
-          expirationTime.toString()
-        );
+        // const expirationTime = now.getTime() + 20 * 1000;
+        // localStorage.setItem(
+        //   "access_token_expires_at",
+        //   expirationTime.toString()
+        // );
         localStorage.setItem("access_token", response.data.data.access_token);
-        setTimeout(function () {
-          localStorage.removeItem("access_token"); // Xóa token khi hết hạn
-        }, 10 * 60 * 1000);
+        // setTimeout(function () {
+        //   localStorage.removeItem("access_token"); // Xóa token khi hết hạn
+        //   // }, 10 * 60 * 1000);
+        // }, 20 * 1000);
         localStorage.setItem("refresh_token", response.data.data.refresh_token);
         localStorage.setItem("user_id", response.data.data.user_id);
+        // setInterval(async () => {
+        //   await refresh(getLocalStorage()?.refresh_token as string);
+        // }, 15 * 1000);
         if (response.data.user_id === "") router.push("/admin");
         else {
           setTimeout(() => {
@@ -77,7 +85,9 @@ export default function LoginPage() {
           }, 2000);
         }
       } else {
-        dispatch(failPopUp(response.data.message));
+        console.log("Loi o day")
+        setLoading_login(false);
+        dispatch(failPopUp(response.data.error));
         dispatch(resetLoading());
       }
     } catch (error) {
@@ -164,10 +174,14 @@ export default function LoginPage() {
                 />
               </div>
               <Button
-                className="bg-[#002D74] rounded-xl text-white py-2 hover:scale-105 duration-300 flex flex-col gap-4 mt-4 mx-auto"
-                onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-                  handleLogin(e)
-                }
+                className="bg-[#002D74] rounded-xl text-white py-2 hover:scale-105 duration-300 flex gap-4 mt-4 mx-auto"
+                isLoading={isLoading}
+                onClick={(
+                  e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+                ) => {
+                  handleLogin(e);
+                  setLoading_login(true);
+                }}
               >
                 Login
               </Button>

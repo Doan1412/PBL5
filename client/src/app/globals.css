@@ -265,7 +265,7 @@ body,
 /* --------------------------- Post --------------------------- */
 
 .postWrapper {
-  @apply bg-[#ffffff] rounded-xl overflow-hidden shadow-xl mx-4 px-4 my-6 pb-2;
+  @apply bg-[#ffffff] rounded-xl overflow-hidden shadow-xl mx-4 px-4 my-6 pb-2 flex flex-col shrink w-80;
 }
 
 .postWrapper .header {

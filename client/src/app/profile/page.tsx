@@ -9,12 +9,13 @@ import AddFriendButton from "@/components/AddFriendButton";
 import SidebarProfile from "@/components/SidebarProfile/SidebarProfile";
 import ListPost from "@/components/SatatusPost";
 import userData from "../data/UserData";
-import Post from "@/components/Post";
+import Post from "@/components/Post/Post";
 import { User } from "../types";
 import SidebarImage from "@/components/SidebarProfile/SidebarImage";
 import { useAppDispatch } from "../hooks/store";
 import { resetLoading } from "../hooks/features/loading.slice";
 import Widget from "../widget";
+import SatatusPost from "@/components/SatatusPost";
 
 interface LinkProfile {
   name: string;
@@ -55,7 +56,7 @@ export default function Profile() {
       <nav className="fixed z-40 w-full">
         <Navigation />
       </nav>
-      <div className=" h-auto dark:bg-[#18191a]">
+      <div className=" h-full dark:bg-[#18191a]">
         <div className="dark:bg-[#242526] bg-[#f0f2f5] ml-15 mr-15 rounded-bl-lg pt-18 rounded-br-lg z-0">
           <div className="flex justify-center">
             <div className="flex items-center relative">
@@ -82,14 +83,14 @@ export default function Profile() {
               <UploadAvatar />
             </div>
           </div>
-          <h1 className="flex justify-center mt-7 font-bold text-3xl">
+          <h1 className="flex justify-center mt-7 font-bold text-3xl dark:text-white">
             Thái Khắc Dược
           </h1>
-          <h2 className="flex justify-center mt-1 text-[#65676b] text-base">
+          <h2 className="flex justify-center mt-1 text-[#65676b] text-base dark:text-gray-600">
             @thaikhacduoc
           </h2>
           {/* <div className="flex justify-center mt-2 gap-4 pb-2"> */}
-          <h2 className="flex justify-center mt-1 text-[#65676b] text-base">
+          <h2 className="flex justify-center mt-1 text-[#65676b] text-base dark:text-white">
             Bạn bè 1K • Đang theo dõi 0
           </h2>
           <div className="mt-2 pb-5">
@@ -126,14 +127,14 @@ export default function Profile() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center h-svh">
+        <div className="flex justify-center">
           <div className="flex flex-col mt-5">
             <SidebarProfile />
             <SidebarImage />
           </div>
           <div className="mt-2 h-full">
             <div className="flex flex-col">
-              <ListPost
+              <SatatusPost
                 reff={ref}
                 isFocused={isFocused}
                 setIsFocused={setIsFocused}
