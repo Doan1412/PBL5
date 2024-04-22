@@ -21,8 +21,8 @@ import java.util.Optional;
 public class MessageController {
     @Autowired
     private final MessageService messageService;
-    @Autowired
-    private SimpMessagingTemplate simpMessagingTemplate;
+    // @Autowired
+    // private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
     private ChatRoomRepository chatRoomRepository; // Assuming you have a repository for ChatRoom
@@ -37,7 +37,7 @@ public class MessageController {
             Message message = messageService.sendMessage(msg.getSenderId(), msg.getRoomId(), msg.getContent());
             ChatRoom chatRoom = chatRoomOptional.get();
             for (User member : chatRoom.getMembers()) {
-                simpMessagingTemplate.convertAndSendToUser(member.getUsername(), "/chatroom", message);
+                // simpMessagingTemplate.convertAndSendToUser(member.getUsername(), "/chatroom", message);
             }
         }
     }

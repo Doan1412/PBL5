@@ -28,8 +28,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private final JwtService jwtService;
+    @Autowired
     private final UserDetailsService userDetailsService;
+    @Autowired
     private final TokenRepository tokenRepository;
+    @Autowired
     private final AccountRepository accountRepository;
 
     @Override
