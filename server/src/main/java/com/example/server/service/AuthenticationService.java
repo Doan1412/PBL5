@@ -113,6 +113,11 @@ public class AuthenticationService {
                 .build();
         tokenRepository.save(token);
     }
+    private void updateUserToken(Account account, String jwtToken) {
+        Token token = tokenRepository.findByAccount(account).orElse(null);
+        token.setToken(jwtToken);
+        tokenRepository.save(token);
+    }
 
     private void revokeAllUserTokens(Account user) {
         tokenRepository.deleteByAccountId(user.getId());
@@ -133,7 +138,7 @@ public class AuthenticationService {
             if (jwtService.isTokenValid(refreshToken, acc)) {
                 var accessToken = jwtService.generateToken(acc);
                 revokeAllUserTokens(acc);
-                saveUserToken(acc, accessToken);
+                updateUserToken(acc, accessToken);
                 Map<String, Object> data = new HashMap<String, Object>();
                 data.put("access_token",accessToken);
                 data.put("refresh_token",refreshToken);
