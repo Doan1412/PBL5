@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import loginImage from "@/static/images/loginImage.jpg";
 import RImage from "@/static/images/RImage.png";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
@@ -7,9 +7,58 @@ import http from "../utils/http";
 import { hasCookie, setCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { Button, Image, Input } from "@nextui-org/react";
+import { resetLoading } from "../hooks/features/loading.slice";
+import { useAppDispatch } from "../hooks/store";
+import { failPopUp, successPopUp } from "../hooks/features/popup.slice";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const [firstname, setFirstname] = useState<string>("");
+  const [lastname, setLastname] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [isLoading, setLoading_login] = useState(false);
+
+  const dispatch = useAppDispatch();
+
+  const handleRegister = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    console.log("Register Oke");
+    e.preventDefault();
+    // dispatch(setLoading());
+
+    try {
+      const response = await http.post(
+        "/auth/register",
+        {
+          email,
+          password,
+          firstname,
+          lastname
+        },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.status === 200) {
+        dispatch(resetLoading());
+        dispatch(successPopUp(response.data.message));
+        router.push("/login");
+      } else {
+        dispatch(failPopUp(response.data.message));
+        dispatch(resetLoading());
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      dispatch(failPopUp("An error occurred during register."));
+      dispatch(resetLoading());
+    }
+  };
 
   const responseGoogle = async (response: any) => {
     const res = await http.post(
@@ -40,6 +89,11 @@ export default function RegisterPage() {
     console.log(res);
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    return value;
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen flex items-center justify-center">
       <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-3xl p-5 items-center">
@@ -56,13 +110,48 @@ export default function RegisterPage() {
           </p>
           <div className="flex flex-col gap-4 mt-4">
             <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-              <Input size="sm" type="text" label="FistName" />
-              <Input size="sm" type="text" label="LastName" />
+              <Input
+                size="sm"
+                type="text"
+                label="FistName"
+                onChange={(e) => {
+                  setFirstname(handleInputChange(e));
+                }}
+              />
+              <Input
+                size="sm"
+                type="text"
+                label="LastName"
+                onChange={(e) => {
+                  setLastname(handleInputChange(e));
+                }}
+              />
             </div>
-            <Input size="sm" type="email" label="Email" />
-            <Input size="sm" type="password" label="Password" />
+            <Input
+              size="sm"
+              type="email"
+              label="Email"
+              onChange={(e) => {
+                setEmail(handleInputChange(e));
+              }}
+            />
+            <Input
+              size="sm"
+              type="password"
+              label="Password"
+              onChange={(e) => {
+                setPassword(handleInputChange(e));
+              }}
+            />
           </div>
-          <Button className="bg-[#002D74] rounded-xl text-white py-2 hover:scale-105 duration-300 flex flex-col gap-4 mt-4 mx-auto">
+          <Button
+            className="bg-[#002D74] rounded-xl text-white py-2 hover:scale-105 duration-300 flex gap-4 mt-4 mx-auto"
+            isLoading={isLoading}
+            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+              handleRegister(e);
+              setLoading_login(true);
+            }}
+          >
             Register
           </Button>
           <div className="mt-6 grid grid-cols-3 items-center text-gray-400">

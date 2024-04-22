@@ -30,7 +30,7 @@ public class MessageController {
             Message message = messageService.sendMessage(msg.getSenderId(), msg.getRoomId(), msg.getContent());
             ChatRoom chatRoom = chatRoomOptional.get();
             for (User member : chatRoom.getMembers()) {
-                simpMessagingTemplate.convertAndSendToUser(member.getUsername(), "/chatroom", message);
+                // simpMessagingTemplate.convertAndSendToUser(member.getUsername(), "/chatroom", message);
             }
         }
     }

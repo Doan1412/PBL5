@@ -137,8 +137,9 @@ public class AuthenticationService {
         userEmail = jwtService.extractUsername(refreshToken);
         System.out.println(userEmail);
         if (userEmail != null) {
-            var acc = this.repository.findByEmail(userEmail)
-                    .orElseThrow();
+            Account acc = this.repository.findByEmail(userEmail)
+            .orElseThrow();
+            System.out.println(acc.getId());
             if (jwtService.isTokenValid(refreshToken, acc)) {
                 var accessToken = jwtService.generateToken(acc);
                 // revokeAllUserTokens(acc);

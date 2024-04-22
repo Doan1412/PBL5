@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -14,8 +16,8 @@ import java.time.LocalDateTime;
 @Node("Report")
 public class Report {
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(UUIDStringGenerator.class)
+    private String id;
     private Post post;
     private User user;
     private String reason;

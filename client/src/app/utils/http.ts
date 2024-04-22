@@ -1,15 +1,18 @@
 import axios, { AxiosInstance } from "axios";
-import { getCookie, hasCookie } from "cookies-next";
+import { getLocalStorage } from "../actions/localStorage_State";
 
 class Http {
   instance: AxiosInstance;
   constructor() {
     this.instance = axios.create({
       baseURL: process.env.BACKEND_URL,
-      timeout: 5000,
-      headers: {
-        Authorization: hasCookie("token") ? getCookie("token") : "",
-      },
+      timeout: 15000,
+      // headers: {
+      //   Authorization: `${getLocalStorage()?.token}`,
+      // },
+      // headers: {
+      //   "Content-Type": "application/json",
+      // },
     });
   }
 }

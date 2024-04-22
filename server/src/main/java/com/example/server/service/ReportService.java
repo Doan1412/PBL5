@@ -37,7 +37,7 @@ public class ReportService {
         List<Report> data = reportRepository.findAll(sort);
         return data;
     }
-    public void updateReportStatus(Long reportId, ReportStatus newStatus) {
+    public void updateReportStatus(String reportId, ReportStatus newStatus) {
         // Tìm báo cáo trong cơ sở dữ liệu
         Report report = reportRepository.findById(reportId).orElse(null);
 
@@ -54,7 +54,7 @@ public class ReportService {
         reportRepository.save(report);
     }
 
-    public void deleteReportById(Long reportId) {
+    public void deleteReportById(String reportId) {
         reportRepository.deleteById(reportId);
     }
 }

@@ -21,7 +21,7 @@ const config: Config = {
       colors: {
         primary: { ...colors.rose, DEFAULT: colors.rose[600] },
         dark: "#232A3C",
-        medium: "#293245",
+        medium: "#18191a",
       },
       screens: {
         mobile: "960px",
