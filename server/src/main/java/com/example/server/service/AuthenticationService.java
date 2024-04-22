@@ -174,6 +174,8 @@ public class AuthenticationService {
             } else {
                 var account = Account.builder()
                         .email(email)
+                        .role("USER")
+                        .status("ACTIVE")
                         .build();
                 var profile = Profile.builder()
                         .avatar_url(jsonObject.get("picture") != null
