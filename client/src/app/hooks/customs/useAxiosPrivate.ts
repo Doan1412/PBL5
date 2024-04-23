@@ -29,7 +29,7 @@ const useHttp = () => {
         // } // 10 phút
         console.log(config.headers);
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = ` ${
+          config.headers["Authorization"] = `Bearer ${
             getLocalStorage()?.token as string
           }`;
         }

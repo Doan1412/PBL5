@@ -85,6 +85,7 @@ export interface PostType {
   share_count?: number;
   attachments?: Attachment[];
   like?: boolean;
+  username?: string;
 }
 
 export interface Attachment {

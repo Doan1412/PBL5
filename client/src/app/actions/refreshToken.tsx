@@ -1,11 +1,12 @@
 "use client";
 
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import http from "../utils/http";
 // import AuthContext from "../context/AuthProvider";
 
 export default function useRefreshToken() {
   // const { setAuth } = useContext(AuthContext);
+  const controller = useMemo(() => new AbortController(), []);
 
   async function refreshToken(refresh_token: String) {
     console.log(refresh_token);
@@ -14,7 +15,9 @@ export default function useRefreshToken() {
       headers: {
         Authorization: `Bearer ` + refresh_token,
       },
+      signal: controller.signal,
     });
+    controller.abort();
     console.log(res.data);
     // setAuth((prev: any) => {
     if (!refresh_token) return;
