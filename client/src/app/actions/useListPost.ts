@@ -1,7 +1,7 @@
 import { useSearchParams } from "next/navigation";
 import { useAppDispatch } from "../hooks/store";
 import { PostType } from "../types";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import useHttp from "../hooks/customs/useAxiosPrivate";
 import { getLocalStorage } from "./localStorage_State";
 import { failPopUp } from "../hooks/features/popup.slice";
@@ -13,6 +13,7 @@ export function useListPost(
   const dispatch = useAppDispatch();
   const params = useSearchParams();
   const httpPrivate = useHttp();
+  const controller = useMemo(() => new AbortController(), []);
 
   useEffect(() => {
     async function fetchListPost() {
@@ -20,13 +21,17 @@ export function useListPost(
       if (!token) return;
       try {
         const response = await httpPrivate.get(
-          `/post/homepage?skip=0&limit=20`
+          `/post/homepage?skip=0&limit=20`,
+          {
+            signal: controller.signal,
+          }
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,
           //   },
           // }
         );
+        controller.abort();
         if (response.data.status === 200) {
           const postsData = response.data.data;
           console.log(postsData);
@@ -41,5 +46,5 @@ export function useListPost(
       }
     }
     fetchListPost();
-  }, [params, dispatch, httpPrivate, setPosts, setLoading]);
+  }, [params, dispatch, httpPrivate, setPosts, setLoading, controller]);
 }

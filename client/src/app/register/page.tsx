@@ -17,6 +17,7 @@ export default function RegisterPage() {
   const [lastname, setLastname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [isLoading, setLoading_login] = useState(false);
 
   const dispatch = useAppDispatch();
@@ -35,7 +36,8 @@ export default function RegisterPage() {
           email,
           password,
           firstname,
-          lastname
+          lastname,
+          username,
         },
         {
           headers: {
@@ -111,23 +113,35 @@ export default function RegisterPage() {
           <div className="flex flex-col gap-4 mt-4">
             <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
               <Input
+                isRequired
                 size="sm"
                 type="text"
-                label="FistName"
+                label="Fistname"
                 onChange={(e) => {
                   setFirstname(handleInputChange(e));
                 }}
               />
               <Input
+                isRequired
                 size="sm"
                 type="text"
-                label="LastName"
+                label="Lastname"
                 onChange={(e) => {
                   setLastname(handleInputChange(e));
                 }}
               />
             </div>
             <Input
+              isRequired
+              size="sm"
+              type="text"
+              label="Username"
+              onChange={(e) => {
+                setUsername(handleInputChange(e));
+              }}
+            />
+            <Input
+              isRequired
               size="sm"
               type="email"
               label="Email"
@@ -136,6 +150,7 @@ export default function RegisterPage() {
               }}
             />
             <Input
+              isRequired
               size="sm"
               type="password"
               label="Password"

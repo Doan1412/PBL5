@@ -16,8 +16,6 @@ import {
 } from "../hooks/features/popup.slice";
 import { resetLoading, setLoading } from "../hooks/features/loading.slice";
 import LandingPage from "../landing";
-import { getLocalStorage } from "../actions/localStorage_State";
-import useRefreshToken from "../actions/refreshToken";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,7 +24,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setLoading_login] = useState(false);
-
 
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
@@ -60,7 +57,6 @@ export default function LoginPage() {
       if (response.data.status === 200) {
         dispatch(resetLoading());
         dispatch(successPopUp("Welcome to Return !!!"));
-        const now = new Date();
         // const expirationTime = now.getTime() + 144 * 60 * 1000;
         // const expirationTime = now.getTime() + 20 * 1000;
         // localStorage.setItem(
@@ -85,7 +81,7 @@ export default function LoginPage() {
           }, 2000);
         }
       } else {
-        console.log("Loi o day")
+        console.log("Loi o day");
         setLoading_login(false);
         dispatch(failPopUp(response.data.error));
         dispatch(resetLoading());
@@ -103,10 +99,9 @@ export default function LoginPage() {
   };
 
   const responseGoogle = async (response: any) => {
-    dispatch(setLoading());
     try {
       const res = await http.post(
-        `${process.env.BACKEND_URL}/auth/google?google_token=${response.credential}`,
+        `/auth/google?google_token=${response.credential}`,
         {
           headers: {
             Accept: "application/json",
@@ -116,7 +111,7 @@ export default function LoginPage() {
       );
       if (res.data.status === 200) {
         dispatch(resetLoading());
-        dispatch(successPopUp(res.data.message));
+        dispatch(successPopUp("Welcome to Return !!!"));
         localStorage.setItem("access_token", res.data.data.access_token);
         localStorage.setItem("refresh_token", res.data.data.refresh_token);
         localStorage.setItem("user_id", res.data.data.user_id);
@@ -126,6 +121,7 @@ export default function LoginPage() {
           setIsLoggedIn(true);
         }, 2000);
       } else {
+        setLoading_login(false);
         dispatch(failPopUp(res.data.message));
         dispatch(resetLoading());
       }

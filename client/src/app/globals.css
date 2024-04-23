@@ -185,7 +185,7 @@ body,
 /* --------------------------- Main Section --------------------------- */
 
 .mainSection {
-  @apply mobile:max-w-mainSection 0.5xl:max-w-[35rem] !mx-auto;
+  @apply mobile:max-w-mainSection 0.5xl:max-w-[35rem] !mx-auto w-full ;
 }
 
 .storiesWidget::-webkit-scrollbar {
@@ -221,7 +221,7 @@ body,
 }
 
 .createPostWidget {
-  @apply h-auto my-3 mx-4 bg-[#f0f2f5] rounded-full relative;
+  @apply h-auto my-3 bg-[#f0f2f5] rounded-full relative;
 }
 
 .createPostWidget.active {
@@ -265,7 +265,7 @@ body,
 /* --------------------------- Post --------------------------- */
 
 .postWrapper {
-  @apply bg-[#ffffff] rounded-xl overflow-hidden shadow-xl mx-4 px-4 my-6 pb-2 flex flex-col shrink w-80;
+  @apply bg-[#ffffff] rounded-xl overflow-hidden shadow-xl mx-4 px-4 my-6 pb-2;
 }
 
 .postWrapper .header {

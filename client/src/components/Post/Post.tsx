@@ -20,7 +20,8 @@ import Widget from "@/app/widget";
 import { PiHeartDuotone } from "react-icons/pi";
 import "./style.css";
 import { TbMessageCircle } from "react-icons/tb";
-import { PostType } from "@/app/types";
+import { Attachment, PostType } from "@/app/types";
+import CommentForm from "../CommentForm";
 
 interface UserData {
   profilePic: string;
@@ -70,7 +71,7 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
             />
             <div className="userDetails">
               <div className="name">{postData?.fullName}</div>
-              <div className="feeling">@{postData?.fullName}</div>
+              <div className="feeling">@{postData?.username}</div>
               <div className="feeling">{(postData?.created_at)?.slice(0,10)} {" "} {(postData?.created_at)?.slice(11,19)}</div>
             </div>
           </div>
@@ -85,7 +86,7 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
         </div>
         <div className="mainPostContent cursor-zoom-in hover:skew-y-1">
           <motion.img
-            src={postData?.avatarUrl}
+            src={postData?.attachments?.[0]?.url}
             alt=""
             className="postImage"
             onClick={() => setOpen(!open)}
@@ -130,31 +131,8 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
           </div>
           {showComment && (
             <div className="flex flex-col gap-4">
-              <div className="flex gap-2">
-                <div>
-                  <Avatar
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-                    size="sm"
-                  />
-                </div>
-                <div>
-                  <Card className="dark:bg-[#3a3b3c] bg-[#f0f2f5]">
-                    <CardHeader className="justify-between">
-                      <div className="flex">
-                        <div className="flex flex-col items-start justify-center">
-                          <h4 className="text-sm font-semibold leading-none text-default-600">
-                            Zoey Lang{" "}
-                            <span className="ml-2 text-sm text-gray-500">
-                              @zoeylang
-                            </span>
-                          </h4>
-                          <p className="text-base">Make beautiful</p>
-                        </div>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                </div>
-              </div>
+             <CommentForm/>
+             <CommentForm/>
               <div className="flex gap-3">
                 <div className="flex items-center">
                   <Avatar

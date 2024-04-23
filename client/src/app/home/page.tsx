@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, Fragment } from "react";
+import React, { useState, useRef, Fragment, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import userData from "../data/UserData";
 import Post from "@/components/Post/Post";
@@ -22,6 +22,7 @@ const Home: React.FC = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
   // const refresh = useRefreshToken();
 
+  
   useListPost(setPosts, setLoading);
 
   // useRefreshToken()
