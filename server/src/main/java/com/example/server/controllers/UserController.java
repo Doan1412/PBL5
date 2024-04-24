@@ -46,7 +46,7 @@ public class UserController {
         try {
             System.out.println(user);
             User u = service.updateInfo(user);
-            return Respond.success(200,"I001","");
+            return Respond.success(200,"I001",u);
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getMessage());

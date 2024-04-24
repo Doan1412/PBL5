@@ -23,20 +23,36 @@ export type ConversationType = {
   users: UserType[];
 };
 
+export type Profile = {
+  id?: String;
+  avatar_url?: String;
+  bio?: String;
+  cover_url?: String;
+};
+
 export type UserType = {
-  id: String;
-  name?: String;
-  email: String;
-  emailVerified: Date;
-  image?: String;
-  hashedPassword: String;
-  createdAt: Date;
-  updatedAt: Date;
-  conversationIds: String;
-  conversations: ConversationType[];
-  seenMessageIds: String;
-  seenMessages: MessageType[];
-  messages: MessageType[];
+  data: {
+    id: String;
+    name?: String;
+    email: String;
+    firstname?: String;
+    lastname?: String;
+    username: String;
+    birth?: Date;
+    gender?: String;
+    phone?: String;
+    profile: Profile;
+    emailVerified: Date;
+    image?: String;
+    hashedPassword: String;
+    createdAt: Date;
+    updatedAt: Date;
+    conversationIds: String;
+    conversations: ConversationType[];
+    seenMessageIds: String;
+    seenMessages: MessageType[];
+    messages: MessageType[];
+  };
 };
 
 export type FullMessageType = MessageType & {
@@ -56,3 +72,26 @@ export interface User {
   storyImage: string;
   postImg: string;
 }
+
+export interface PostType {
+  id?: string;
+  content?: string;
+  created_at?: string;
+  updated_at?: string | null;
+  userId?: string;
+  fullName?: string;
+  avatarUrl?: string;
+  like_count?: number;
+  share_count?: number;
+  attachments?: Attachment[];
+  like?: boolean;
+  username?: string;
+}
+
+export interface Attachment {
+  id?: string;
+  url?: string;
+  type?: string;
+  created_at?: string;
+}
+

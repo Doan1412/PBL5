@@ -13,7 +13,7 @@ body,
 }
 
 .inBtn {
-  @apply bg-[#45d4a4] px-6 py-2 cursor-pointer rounded-full text-white hover:opacity-100 opacity-95 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-within:ring-offset-2;
+  @apply bg-[#377375] px-6 py-2 cursor-pointer rounded-full text-white hover:opacity-100 opacity-95 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#377375] focus-within:ring-offset-2;
 }
 
 .userProfile {
@@ -38,7 +38,7 @@ body,
 }
 
 .profileWrapper .profileData span {
-  @apply text-[.7rem] cursor-pointer hover:text-primary;
+  @apply text-[.7rem] cursor-pointer hover:text-[#377375];
 }
 
 .userImage img,
@@ -104,7 +104,7 @@ body,
 
 .leftSection .userProfileWidget .userDetails .name,
 .rightSection .requestWidget .requestProfile .userDetails .name {
-  @apply text-base text-gray-700 font-bold hover:text-primary hover:cursor-pointer dark:text-white;
+  @apply text-base text-gray-700 font-bold hover:text-[#377375] hover:cursor-pointer dark:text-white;
 }
 
 .leftSection .userProfileWidget .userDetails .username,
@@ -129,7 +129,7 @@ body,
 }
 
 .inSidebar .link:hover :is(svg, h3) {
-  @apply text-primary dark:text-white;
+  @apply text-[#377375] dark:text-white;
 }
 
 .inSidebar .link h3 {
@@ -157,7 +157,7 @@ body,
 }
 
 .rightSection .requestWidget .requestProfile {
-  @apply my-3 scale-95 bg-white shadow-md p-1 rounded-xl pt-5 dark:bg-[#353a50];
+  @apply my-3 scale-95 bg-white shadow-md p-1 rounded-xl pt-5 dark:bg-[#242526];
 }
 
 .rightSection .requestWidget .requestProfile .userDetails .name {
@@ -177,7 +177,7 @@ body,
 }
 
 .rightSection .requestWidget .requestProfile .actions .actionBtn {
-  @apply mx-2 w-[6rem] text-sm first:bg-primary first:opacity-90 first:hover:opacity-100 first:text-white last:bg-gray-200 last:dark:bg-[#444546] py-1.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-within:ring-offset-2 last:hover:bg-rose-600 last:hover:text-white;
+  @apply mx-2 w-[6rem] text-sm first:bg-[#377375] first:opacity-90 first:hover:opacity-100 first:text-white last:bg-gray-200 last:dark:bg-[#444546] py-1.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#377375] focus-within:ring-offset-2 last:hover:bg-rose-600 last:hover:text-white;
 }
 
 /* --------------------------- Right Section End --------------------------- */
@@ -185,7 +185,7 @@ body,
 /* --------------------------- Main Section --------------------------- */
 
 .mainSection {
-  @apply mobile:max-w-mainSection 0.5xl:max-w-[35rem] !mx-auto;
+  @apply mobile:max-w-mainSection 0.5xl:max-w-[35rem] !mx-auto w-full ;
 }
 
 .storiesWidget::-webkit-scrollbar {
@@ -213,7 +213,7 @@ body,
 }
 
 .storiesWidget .story .profileImage {
-  @apply w-[1.5rem] h-[1.5rem] object-cover absolute top-[.4rem] left-[.4rem] rounded-full ring-2 ring-primary p-[.07rem];
+  @apply w-[1.5rem] h-[1.5rem] object-cover absolute top-[.4rem] left-[.4rem] rounded-full ring-2 ring-[#377375] p-[.07rem];
 }
 
 .storiesWidget .story .name {
@@ -221,7 +221,7 @@ body,
 }
 
 .createPostWidget {
-  @apply h-auto my-3 mx-4 bg-[#f0f2f5] rounded-full relative;
+  @apply h-auto my-3 bg-[#f0f2f5] rounded-full relative;
 }
 
 .createPostWidget.active {
@@ -241,11 +241,11 @@ body,
 }
 
 .createPostWidget.active .otherOptions .option svg {
-  @apply mr-2 text-xl text-primary;
+  @apply mr-2 text-xl text-[#377375];
 }
 
 .createPostWidget.active .otherOptions .option span {
-  @apply mr-2 text-sm hover:text-primary;
+  @apply mr-2 text-sm hover:text-[#377375];
 }
 
 .createPostWidget .createInput {
@@ -265,7 +265,7 @@ body,
 /* --------------------------- Post --------------------------- */
 
 .postWrapper {
-  @apply bg-[#f0f2f5] rounded-xl overflow-hidden shadow-xl mx-4 px-4 my-6 pb-2;
+  @apply bg-[#ffffff] rounded-xl overflow-hidden shadow-xl mx-4 px-4 my-6 pb-2;
 }
 
 .postWrapper .header {
@@ -285,7 +285,7 @@ body,
 }
 
 .postWrapper .header .left .userDetails .name {
-  @apply font-semibold text-gray-600 hover:text-primary cursor-pointer dark:text-white dark:hover:text-primary;
+  @apply font-semibold text-gray-600 hover:text-[#377375] cursor-pointer dark:text-white dark:hover:text-[#377375];
 }
 
 .postWrapper .header .left .userDetails .feeling {
@@ -305,7 +305,7 @@ body,
 }
 
 .postFooter {
-  @apply flex justify-between items-center my-3;
+  @apply flex justify-between my-3;
 }
 
 .postFooter .postActions {

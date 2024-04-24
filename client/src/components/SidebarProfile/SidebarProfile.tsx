@@ -9,9 +9,9 @@ export default function SidebarProfile() {
  
   return (
     <>
-      <div className="bg-[#f0f2f5] dark:bg-gray-800 rounded-lg mb-4 shrink">
-        <h1 className="ml-5 mt-5 font-bold text-xl">Intro</h1>
-        <h1 className="flex justify-center mt-2">Code toàn bug 🤡</h1>
+      <div className="bg-[#ffffff] dark:bg-[#242526] rounded-lg mb-4 shrink drop-shadow-2xl dark:text-white">
+        <h1 className="ml-5 mt-5 font-bold text-xl dark:text-white">Intro</h1>
+        <h1 className="flex justify-center mt-2 dark:text-white">Code toàn bug 🤡</h1>
         <div className="mt-2 flex justify-center w-full">
           <Button color="default" className="w-5/6">
             Chỉnh sửa tiểu sử
@@ -20,26 +20,26 @@ export default function SidebarProfile() {
         <div className="mt-5 ml-5 flex">
           <MdBusinessCenter size={25} />
           <h1 className="ml-1">
-            Từng học tại <span className="font-medium">THPT Khâm Đức</span>
+            Từng học tại <span className="font-medium dark:text-white">THPT Khâm Đức</span>
           </h1>
         </div>
         <div className="mt-3 ml-5 flex">
           <FaGraduationCap size={25} />
           <h1 className="ml-1">
-            Học IT tại <span className="font-medium">Đại học Bách Khoa</span>
+            Học IT tại <span className="font-medium dark:text-white">Đại học Bách Khoa</span>
           </h1>
         </div>
         <div className="mt-3 ml-5 flex">
           <FaLocationDot size={25} />
-          <h1 className="ml-1">
+          <h1 className="ml-1 dark:text-white">
             Đến từ{" "}
-            <span className="font-medium">Phuoc Son, Quang Nam, Viet Nam</span>
+            <span className="font-medium dark:text-white">Phuoc Son, Quang Nam, Viet Nam</span>
           </h1>
         </div>
         <div className="mt-3 ml-5 mr-2 flex">
           <IoHeart size={25} />
           <h1 className="ml-1">
-            <span className="ml-1 font-medium">Độc thân</span>
+            <span className="ml-1 font-medium dark:text-white">Độc thân</span>
           </h1>
         </div>
         <div className="mt-5 mb-5 flex justify-center w-full">

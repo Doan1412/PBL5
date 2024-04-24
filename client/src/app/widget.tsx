@@ -1,9 +1,11 @@
-import Popup from "@/components/Popup";
+
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./hooks/store";
 import { resetPopUp } from "./hooks/features/popup.slice";
 import { resetLoading } from "./hooks/features/loading.slice";
 import Loading from "@/components/Loading/Loading";
+import Popup from "@/components/Popup";
+
 
 export default function Widget({ children }: { children: React.ReactNode }) {
   const dispatch = useAppDispatch();

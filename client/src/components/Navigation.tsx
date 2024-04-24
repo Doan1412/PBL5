@@ -8,28 +8,48 @@ import {
   DropdownMenu,
   Avatar,
   Image,
+  Skeleton,
 } from "@nextui-org/react";
 import logoImage from "@/static/images/logoImage.png";
 import SearchIcon from "./SearchIcon";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faFacebookMessenger } from "@fortawesome/free-brands-svg-icons";
 import { FaFacebookMessenger } from "react-icons/fa";
 import { FaBell } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import ThemeToggle from "./ThemeToggle";
+import { useRouter } from "next/navigation";
+// import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
+import { getLocalStorage } from "@/app/actions/localStorage_State";
+import { useAppDispatch } from "@/app/hooks/store";
+import { resetLoading, setLoading } from "@/app/hooks/features/loading.slice";
+import { successPopUp } from "@/app/hooks/features/popup.slice";
+import avatarDefault from "@/static/images/avatarDefault.jpg";
+import { UserType } from "@/app/types";
+import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
+
+
 
 export default function Navigation() {
+  const router = useRouter();
+  const { data, isFetching } = useGetUserInfoQuery(
+    getLocalStorage()?.user_id as string
+  );
+
+
+  const dispatch = useAppDispatch();
   return (
     <div>
-      <nav className="hidden lg:flex bg-white p-0 dark:bg-dark justify-between">
+      <nav className="hidden lg:flex bg-white p-0 dark:bg-[#242526] justify-between">
         <div className="flex">
           <div>
             <Image
-              className="mx-auto mr-3 ml-3 dark:filter dark:invert"
+              className="mx-auto mr-3 ml-3 dark:filter dark:invert hover:cursor-pointer"
               src={logoImage.src}
               alt="Login"
               width={50}
               height={50}
+              onClick={() => {
+                router.push("/home");
+              }}
             />
           </div>
           <div className="flex items-center">
@@ -55,7 +75,12 @@ export default function Navigation() {
               className="tooltip active w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg dark:hover:bg-medium dark:hover:border-none"
               data-tooltip="Home"
             >
-              <button className="button hover:translate-y-[-3px]">
+              <button
+                className="button dark:text-white hover:translate-y-[-3px]"
+                onClick={() => {
+                  router.push("/home");
+                }}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="1.6em"
@@ -73,7 +98,7 @@ export default function Navigation() {
           </li>
           <li>
             <div className="w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg shrink dark:hover:bg-medium dark:hover:border-none">
-              <button className="button hover:translate-y-[-3px]">
+              <button className="button dark:text-white hover:translate-y-[-3px]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="1.6em"
@@ -96,7 +121,7 @@ export default function Navigation() {
           </li>
           <li>
             <div className="w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg dark:hover:bg-medium dark:hover:border-none">
-              <button className="hover:translate-y-[-3px]">
+              <button className="hover:translate-y-[-3px] dark:text-white">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="1.6em"
@@ -122,17 +147,17 @@ export default function Navigation() {
             </li>
             <li>
               <button className="w-12 h-12 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 mr-1 dark:bg-medium">
-                <FaUserGroup size={23} />
+                <FaUserGroup size={23} className="dark:text-white" />
               </button>
             </li>
             <li>
               <button className="w-12 h-12 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 mr-1 dark:bg-medium">
-                <FaFacebookMessenger size={23} />
+                <FaFacebookMessenger size={23} className="dark:text-white" />
               </button>
             </li>
             <li>
               <button className="w-12 h-12 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 dark:bg-medium">
-                <FaBell size={23} />
+                <FaBell size={23} className="dark:text-white" />
               </button>
             </li>
             <li className="mt-1">
@@ -146,7 +171,11 @@ export default function Navigation() {
                       color="secondary"
                       name="Jason Hughes"
                       size="sm"
-                      src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                      src={
+                        data?.data.profile.avatar_url != ""
+                          ? `${data?.data.profile.avatar_url}`
+                          : avatarDefault.src
+                      }
                     />
                     <span className=" absolute flex h-3 w-3 top-0 right-1">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75"></span>
@@ -156,20 +185,42 @@ export default function Navigation() {
                 </DropdownTrigger>
                 <DropdownMenu aria-label="Profile Actions" variant="flat">
                   <DropdownItem key="profile" className="h-14 gap-2">
-                    <p className="font-semibold">Signed in as</p>
-                    <p className="font-semibold">zoey@example.com</p>
+                    {isFetching ? (
+                      <div className="w-full flex flex-col gap-2">
+                        <Skeleton className="h-3 w-3/5 rounded-lg" />
+                        <Skeleton className="h-3 w-4/5 rounded-lg" />
+                      </div>
+                    ) : (
+                      <div
+                        onClick={() => {
+                          dispatch(setLoading());
+                          router.push("/profile");
+                        }}
+                      >
+                        <p className="font-semibold">Signed in as</p>
+
+                        <p className="font-semibold">
+                          {data?.data.firstname} {data?.data.lastname}
+                        </p>
+                      </div>
+                    )}
                   </DropdownItem>
-                  <DropdownItem key="settings">My Settings</DropdownItem>
-                  <DropdownItem key="team_settings">Team Settings</DropdownItem>
-                  <DropdownItem key="analytics">Analytics</DropdownItem>
-                  <DropdownItem key="system">System</DropdownItem>
-                  <DropdownItem key="configurations">
-                    Configurations
-                  </DropdownItem>
-                  <DropdownItem key="help_and_feedback">
+                  <DropdownItem
+                    key="help_and_feedback"
+                    onClick={() => {
+                      dispatch(successPopUp("Tính năng đang phát triển!"));
+                    }}
+                  >
                     Help & Feedback
                   </DropdownItem>
-                  <DropdownItem key="logout" color="danger">
+                  <DropdownItem
+                    key="logout"
+                    color="danger"
+                    onClick={() => {
+                      localStorage.clear();
+                      router.push("/");
+                    }}
+                  >
                     Log Out
                   </DropdownItem>
                 </DropdownMenu>

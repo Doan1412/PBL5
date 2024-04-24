@@ -24,7 +24,7 @@ interface ListPost {
   setIsFocused: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function ListPost({ reff, isFocused, setIsFocused }: ListPost) {
+export default function SatatusPost({ reff, isFocused, setIsFocused }: ListPost) {
   //   const [isFocused, setIsFocused] = useState<boolean>(false);
   //   const ref = useRef<HTMLDivElement>(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -34,11 +34,11 @@ export default function ListPost({ reff, isFocused, setIsFocused }: ListPost) {
     <>
       <div
         ref={reff}
-        className={`createPostWidget dark:bg-[#353a50] shadow-xl ${
+        className={`createPostWidget w-full dark:bg-[#242526] shadow-xl dark:text-white ${
           isFocused ? "active" : ""
         }`}
       >
-        <div className="createInput dark:bg-[#353a50] rounded-lg">
+        <div className="createInput dark:bg-[#242526] rounded-lg">
           {/* <img src="/assets/image/avatar_default.jpg" alt="" /> */}
           <input
             type="text"
@@ -99,13 +99,13 @@ export default function ListPost({ reff, isFocused, setIsFocused }: ListPost) {
                       value={text}
                       onChange={(e) => setText(e.target.value)}
                     />
-                    <div className="otherOptions border border-slate-500 dark:bg-[#18181b] rounded-lg flex justify-between">
+                    <div className="otherOptions border border-slate-500 dark:bg-[#242526] rounded-lg flex justify-between">
                       <div className="m-3">
                         <p className="text-sm">Thêm vào bài đăng của bạn</p>
                       </div>
                       <div className="flex justify-center items-center gap-3 mr-3 relative">
                         <div className="option">
-                          <IoMdImages size={25} className="text-green-700" />
+                          <IoMdImages size={25} className="text-green-700 cursor-pointer" />
                         </div>
                         <div className="option">
                           <FaVideo size={25} className="text-red-700" />
@@ -131,7 +131,7 @@ export default function ListPost({ reff, isFocused, setIsFocused }: ListPost) {
 
           <button className="inBtn">Post</button>
         </div>
-        <div className="otherOptions dark:bg-[#353a50] rounded-lg">
+        <div className="otherOptions dark:bg-[#242526] rounded-lg">
           <div className="option">
             <BsFillCameraVideoFill />
             <span>Go Live</span>

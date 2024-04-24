@@ -1,0 +1,396 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:800,300);
+$numberOfLines: 10; // sync with HTML
+
+.frame_animation1 {
+  width: 100%;
+  height: 100vh;
+  border-radius: 2px;
+  box-shadow: 1px 2px 10px 0px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  background: #607d8b;
+  color: #fff;
+  font-family: "Open Sans", Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.center {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.line_animation1 {
+  box-sizing: border-box;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 0;
+  left: 0;
+  background: #fff;
+}
+
+@for $i from 1 through $numberOfLines {
+  $nullBase: $i - 1;
+  $degree: 360 / $numberOfLines;
+
+  .line-#{$i} {
+    animation: line-#{$i} 10s ease-in-out;
+  }
+
+  @keyframes line-#{$i} {
+    0% {
+      transform: rotate(0) translate(0, 0) scale(0.01);
+    }
+    5% {
+      transform: rotate(0) translate(0, 0) scale(1);
+    }
+    15% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, 0) scale(1);
+    }
+    20% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -100px)
+        scale(0.25, 1);
+    }
+    25% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -100px)
+        scale(0.25, 0.25) rotate(179deg);
+    }
+    30% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -100px)
+        scale(1, 0.25) rotate(179deg);
+    }
+    35% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -60px)
+        scale(1, 0.1);
+    }
+    40% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -60px)
+        scale(1, 0.1) translate(-30px, 0);
+    }
+    45% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -60px)
+        scale(1, 0.1) translate(30px, 0);
+    }
+    50% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -60px)
+        scale(0.1, 1);
+    }
+    55% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -60px)
+        scale(0.5, 0.1);
+      border-radius: 0;
+    }
+    60% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -80px)
+        scale(0.5, 0.5) rotate(179deg);
+      border-radius: 50%;
+    }
+    65% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, 0)
+        scale(0.2, 0.2);
+      border-radius: 50%;
+    }
+    70% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -100px)
+        scale(0.25, 1);
+      border-radius: 0;
+    }
+    75% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -100px)
+        scale(0.25, 0.25);
+    }
+    80% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -50px)
+        scale(0.5, 0.5);
+    }
+    85% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -50px)
+        scale(0.5, 0.5) rotate(179deg) translate(-50px, 50px);
+    }
+    90% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -30px)
+        scale(0.5, 0.1);
+    }
+    95% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -10px)
+        scale(0.1, 0.5);
+    }
+    100% {
+      transform: rotate(($nullBase * $degree) + deg) translate(0, -300px)
+        scale(0.1, 0.5);
+    }
+  }
+}
+
+//animation_2
+
+.frame_animation2 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 400px;
+  margin-top: -200px;
+  margin-left: -200px;
+  border-radius: 2px;
+  //   box-shadow: 1px 2px 10px 0px rgba(0,0,0,0.3);
+  // 	overflow: hidden;
+  background: #607d8b;
+  color: #fff;
+  font-family: "Open Sans", Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.circle {
+  position: absolute;
+  z-index: 10;
+  height: 50px;
+  width: 50px;
+  top: 175px;
+  left: 175px;
+  background: #fff;
+  border-radius: 50%;
+  animation: circle 1s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.line_animation2 {
+  position: absolute;
+  z-index: 10;
+  width: 150px;
+  height: 4px;
+  top: 198px;
+  background: #fff;
+  transform: scaleX(0);
+
+  &.left {
+    left: 50px;
+    transform-origin: 100% 50%;
+    animation: lines 1s ease-in-out 0.8s, line-left 1s steps(1) 0.8s;
+  }
+
+  &.right {
+    right: 50px;
+    transform-origin: 0% 50%;
+    animation: lines 1s ease-in-out 0.8s, line-right 1s steps(1) 0.8s;
+  }
+}
+
+.bracket {
+  position: absolute;
+  z-index: 10;
+  height: 70px;
+  width: 4px;
+  top: 165px;
+  background: #fff;
+  animation: bracket 0.4s ease-out 1.7s;
+  animation-fill-mode: both;
+
+  &:before,
+  &:after {
+    position: absolute;
+    display: block;
+    content: "";
+    width: 25px;
+    height: 4px;
+    background: #fff;
+  }
+
+  &.left {
+    left: 50px;
+
+    &:before {
+      top: 0;
+      left: 0;
+      transform-origin: 0% 50%;
+      animation: bracket-line 0.2s ease-out 2.1s;
+      animation-fill-mode: both;
+    }
+
+    &:after {
+      bottom: 0;
+      left: 0;
+      transform-origin: 0% 50%;
+      animation: bracket-line 0.2s ease-out 2.1s;
+      animation-fill-mode: both;
+    }
+  }
+
+  &.right {
+    right: 50px;
+
+    &:before {
+      top: 0;
+      right: 0;
+      transform-origin: 100% 50%;
+      animation: bracket-line 0.2s ease-out 2.1s;
+      animation-fill-mode: both;
+    }
+
+    &:after {
+      bottom: 0;
+      right: 0;
+      transform-origin: 100% 50%;
+      animation: bracket-line 0.2s ease-out 2.1s;
+      animation-fill-mode: both;
+    }
+  }
+}
+
+.big {
+  position: absolute;
+  z-index: 5;
+  top: 173px;
+  width: 400px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 50px;
+  color: #ffffff;
+  line-height: 50px;
+  text-transform: uppercase;
+}
+
+.hide {
+  position: absolute;
+  z-index: 7;
+  width: 400px;
+  height: 50px;
+  background: #010101;
+  left: 0;
+  animation: reveal 0.4s ease-out 1.7s;
+  animation-fill-mode: both;
+
+  &.top {
+    bottom: 49%;
+    transform-origin: 50% 0%;
+  }
+
+  &.bottom {
+    top: 49%;
+    transform-origin: 50% 100%;
+  }
+}
+
+.small {
+  position: absolute;
+  z-index: 10;
+  width: 400px;
+  text-align: center;
+  left: 0;
+  font-weight: 300;
+  font-size: 30px;
+  color: #ffffff;
+  line-height: 30px;
+  text-transform: uppercase;
+
+  &.top {
+    top: 140px;
+    animation: small-top 0.5s ease-out 2.2s;
+    animation-fill-mode: both;
+  }
+
+  &.bottom {
+    bottom: 140px;
+    animation: small-bottom 0.5s ease-out 2.2s;
+    animation-fill-mode: both;
+  }
+}
+
+@keyframes circle {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  90%,
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes lines {
+  0% {
+    transform: scaleX(0);
+  }
+  50% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes line-left {
+  0% {
+    transform-origin: 100% 50%;
+  }
+  50%,
+  100% {
+    transform-origin: 0% 50%;
+  }
+}
+
+@keyframes line-right {
+  0% {
+    transform-origin: 0% 50%;
+  }
+  50%,
+  100% {
+    transform-origin: 100% 50%;
+  }
+}
+
+@keyframes bracket {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes bracket-line {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes reveal {
+  0% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes small-top {
+  0% {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes small-bottom {
+  0% {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
