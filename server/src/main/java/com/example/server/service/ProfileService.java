@@ -23,6 +23,10 @@ public class ProfileService {
         profile.setBio(profile_updated.getBio());
         profile.setCover_url(profile_updated.getCover_url());
         profile.setAvatar_url(profile_updated.getAvatar_url());
+        profile.setFrom(profile_updated.getFrom());
+        profile.setRelationship(profile_updated.getRelationship());
+        profile.setWork_at(profile_updated.getWork_at());
+        profile.setStudy_at(profile_updated.getStudy_at());
         return repository.save(profile);
     }
 }

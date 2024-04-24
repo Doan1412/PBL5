@@ -58,6 +58,10 @@ public class AuthenticationService {
                 .avatar_url("")
                 .bio("")
                 .cover_url("")
+                .from("")
+                .work_at("")
+                .study_at("")
+                .relationship("")
                 .build();
         var savedProfile = profileRepository.save(profile);
         var user = User.builder()
@@ -182,6 +186,10 @@ public class AuthenticationService {
                                 : "")
                         .bio("")
                         .cover_url("")
+                        .from("")
+                        .work_at("")
+                        .study_at("")
+                        .relationship("")
                         .build();
                 var savedProfile = profileRepository.save(profile);
                 var user = User.builder()

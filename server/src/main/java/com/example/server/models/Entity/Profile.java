@@ -21,4 +21,8 @@ public class Profile {
     private String avatar_url;
     private String bio;
     private String cover_url;
+    private String study_at;
+    private String work_at;
+    private String from;
+    private String relationship;
 }
