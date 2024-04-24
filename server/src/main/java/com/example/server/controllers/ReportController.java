@@ -49,7 +49,7 @@ public class ReportController {
         return ResponseEntity.ok("Report status updated successfully");
     }
     @DeleteMapping("/{reportId}")
-    public ResponseEntity<String> deleteReport(@PathVariable Long reportId) {
+    public ResponseEntity<String> deleteReport(@PathVariable String reportId) {
         // Gọi phương thức deleteReport từ ReportService
         reportService.deleteReportById(reportId);
         return ResponseEntity.ok("Report deleted successfully");
