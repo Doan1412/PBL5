@@ -41,6 +41,10 @@ public class UserService {
                     .avatar_url("")
                     .bio("")
                     .cover_url("")
+                    .from("")
+                    .work_at("")
+                    .study_at("")
+                    .relationship("")
                     .build();
             u.setProfile(profile);
         }
