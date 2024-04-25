@@ -1,5 +1,6 @@
 package com.example.server.controllers;
 
+import com.example.server.DTO.CommentDTO;
 import com.example.server.DTO.PostDTO;
 import com.example.server.models.Entity.Account;
 import com.example.server.models.Entity.Post;
@@ -94,9 +95,9 @@ public class PostController {
     }
 
     @PostMapping("/comment")
-    public ResponseEntity<Object> reply(@RequestBody List<PostAttachment> attachments,@RequestParam String post_id,  @RequestParam String content,@AuthenticationPrincipal Account account) {
+    public ResponseEntity<Object> reply(@RequestBody CommentDTO commentDTO, @AuthenticationPrincipal Account account) {
         try {
-            Object data = service.comment(post_id,account.getId(), content,attachments);
+            Object data = service.comment(commentDTO.getPostId(),account.getId(), commentDTO.getContent(),commentDTO.getAttachment());
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){

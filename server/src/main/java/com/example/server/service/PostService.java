@@ -98,6 +98,7 @@ public class PostService {
     }
     public void delete_post(String post_id){
         attachmentRepository.deleteByPostId(post_id);
+        repository.deleteComment(post_id);
         repository.deleteById(post_id);
     }
     public List<PostDTO> getTimelinePosts(String acc_id, int skip, int limit) {

@@ -55,7 +55,13 @@ public class UserService {
         repository.deleteById(id);
     }
     public List<PostDTO> get_post_by_user (String user_id){
-        List<Post> list = postRepository.findByUserId(user_id).stream()
+        List<String> post_ids = postRepository.findByUserId(user_id);
+        List<Post> list = new ArrayList<>();
+        for (String postId : post_ids) {
+            Post p = postRepository.findById(postId).orElseThrow();
+            list.add(p);
+        }
+        list = list.stream()
                 .sorted(Comparator.comparing(Post::getCreated_at))
                 .collect(Collectors.toList());;
         List<PostDTO> data = new ArrayList<>();
