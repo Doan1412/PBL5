@@ -28,6 +28,10 @@ export type Profile = {
   avatar_url?: String;
   bio?: String;
   cover_url?: String;
+  study_at?: String;
+  work_at?: String;
+  from?: String;
+  relationship?: String;
 };
 
 export type UserType = {
@@ -93,5 +97,16 @@ export interface Attachment {
   url?: string;
   type?: string;
   created_at?: string;
+}
+
+export interface ImageType {
+  image: string[];
+}
+
+export interface ListFriendType {
+  id: string;
+  fullname: string;
+  avatar_url: string;
+  username: string;
 }
 

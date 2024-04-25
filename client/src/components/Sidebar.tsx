@@ -10,7 +10,6 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import { Image, Skeleton } from "@nextui-org/react";
-import avatar from "@/static/images/avatar.jpg";
 import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
 import { getLocalStorage } from "@/app/actions/localStorage_State";
 import avatarDefault from "@/static/images/avatarDefault.jpg";
@@ -75,7 +74,7 @@ const Sidebar: React.FC = () => {
             </div>
             <div className="userDetails dark:text-white flex items-center">
               <div className="flex flex-col">
-                <Link href={"/profile"} className="name dark:text-white">
+                <Link href={`/profile?id_user=${getLocalStorage()?.user_id}`} className="name dark:text-white">
                   {data?.data.firstname} {data?.data.lastname}
                 </Link>
                 <div className="username dark:text-white">

@@ -26,14 +26,11 @@ import avatarDefault from "@/static/images/avatarDefault.jpg";
 import { UserType } from "@/app/types";
 import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
 
-
-
 export default function Navigation() {
   const router = useRouter();
   const { data, isFetching } = useGetUserInfoQuery(
     getLocalStorage()?.user_id as string
   );
-
 
   const dispatch = useAppDispatch();
   return (
@@ -193,12 +190,13 @@ export default function Navigation() {
                     ) : (
                       <div
                         onClick={() => {
-                          dispatch(setLoading());
-                          router.push("/profile");
+                          const currentUrl = `/profile/photo?id_user=${
+                            data?.data.id as string
+                          }`;
+                          router.push(currentUrl);
                         }}
                       >
                         <p className="font-semibold">Signed in as</p>
-
                         <p className="font-semibold">
                           {data?.data.firstname} {data?.data.lastname}
                         </p>

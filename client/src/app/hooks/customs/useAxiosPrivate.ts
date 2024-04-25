@@ -7,7 +7,7 @@ import { getLocalStorage } from "@/app/actions/localStorage_State";
 
 const useHttp = () => {
   const refresh = useRefreshToken();
-  const { auth } = useContext(AuthContext);
+  // const { auth } = useContext(AuthContext);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
