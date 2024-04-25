@@ -6,7 +6,8 @@ import http from "../utils/http";
 
 export default function useRefreshToken() {
   // const { setAuth } = useContext(AuthContext);
-  const controller = useMemo(() => new AbortController(), []);
+  // const controller = useMemo(() => new AbortController(), []);
+  const controller = new AbortController();
 
   async function refreshToken(refresh_token: String) {
     console.log(refresh_token);

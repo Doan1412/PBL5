@@ -112,7 +112,7 @@ export default function FriendSuggestion() {
       <nav className="fixed z-40 w-full">
         <Navigation />
       </nav>
-      <div className="h-screen flex justify-center items-center">
+      <div className="h-screen flex justify-center items-center dark:text-white">
         <div className="flex-col content-center">
           <div className="flex justify-center mb-4">
             <p className="font-bold text-xl">Những người bạn có thể biết</p>
