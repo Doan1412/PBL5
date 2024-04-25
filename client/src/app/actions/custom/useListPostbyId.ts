@@ -1,14 +1,15 @@
 import { useSearchParams } from "next/navigation";
-import { useAppDispatch } from "../hooks/store";
-import { PostType } from "../types";
+import { useAppDispatch } from "../../hooks/store";
+import { PostType } from "../../types";
 import { useEffect, useMemo } from "react";
-import useHttp from "../hooks/customs/useAxiosPrivate";
-import { getLocalStorage } from "./localStorage_State";
-import { failPopUp } from "../hooks/features/popup.slice";
+import useHttp from "../../hooks/customs/useAxiosPrivate";
+import { getLocalStorage } from "../localStorage_State";
+import { failPopUp } from "../../hooks/features/popup.slice";
 
-export function useListPost(
+export function useListPostById(
   setPosts: React.Dispatch<React.SetStateAction<PostType[]>>,
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  id_user?: string,
 ) {
   const dispatch = useAppDispatch();
   const params = useSearchParams();
@@ -21,7 +22,7 @@ export function useListPost(
       if (!token) return;
       try {
         const response = await httpPrivate.get(
-          `/post/homepage?skip=0&limit=20`,
+          `/user/${id_user}/post`,
           {
             signal: controller.signal,
           }
@@ -46,5 +47,5 @@ export function useListPost(
       }
     }
     fetchListPost();
-  }, [params, dispatch, httpPrivate, setPosts, setLoading, controller]);
+  }, [params, dispatch, httpPrivate, setPosts, setLoading, controller, id_user]);
 }

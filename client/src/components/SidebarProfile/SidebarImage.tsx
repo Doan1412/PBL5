@@ -1,47 +1,14 @@
 import { Card, CardBody, Image, Link } from "@nextui-org/react";
 import React from "react";
 import Avatar1 from "@/static/images/avatar.jpg";
+import { ImageType } from "@/app/types";
 
-export default function SidebarImage() {
-  const list = [
-    {
-      title: "Orange",
-      img: Avatar1.src,
-    },
-    {
-      title: "Tangerine",
-      img: Avatar1.src,
-    },
-    {
-      title: "Raspberry",
-      img: Avatar1.src,
-    },
-    {
-      title: "Lemon",
-      img: Avatar1.src,
-    },
-    {
-      title: "Avocado",
-      img: Avatar1.src,
-    },
-    {
-      title: "Lemon 2",
-      img: Avatar1.src,
-    },
-    {
-      title: "Banana",
-      img: Avatar1.src,
-    },
-    {
-      title: "Watermelon",
-      img: Avatar1.src,
-    },
-    {
-      title: "Watermelon",
-      img: Avatar1.src,
-    },
-  ];
+interface PropsSidebarImage {
+  data?: string[];
+}
 
+export default function SidebarImage({ data }: PropsSidebarImage) {
+  console.log(data);
   return (
     <>
       <div className="bg-[#ffffff] dark:bg-[#242526] rounded-lg shrink flex flex-col drop-shadow-2xl">
@@ -53,7 +20,7 @@ export default function SidebarImage() {
         </div>
         <div>
           <div className="gap-1 grid grid-cols-2 sm:grid-cols-3 m-5">
-            {list.map((item, index) => (
+            {data?.map((item, index) => (
               <Card
                 shadow="sm"
                 key={index}
@@ -65,9 +32,9 @@ export default function SidebarImage() {
                     shadow="sm"
                     radius="lg"
                     width={120}
-                    alt={item.title}
+                    alt=""
                     className="w-full object-cover h-[140px]"
-                    src={item.img}
+                    src={item}
                   />
                 </CardBody>
               </Card>

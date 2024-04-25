@@ -3,27 +3,26 @@ import Navigation from "@/components/Navigation";
 import { Avatar, AvatarGroup, Image, Skeleton } from "@nextui-org/react";
 import React, { useRef, useState } from "react";
 import Poster from "@/static/images/Poster.jpg";
-import UploadButton from "../../components/UploadButton";
-import UploadAvatar from "../../components/UploadAvatar";
 import AddFriendButton from "@/components/AddFriendButton";
 import SidebarProfile from "@/components/SidebarProfile/SidebarProfile";
 import Post from "@/components/Post/Post";
-import { ImageType, PostType } from "../types";
 import SidebarImage from "@/components/SidebarProfile/SidebarImage";
-import { useAppDispatch } from "../hooks/store";
-import { resetLoading } from "../hooks/features/loading.slice";
-import Widget from "../widget";
 import SatatusPost from "@/components/SatatusPost";
-import { useGetUserInfoQuery } from "../hooks/services/user_info.service";
-import { useListPostById } from "../actions/custom/useListPostbyId";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import avatarDefault from "@/static/images/avatarDefault.jpg";
 import SkeletonPost from "@/components/SkeletonPost/SkeletonPost";
 import Link from "next/link";
-import { useImageProfileById } from "../actions/custom/useImageProfileById";
-import HeaderProfile from "@/components/Profile/HeaderProfile";
 
-export default function Profile() {
+import HeaderProfile from "@/components/Profile/HeaderProfile";
+import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
+import { PostType } from "@/app/types";
+import { useAppDispatch } from "@/app/hooks/store";
+import { resetLoading } from "@/app/hooks/features/loading.slice";
+import { useListPostById } from "@/app/actions/custom/useListPostbyId";
+import { useImageProfileById } from "@/app/actions/custom/useImageProfileById";
+import Widget from "@/app/widget";
+
+export default function Timeline() {
   const params = useSearchParams();
 
   const { data, isFetching } = useGetUserInfoQuery(
@@ -42,7 +41,6 @@ export default function Profile() {
   useListPostById(setPosts, setLoading, params.get("id_user") as string);
   useImageProfileById(setImages, setLoading, params.get("id_user") as string);
   console.log(images);
-
   return (
     <Widget>
       <nav className="fixed z-40 w-full">

@@ -7,7 +7,7 @@ import Navigation from "@/components/Navigation";
 import ListPost from "@/components/SatatusPost";
 import { PostType, User } from "../types";
 import Widget from "../widget";
-import { useListPost } from "../actions/useListPost";
+import { useListPost } from "../actions/custom/useListPost";
 import useRefreshToken from "../actions/refreshToken";
 import { getLocalStorage } from "../actions/localStorage_State";
 import SatatusPost from "@/components/SatatusPost";
@@ -22,7 +22,6 @@ const Home: React.FC = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
   // const refresh = useRefreshToken();
 
-  
   useListPost(setPosts, setLoading);
 
   // useRefreshToken()
@@ -48,14 +47,14 @@ const Home: React.FC = () => {
                 setIsFocused={setIsFocused}
               />
               {loading ? (
-                <Fragment>
+                <div className="mt-10">
                   <SkeletonPost />
                   <SkeletonPost />
                   <SkeletonPost />
                   <SkeletonPost />
                   <SkeletonPost />
                   <SkeletonPost />
-                </Fragment>
+                </div>
               ) : (
                 <div>
                   {posts.map((post: PostType, index: number) => {

@@ -22,6 +22,7 @@ import "./style.css";
 import { TbMessageCircle } from "react-icons/tb";
 import { Attachment, PostType } from "@/app/types";
 import CommentForm from "../CommentForm";
+import { useRouter } from "next/navigation";
 
 interface UserData {
   profilePic: string;
@@ -38,6 +39,8 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
   const [showComment, setShowComment] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
+  const router = useRouter();
+
   const toggleComment = () => {
     if (!isClicked) {
       setShowComment(!showComment);
@@ -50,7 +53,9 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
   };
 
   const [liked, setLiked] = useState<boolean>(postData?.like as boolean);
-  const [likesAmount, setLikesAmount] = useState<number>(postData?.like_count as number);
+  const [likesAmount, setLikesAmount] = useState<number>(
+    postData?.like_count as number
+  );
 
   const handleLikeClick = () => {
     setLiked((prevLiked) => !prevLiked);
@@ -68,11 +73,24 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
               src={`${postData?.avatarUrl}`}
               alt=""
               className="profileImg"
+              onClick={() =>
+                router.push(`/profile?id_user=${postData?.userId}`)
+              }
             />
             <div className="userDetails">
-              <div className="name">{postData?.fullName}</div>
+              <div
+                className="name"
+                onClick={() =>
+                  router.push(`/profile?id_user=${postData?.userId}`)
+                }
+              >
+                {postData?.fullName}
+              </div>
               <div className="feeling">@{postData?.username}</div>
-              <div className="feeling">{(postData?.created_at)?.slice(0,10)} {" "} {(postData?.created_at)?.slice(11,19)}</div>
+              <div className="feeling">
+                {postData?.created_at?.slice(0, 10)}{" "}
+                {postData?.created_at?.slice(11, 19)}
+              </div>
             </div>
           </div>
           <div className="right">
@@ -131,8 +149,8 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
           </div>
           {showComment && (
             <div className="flex flex-col gap-4">
-             <CommentForm/>
-             <CommentForm/>
+              <CommentForm />
+              <CommentForm />
               <div className="flex gap-3">
                 <div className="flex items-center">
                   <Avatar
