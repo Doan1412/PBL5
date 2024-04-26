@@ -36,8 +36,8 @@ public class FriendRequestController {
     @PostMapping("/unfriend/{id1}")
     public ResponseEntity<Object> unfriend(@PathVariable String id1,  @AuthenticationPrincipal Account account) {
         try {
-            service.unfriend(account.getId(),id1);
-            return Respond.success(200,"I001","");
+            List<DisplayUserDTO>data = service.unfriend(account.getId(),id1);
+            return Respond.success(200,"I001",data);
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getMessage());

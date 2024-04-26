@@ -35,7 +35,7 @@ public class FriendRequestService {
         repository.save(user_2);
     }
 
-    public void unfriend(String acc_id, String id2){
+    public List<DisplayUserDTO> unfriend(String acc_id, String id2){
         User user_1 = repository.findByAccount_Id(acc_id).orElseThrow();
         User user_2 = repository.findById(id2).orElseThrow();
         friendRequestRepository.deleteByUserId(user_1.getId(), user_2.getId());
@@ -44,6 +44,9 @@ public class FriendRequestService {
         user_2.getFriends().remove(user_1);
         repository.save(user_1);
         repository.save(user_2);
+        List<DisplayUserDTO> data = friendRequestRepository.getListDisplayUsers(user_id);
+        System.out.println(data.toString());
+        return data;
     }
 
     public void sendFriendRequest(String acc_id, String friend_id) {
