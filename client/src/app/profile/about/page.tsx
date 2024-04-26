@@ -45,7 +45,7 @@ export default function About() {
         <HeaderProfile />
         {/* {pathname === "/profile"}( */}
         <div className="hidden lg:flex justify-center">
-          <AboutProfile />
+          <AboutProfile data = {data!}/>
         </div>
       </div>
     </Widget>

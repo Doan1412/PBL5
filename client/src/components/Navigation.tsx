@@ -169,8 +169,8 @@ export default function Navigation() {
                       name="Jason Hughes"
                       size="sm"
                       src={
-                        data?.data.profile.avatar_url != ""
-                          ? `${data?.data.profile.avatar_url}`
+                        data?.data?.profile.avatar_url != ""
+                          ? `${data?.data?.profile.avatar_url}`
                           : avatarDefault.src
                       }
                     />
@@ -191,14 +191,14 @@ export default function Navigation() {
                       <div
                         onClick={() => {
                           const currentUrl = `/profile/photo?id_user=${
-                            data?.data.id as string
+                            data?.data?.id as string
                           }`;
                           router.push(currentUrl);
                         }}
                       >
                         <p className="font-semibold">Signed in as</p>
                         <p className="font-semibold">
-                          {data?.data.firstname} {data?.data.lastname}
+                          {data?.data?.firstname} {data?.data?.lastname}
                         </p>
                       </div>
                     )}

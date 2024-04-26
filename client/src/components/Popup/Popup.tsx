@@ -16,7 +16,7 @@ export default function Popup({ type, text, close }: PopupProps) {
   return (
     <>
       {type === "success" ? (
-        <div className="notification dark:bg-[#242526] dark:text-white">
+        <div className="notification dark:bg-[#242526] dark:text-white z-50">
           <div className="notification-header">
             <h3 className="notification-title">New notification</h3>
             <BiX className="cursor-pointer" onClick={close} />
@@ -42,7 +42,7 @@ export default function Popup({ type, text, close }: PopupProps) {
           </div>
         </div>
       ) : (
-        <div className="notification dark:bg-[#242526] dark:text-white">
+        <div className="notification dark:bg-[#242526] dark:text-white z-50">
           <div className="notification-header">
             <h3 className="notification-title">New notification</h3>
             <BiX className="cursor-pointer" onClick={close} />
