@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/report")
+@RequestMapping("/api/v1/report")
 public class ReportController {
 
     private final ReportService reportService;
@@ -33,7 +33,7 @@ public class ReportController {
     }
 
     @GetMapping("")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Object> get(){
         try {
             List<Report> data = reportService.getAll();

@@ -1,3 +1,5 @@
+import { PostType } from '@/app/types';
+import { Post } from '@/components/Post/Post';
 export type MessageType = {
   id: String;
   body?: String;
@@ -110,3 +112,11 @@ export interface ListFriendType {
   username: string;
 }
 
+export interface Report {
+  id: string;
+  reason: string;
+  createdAt: string;
+  status: string;
+  user : User;
+  post : PostType
+}
