@@ -70,6 +70,35 @@ export default function Admin() {
         }
         fetchReports();
     }, [dispatch, controller, httpPrivate]);
+    const updateReportStatus = async (reportId: string, status: string) => {
+        const token = getLocalStorage()?.token;
+        if (status === "RESOLVED") return;
+        if (!token) return;
+        try {
+            const response = await httpPrivate.put(
+                `/report/${reportId}/status?newStatus=RESOLVED`,
+                // {
+                //     signal: controller.signal,
+                // }
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            if (response.data.status === 200) {
+                const reportsData = response.data.data;
+                console.log(reportsData);
+                setReports(reportsData);
+                setLoading(false);
+            } else {
+                dispatch(failPopUp(response.data.message));
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            setLoading(false);
+        }
+    };
     function getBackgroundColor(index: number) {
         const colors = ["bg-blue-50", "bg-indigo-50", "bg-violet-50"]; // Màu nền cho các lý do khác nhau
         return colors[index % colors.length];
@@ -79,7 +108,7 @@ export default function Admin() {
         const colors = ["text-blue-600", "text-indigo-600", "text-violet-600"]; // Màu chữ cho các lý do khác nhau
         return colors[index % colors.length];
     }
-    function formatDate(isoDate) {
+    function formatDate(isoDate: string) {
         const date = new Date(isoDate);
         const day = date.getDate().toString().padStart(2, "0");
         const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Tháng bắt đầu từ 0 nên cần cộng thêm 1
@@ -88,10 +117,10 @@ export default function Admin() {
         return `${day}/${month}/${year}`;
     }
     return (
-        <div className="pr-10 bg-stone-50 max-md:pr-5">
-            <div className="flex gap-5 max-md:flex-col max-md:gap-0">
-                <div className="flex flex-col w-[17%] max-md:ml-0 max-md:w-full">
-                    <div className="flex flex-col grow pt-10 pb-20 mx-auto w-full text-base tracking-wide whitespace-nowrap bg-white max-md:mt-6">
+        <div className="pr-10 bg-stone-50 max-md:pr-5 h-screen">
+            <div className="flex gap-5 max-md:flex-col max-md:gap-0 h-full">
+                <div className="flex flex-col w-[17%] max-md:ml-0 max-md:w-full h-full">
+                    <div className="flex flex-col grow pt-10 pb-20 mx-auto w-full text-base tracking-wide whitespace-nowrap bg-white max-md:mt-6 h-full">
                         <div className="flex justify-center max-h-52">
                             <Image
                                 loading="lazy"
@@ -120,7 +149,7 @@ export default function Admin() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col ml-5 w-[83%] max-md:ml-0 max-md:w-full">
+                <div className="flex flex-col ml-5 w-[83%] max-md:ml-0 max-md:w-full h-screen">
                     <div className="flex flex-col mt-14 max-md:mt-10 max-md:max-w-full">
                         <div className="flex gap-5 justify-between pr-4 w-full max-md:flex-wrap max-md:max-w-full">
                             <div className="flex items-center">
@@ -248,7 +277,7 @@ export default function Admin() {
                         <div className="self-start mt-12 ml-4 text-2xl font-medium text-black max-md:mt-10 max-md:ml-2.5">
                             Manager Information Report
                         </div>
-                        <div className="flex flex-col pb-20 mt-16 bg-white rounded max-md:mt-10 max-md:max-w-full">
+                        <div className="flex flex-col pb-20 mt-16 bg-white rounded max-md:mt-10 max-md:max-w-full h-full">
                             <table className="w-full border-collapse bg-white text-left text-sm text-gray-500">
                                 <thead className="bg-white">
                                     <tr>
@@ -381,17 +410,24 @@ export default function Admin() {
                                                             </td>
                                                             <td className="px-6 py-4">
                                                                 <div className="flex justify-center">
-                                                                    <Checkbox
-                                                                        defaultSelected={
-                                                                            report.status ===
-                                                                            "RESOLVED"
-                                                                        } // Nếu status là RESOLVED thì checkbox được chọn, ngược lại không chọn
-                                                                        color="success"
-                                                                        disabled={
-                                                                            report.status ===
-                                                                            "RESOLVED"
-                                                                        } // Nếu status là RESOLVED thì checkbox bị vô hiệu hóa
-                                                                    />
+                                                                    {report.status ===
+                                                                    "RESOLVED" ? (
+                                                                        <Checkbox
+                                                                            defaultSelected
+                                                                            color="success"
+                                                                            isDisabled
+                                                                        />
+                                                                    ) : (
+                                                                        <Checkbox
+                                                                            color="success"
+                                                                            onClick={() =>
+                                                                                updateReportStatus(
+                                                                                    report.id,
+                                                                                    report.status
+                                                                                )
+                                                                            }
+                                                                        />
+                                                                    )}
                                                                 </div>
                                                             </td>
                                                             <td className="px-6 py-4">
