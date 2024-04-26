@@ -1,10 +1,16 @@
+import { UserType } from "@/app/types";
 import React from "react";
 import { BsCake } from "react-icons/bs";
 import {IoMaleFemaleSharp } from "react-icons/io5";
 import { PiPhoneDuotone } from "react-icons/pi";
 import { TbMailFast, TbPencilMinus } from "react-icons/tb";
 
-export default function AboutProfile() {
+interface PropsAboutProfile {
+  data: UserType;
+
+}
+
+export default function AboutProfile({data} : PropsAboutProfile) {
   return (
     <>
       <div className=" bg-[#ffffff] dark:bg-[#242526] rounded-lg mb-4 shrink drop-shadow-2xl dark:text-white w-full ml-48 mr-48 mt-4">
@@ -17,7 +23,7 @@ export default function AboutProfile() {
               <PiPhoneDuotone />
             </div>
             <div>
-              <h1 className=" dark:text-white">0998877</h1>
+              <h1 className=" dark:text-white">{data?.data?.phone}</h1>
               <h1 className="text-xs text-gray-600 dark:text-white">Phone</h1>
             </div>
           </div>
@@ -33,7 +39,7 @@ export default function AboutProfile() {
               <TbMailFast size={20} />
             </div>
             <div>
-              <h1 className=" dark:text-white">khacduockhamduc@gmail.com</h1>
+              <h1 className=" dark:text-white">{data?.data?.username}</h1>
               <h1 className="text-xs text-gray-600 dark:text-white">Email</h1>
             </div>
           </div>
@@ -52,7 +58,7 @@ export default function AboutProfile() {
               <IoMaleFemaleSharp />
             </div>
             <div>
-              <h1 className=" dark:text-white">Nữ</h1>
+              <h1 className=" dark:text-white">{data?.data?.gender}</h1>
               <h1 className="text-xs text-gray-600 dark:text-white">
                 Giới tính
               </h1>
@@ -70,7 +76,7 @@ export default function AboutProfile() {
               <BsCake />
             </div>
             <div>
-              <h1 className=" dark:text-white">19/11/2003</h1>
+              <h1 className=" dark:text-white">{data?.data?.birth}</h1>
               <h1 className="text-xs text-gray-600 dark:text-white">
                 Sinh nhật
               </h1>

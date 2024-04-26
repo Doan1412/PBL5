@@ -42,7 +42,7 @@ export type UserType = {
     firstname?: String;
     lastname?: String;
     username: String;
-    birth?: Date;
+    birth?: String;
     gender?: String;
     phone?: String;
     profile: Profile;
