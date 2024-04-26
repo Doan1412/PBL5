@@ -44,7 +44,7 @@ public class FriendRequestService {
         user_2.getFriends().remove(user_1);
         repository.save(user_1);
         repository.save(user_2);
-        List<DisplayUserDTO> data = friendRequestRepository.getListDisplayUsers(user_id);
+        List<DisplayUserDTO> data = friendRequestRepository.getListDisplayUsers(user_1.getId());
         System.out.println(data.toString());
         return data;
     }
