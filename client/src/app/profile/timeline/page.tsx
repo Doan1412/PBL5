@@ -51,7 +51,7 @@ export default function Timeline() {
         {/* {pathname === "/profile"}( */}
         <div className="flex justify-center">
           <div className="flex flex-col mt-5 w-1/3 ml-44">
-            <SidebarProfile data={data?.data?.profile} />
+            <SidebarProfile data={data?.data?.profile} id_user={data?.data.id} />
             <SidebarImage data={images} />
           </div>
           <div className="mt-2 h-full w-2/3">

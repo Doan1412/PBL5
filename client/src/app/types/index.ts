@@ -1,4 +1,3 @@
-
 export type MessageType = {
   id: string;
   body?: string;
@@ -49,14 +48,7 @@ export type UserType = {
     profile: Profile;
     emailVerified: Date;
     image?: string;
-    hashedPassword: string;
-    createdAt: Date;
-    updatedAt: Date;
-    conversationIds: string;
-    conversations: ConversationType[];
-    seenMessageIds: string;
-    seenMessages: MessageType[];
-    messages: MessageType[];
+    password?: string;
   };
 };
 
@@ -116,6 +108,6 @@ export interface Report {
   reason: string;
   createdAt: string;
   status: string;
-  user : User;
-  post : PostType
+  user: User;
+  post: PostType;
 }

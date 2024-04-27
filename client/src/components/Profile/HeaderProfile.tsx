@@ -16,6 +16,7 @@ import avatarDefault from "@/static/images/avatarDefault.jpg";
 import { useListFriend } from "@/app/actions/custom/useListFriend";
 import { ListFriendType, UserType } from "@/app/types";
 import ModalHandleBio from "./ModalHandleBio";
+import { useUserProfile } from "@/app/profile/about/page";
 
 interface LinkProfile {
   // name: string;
@@ -25,6 +26,15 @@ interface LinkProfile {
 }
 
 export default function HeaderProfile({ data, isFetching }: LinkProfile) {
+  const {
+    firstname,
+    setFirstname,
+    lastname,
+    setLastname,
+    username,
+    setUsername,
+  } = useUserProfile();
+
   const [friends, setFiends] = useState<ListFriendType[]>([]);
   const [loading, setLoading] = useState(true);
   const params = useSearchParams();
@@ -37,7 +47,6 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
 
   const [linkImageAvatar, setImageAvatar] = useState<string>("");
   const [linkImageCover, setImageCover] = useState<string>("");
-
   const [bio, setBio] = useState<string>(data?.data?.profile?.bio as string);
 
   const url = usePathname();
@@ -54,10 +63,19 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
     setImageAvatar(data?.data?.profile?.avatar_url as string);
     setImageCover(data?.data?.profile?.cover_url as string);
     setBio(data?.data?.profile?.bio as string);
+    // setFirstname(data?.data?.firstname as string);
+    // setLastname(data?.data?.lastname as string);
+    // setUsername(data?.data?.username as string);
   }, [
     data?.data?.profile?.avatar_url,
     data?.data?.profile?.cover_url,
     data?.data?.profile?.bio,
+    // data?.data?.firstname,
+    // data?.data?.lastname,
+    // data?.data?.username,
+    // setFirstname,
+    // setLastname,
+    // setUsername,
   ]);
 
   return (
@@ -133,10 +151,11 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
         ) : (
           <div>
             <h1 className="flex justify-center mt-7 font-bold text-3xl dark:text-white">
-              {data?.data?.firstname + " " + data?.data?.lastname}
+              {/* {data?.data?.firstname + " " + data?.data?.lastname} */}
+              {firstname + " " + lastname}
             </h1>
             <h2 className="flex justify-center mt-1 text-[#65676b] text-base dark:text-gray-600">
-              @{data?.data?.username}
+              @{username}
             </h2>
             {/* <div className="flex justify-center mt-2 gap-4 pb-2"> */}
             <h2 className="flex justify-center mt-1 text-[#65676b] text-base dark:text-white">

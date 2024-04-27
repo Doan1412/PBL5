@@ -37,7 +37,7 @@ export default function Friend() {
         <Navigation />
       </nav>
       <div className=" h-full dark:bg-[#18191a]">
-        <HeaderProfile />
+        <HeaderProfile data={data!} isFetching={isFetching} />
         {/* {pathname === "/profile"}( */}
         <div className="hidden md:flex justify-center">
           <FriendProfile />
