@@ -2,11 +2,9 @@
 import {
   Avatar,
   AvatarGroup,
-  Button,
   Image,
   Skeleton,
   useDisclosure,
-  user,
 } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import Poster from "@/static/images/Poster.jpg";
@@ -15,12 +13,9 @@ import UploadAvatar from "../../components/UploadAvatar";
 import AddFriendButton from "@/components/AddFriendButton";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import avatarDefault from "@/static/images/avatarDefault.jpg";
-import Link from "next/link";
-import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
 import { useListFriend } from "@/app/actions/custom/useListFriend";
 import { ListFriendType, UserType } from "@/app/types";
-import { CldUploadButton } from "next-cloudinary";
-import ModalProfile from "./ModalProfile";
+import ModalHandleBio from "./ModalHandleBio";
 
 interface LinkProfile {
   // name: string;
@@ -87,7 +82,7 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
               >
                 <UploadButton />
               </button>
-              <ModalProfile
+              <ModalHandleBio
                 isOpen={isOpen}
                 onClose={onClose}
                 setImageCover={setImageCover}
@@ -114,7 +109,7 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
             >
               <UploadAvatar />
             </button>
-            <ModalProfile
+            <ModalHandleBio
               isOpen={isOpen}
               onClose={onClose}
               setImageCover={setImageCover}
