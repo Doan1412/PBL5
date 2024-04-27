@@ -27,7 +27,7 @@ const useHttp = () => {
         //     }
         //   }, 9 * 60 * 1000);
         // } // 10 phút
-        console.log(config.headers);
+        // console.log(config.headers);
         if (!config.headers["Authorization"]) {
           config.headers["Authorization"] = `Bearer ${
             getLocalStorage()?.token as string
@@ -47,9 +47,9 @@ const useHttp = () => {
           if (isRefreshing == false) {
             // Kiểm tra xem refreshToken có đang được gọi lại không
             setIsRefreshing(true); // Bắt đầu quá trình refresh
-            console.log(getLocalStorage()?.refresh_token as string);
+            // console.log(getLocalStorage()?.refresh_token as string);
             await refresh(getLocalStorage()?.refresh_token as string);
-            console.log("1");
+            // console.log("1");
             // const token = localStorage.getItem("access_token");
             // const expiration = localStorage.getItem("access_token_expires_at");
             // if (token && expiration) {
@@ -61,11 +61,11 @@ const useHttp = () => {
             //     }
             //   }, 9 * 60 * 1000);
             // } // 10 phút
-            console.log(getLocalStorage()?.token as string);
+            // console.log(getLocalStorage()?.token as string);
             prevRequest.headers["Authorization"] = `Bearer ${
               getLocalStorage()?.token as string
             }`;
-            console.log(getLocalStorage()?.token as string);
+            // console.log(getLocalStorage()?.token as string);
             setIsRefreshing(false);
             return http(prevRequest);
           }

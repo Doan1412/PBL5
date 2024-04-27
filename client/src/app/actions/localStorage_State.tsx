@@ -6,7 +6,6 @@ export function getLocalStorage() {
     const access_token_expires_at = localStorage.getItem(
       "access_token_expires_at"
     );
-    console.log(token);
     return {
       token,
       refresh_token,

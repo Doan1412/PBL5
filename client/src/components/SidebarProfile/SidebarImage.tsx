@@ -8,7 +8,7 @@ interface PropsSidebarImage {
 }
 
 export default function SidebarImage({ data }: PropsSidebarImage) {
-  console.log(data);
+  // console.log(data);
   return (
     <>
       <div className="bg-[#ffffff] dark:bg-[#242526] rounded-lg shrink flex flex-col drop-shadow-2xl">
@@ -25,7 +25,7 @@ export default function SidebarImage({ data }: PropsSidebarImage) {
                 shadow="sm"
                 key={index}
                 isPressable={true}
-                onPress={() => console.log("item pressed")}
+                onPress={() => {}}
               >
                 <CardBody className="overflow-visible p-0">
                   <Image

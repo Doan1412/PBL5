@@ -30,7 +30,7 @@ export default function Friend() {
 
   useListPostById(setPosts, setLoading, params.get("id_user") as string);
   useImageProfileById(setImages, setLoading, params.get("id_user") as string);
-  console.log(images);
+  // console.log(images);
   return (
     <Widget>
       <nav className="fixed z-40 w-full">

@@ -8,7 +8,7 @@ export default function UploadButton() {
   // const handleFileChange = (event) => {
   //   const file = event.target.files[0];
   //   // Xử lý tệp tại đây (ví dụ: tải lên tệp, hiển thị trước tệp, vv.)
-  //   console.log("Selected file:", file);
+  //   // console.log("Selected file:", file);
   // };
 
   return (

@@ -25,28 +25,43 @@ import { failPopUp, successPopUp } from "@/app/hooks/features/popup.slice";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
+  linkImageCover?: string;
+  linkImageAvatar?: string;
+  bio?: string;
+  setImageAvatar: React.Dispatch<React.SetStateAction<string>>;
+  setImageCover: React.Dispatch<React.SetStateAction<string>>;
+  setBio: React.Dispatch<React.SetStateAction<string>>;
 }
 
-
-export default function ModalProfile({ isOpen, onClose }: ModalProps) {
+export default function ModalProfile({
+  isOpen,
+  onClose,
+  setImageAvatar,
+  setImageCover,
+  setBio,
+  linkImageAvatar,
+  linkImageCover,
+  bio,
+}: ModalProps) {
   const params = useSearchParams();
   const { data, isFetching } = useGetUserInfoQuery(
     params.get("id_user") as string
   );
-  const [linkImageAvatar, setImageAvatar] = useState<string>(
-    data?.data?.profile?.avatar_url != ""
-      ? `${data?.data?.profile?.avatar_url}`
-      : avatarDefault.src
-  );
-  const [linkImageCover, setImageCover] = useState<string>(
-    data?.data?.profile?.avatar_url != ""
-      ? `${data?.data?.profile?.cover_url}`
-      : Poster.src
-  );
-  const [bio, setBio] = useState<string>(data?.data?.profile?.bio as string);
+  // const [linkImageAvatar, setImageAvatar] = useState<string>(
+  //   data?.data?.profile?.avatar_url != ""
+  //     ? `${data?.data?.profile?.avatar_url}`
+  //     : avatarDefault.src
+  // );
+  // const [linkImageCover, setImageCover] = useState<string>(
+  //   data?.data?.profile?.avatar_url != ""
+  //     ? `${data?.data?.profile?.cover_url}`
+  //     : Poster.src
+  // );
+  // const [bio, setBio] = useState<string>(data?.data?.profile?.bio as string);
   const dispatch = useAppDispatch();
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
+  const [bioModal, setBioModal] = useState<string>("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -54,6 +69,7 @@ export default function ModalProfile({ isOpen, onClose }: ModalProps) {
   };
 
   const handleUpdate = async () => {
+    setBio(bioModal);
     const token = getLocalStorage()?.token;
     if (!token) return;
     try {
@@ -76,12 +92,11 @@ export default function ModalProfile({ isOpen, onClose }: ModalProps) {
       controller.abort();
       if (response.data.status === 200) {
         dispatch(successPopUp("Cập nhật thông tin thành công!"));
-        
       } else {
         dispatch(failPopUp("Error: " + response.data.message));
       }
     } catch (error) {
-      console.error("Error:", error);
+      // console.error("Error:", error);
     }
   };
 
@@ -148,7 +163,7 @@ export default function ModalProfile({ isOpen, onClose }: ModalProps) {
                       <Textarea
                         defaultValue={data?.data?.profile?.bio as string}
                         onChange={(e) => {
-                          setBio(handleInputChange(e));
+                          setBioModal(handleInputChange(e));
                         }}
                       />
                     </div>

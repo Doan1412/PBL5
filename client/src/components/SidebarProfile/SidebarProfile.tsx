@@ -28,7 +28,16 @@ export default function SidebarProfile({ data, id_user }: PropsSidebar) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const params = useSearchParams();
   const router = useRouter();
- 
+
+  const [linkImageAvatar, setImageAvatar] = useState<string>("");
+  const [linkImageCover, setImageCover] = useState<string>("");
+  const [bio, setBio] = useState<string>("");
+
+  useEffect(() => {
+    setImageAvatar(data?.avatar_url as string);
+    setImageCover(data?.cover_url as string);
+    setBio(data?.bio as string);
+  }, [data?.avatar_url, data?.cover_url, data?.bio]);
 
   const handleOpen = () => {
     onOpen();
@@ -43,7 +52,7 @@ export default function SidebarProfile({ data, id_user }: PropsSidebar) {
       <div className="bg-[#ffffff] dark:bg-[#242526] rounded-lg mb-4 shrink drop-shadow-2xl dark:text-white">
         <h1 className="ml-5 mt-5 font-bold text-xl dark:text-white">Intro</h1>
         <h1 className="flex justify-center mt-2 dark:text-white">
-          {data?.bio}
+          {bio}
         </h1>
         {id_user == userId && (
           <div className="mt-2 flex justify-center w-full">
@@ -54,7 +63,16 @@ export default function SidebarProfile({ data, id_user }: PropsSidebar) {
             >
               Chỉnh sửa tiểu sử
             </Button>
-            <ModalProfile isOpen = {isOpen} onClose={onClose}/>
+            <ModalProfile
+              isOpen={isOpen}
+              onClose={onClose}
+              setImageCover={setImageCover}
+              setImageAvatar={setImageAvatar}
+              linkImageCover={linkImageCover}
+              linkImageAvatar={linkImageAvatar}
+              bio={bio}
+              setBio={setBio}
+            />
           </div>
         )}
         <div className="mt-5 ml-5 flex">
@@ -109,7 +127,7 @@ export default function SidebarProfile({ data, id_user }: PropsSidebar) {
               shadow="sm"
               key={index}
               isPressable
-              onPress={() => console.log("item pressed")}
+              onPress={() => // console.log("item pressed")}
             >
               <CardBody className="overflow-visible p-0">
                 <Image

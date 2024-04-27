@@ -34,14 +34,14 @@ export function useListPost(
         controller.abort();
         if (response.data.status === 200) {
           const postsData = response.data.data;
-          console.log(postsData);
+          // console.log(postsData);
           setPosts(postsData);
           setLoading(false);
         } else {
           dispatch(failPopUp(response.data.message));
         }
       } catch (error) {
-        console.error("Error:", error);
+        // console.error("Error:", error);
         setLoading(false);
       }
     }

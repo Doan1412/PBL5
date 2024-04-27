@@ -26,7 +26,7 @@ export default function RegisterPage() {
   const handleRegister = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    console.log("Register Oke");
+    // console.log("Register Oke");
     e.preventDefault();
     // dispatch(setLoading());
 
@@ -57,7 +57,7 @@ export default function RegisterPage() {
         dispatch(resetLoading());
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      // console.error("Error during login:", error);
       dispatch(failPopUp("An error occurred during register."));
       dispatch(resetLoading());
     }
@@ -73,7 +73,7 @@ export default function RegisterPage() {
         },
       }
     );
-    console.log(res);
+    // console.log(res);
     if (res.data.status === 200) {
       // dispatch(successPopUp(d.message));
       setCookie("access_token", res.data.data.access_token, {
@@ -89,7 +89,7 @@ export default function RegisterPage() {
       // dispatch(failPopUp(d.message));
       // dispatch(resetLoading());
     }
-    console.log(res);
+    // console.log(res);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -173,7 +173,7 @@ export default function RegisterPage() {
                     )
                   );
                   setLoading_register(false);
-                  console.log(isLoading);
+                  // console.log(isLoading);
                   return;
                 }
                 handleRegister(e);
@@ -191,7 +191,7 @@ export default function RegisterPage() {
                 <GoogleLogin
                   onSuccess={responseGoogle}
                   onError={() => {
-                    console.log("Login Failed");
+                    // console.log("Login Failed");
                   }}
                 />
               </GoogleOAuthProvider>

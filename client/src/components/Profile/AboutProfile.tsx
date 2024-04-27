@@ -45,7 +45,7 @@ export default function AboutProfile({ data }: PropsAboutProfile) {
         // dispatch(failPopUp(response.data.message));
       }
     } catch (error) {
-      console.error("Error:", error);
+      // console.error("Error:", error);
     }
   };
 

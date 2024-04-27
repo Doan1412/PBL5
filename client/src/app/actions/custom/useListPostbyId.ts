@@ -9,7 +9,7 @@ import { failPopUp } from "../../hooks/features/popup.slice";
 export function useListPostById(
   setPosts: React.Dispatch<React.SetStateAction<PostType[]>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  id_user?: string,
+  id_user?: string
 ) {
   const dispatch = useAppDispatch();
   const params = useSearchParams();
@@ -35,17 +35,25 @@ export function useListPostById(
         controller.abort();
         if (response.data.status === 200) {
           const postsData = response.data.data;
-          console.log(postsData);
+          // console.log(postsData);
           setPosts(postsData);
           setLoading(false);
         } else {
           dispatch(failPopUp(response.data.message));
         }
       } catch (error) {
-        console.error("Error:", error);
+        // console.error("Error:", error);
         setLoading(false);
       }
     }
     fetchListPost();
-  }, [params, dispatch, httpPrivate, setPosts, setLoading, controller, id_user]);
+  }, [
+    params,
+    dispatch,
+    httpPrivate,
+    setPosts,
+    setLoading,
+    controller,
+    id_user,
+  ]);
 }
