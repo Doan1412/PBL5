@@ -88,6 +88,7 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.error("Error during login:", error);
+      setLoading_login(false);
       dispatch(failPopUp("An error occurred during login."));
       dispatch(resetLoading());
     }

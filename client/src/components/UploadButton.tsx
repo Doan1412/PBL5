@@ -21,7 +21,7 @@ export default function UploadButton() {
           <FaCameraRetro />
         </div>
         <div className="absolute right-3 transform translate-x-full opacity-0 text-white text-xs font-semibold transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-          Update Avatar
+          Update Cover
         </div>
       </label>
       <input

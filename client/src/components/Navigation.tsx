@@ -169,8 +169,8 @@ export default function Navigation() {
                       name="Jason Hughes"
                       size="sm"
                       src={
-                        data?.data?.profile.avatar_url != ""
-                          ? `${data?.data?.profile.avatar_url}`
+                        data?.data?.profile?.avatar_url != ""
+                          ? `${data?.data?.profile?.avatar_url}`
                           : avatarDefault.src
                       }
                     />

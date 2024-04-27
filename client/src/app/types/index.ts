@@ -1,61 +1,60 @@
-import { PostType } from '@/app/types';
-import { Post } from '@/components/Post/Post';
+
 export type MessageType = {
-  id: String;
-  body?: String;
+  id: string;
+  body?: string;
   image?: Date;
   createdAt: Date;
-  seenIds: String;
+  seenIds: string;
   seen: UserType[];
-  conversationId: String;
+  conversationId: string;
   conversation: ConversationType;
-  senderId: String;
+  senderId: string;
   sender: UserType;
 };
 
 export type ConversationType = {
-  id: String;
+  id: string;
   createdAt: Date;
   lastMessageAt: Date;
-  name?: String;
+  name?: string;
   isGroup?: boolean;
-  messagesIds: String;
+  messagesIds: string;
   messages: MessageType[];
-  userIds: String;
+  userIds: string;
   users: UserType[];
 };
 
 export type Profile = {
-  id?: String;
-  avatar_url?: String;
-  bio?: String;
-  cover_url?: String;
-  study_at?: String;
-  work_at?: String;
-  from?: String;
-  relationship?: String;
+  id?: string;
+  avatar_url?: string;
+  bio?: string;
+  cover_url?: string;
+  study_at?: string;
+  work_at?: string;
+  from?: string;
+  relationship?: string;
 };
 
 export type UserType = {
   data: {
-    id: String;
-    name?: String;
-    email: String;
-    firstname?: String;
-    lastname?: String;
-    username: String;
-    birth?: String;
-    gender?: String;
-    phone?: String;
+    id: string;
+    name?: string;
+    email: string;
+    firstname?: string;
+    lastname?: string;
+    username: string;
+    birth?: string;
+    gender?: string;
+    phone?: string;
     profile: Profile;
     emailVerified: Date;
-    image?: String;
-    hashedPassword: String;
+    image?: string;
+    hashedPassword: string;
     createdAt: Date;
     updatedAt: Date;
-    conversationIds: String;
+    conversationIds: string;
     conversations: ConversationType[];
-    seenMessageIds: String;
+    seenMessageIds: string;
     seenMessages: MessageType[];
     messages: MessageType[];
   };

@@ -1,5 +1,13 @@
 "use client";
-import { Avatar, AvatarGroup, Image, Skeleton, user } from "@nextui-org/react";
+import {
+  Avatar,
+  AvatarGroup,
+  Button,
+  Image,
+  Skeleton,
+  useDisclosure,
+  user,
+} from "@nextui-org/react";
 import React, { useState } from "react";
 import Poster from "@/static/images/Poster.jpg";
 import UploadButton from "../../components/UploadButton";
@@ -11,6 +19,8 @@ import Link from "next/link";
 import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
 import { useListFriend } from "@/app/actions/custom/useListFriend";
 import { ListFriendType } from "@/app/types";
+import { CldUploadButton } from "next-cloudinary";
+import ModalProfile from "./ModalProfile";
 
 interface LinkProfile {
   name: string;
@@ -24,13 +34,17 @@ export default function HeaderProfile() {
   const url = usePathname();
   const params = useSearchParams();
   const router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleOpen = () => {
+    onOpen();
+  };
+
   const { data, isFetching } = useGetUserInfoQuery(
     params.get("id_user") as string
   );
 
   useListFriend(setFiends, setLoading, params.get("id_user") as string);
-
-  console.log(friends.length);
 
   return (
     <>
@@ -43,15 +57,22 @@ export default function HeaderProfile() {
               height={300}
               alt="NextUI hero Image with delay"
               src={
-                data?.data?.profile.avatar_url != ""
-                  ? `${data?.data?.profile.cover_url}`
-                  : Poster.src
+                data?.data?.profile?.cover_url != ""
+                  ? `${data?.data?.profile?.cover_url}`
+                  : avatarDefault.src
               }
               // src={Poster.src}
               className="z-0"
             />
-            <div className=" absolute bottom-2 right-2 z-10">
-              <UploadButton />
+            <div className="absolute bottom-2 right-2 z-10">
+              <button
+                color="default"
+                className="w-5/6"
+                onClick={() => handleOpen()}
+              >
+                <UploadButton />
+              </button>
+              <ModalProfile isOpen={isOpen} onClose={onClose} />
             </div>
           </div>
         </div>
@@ -59,14 +80,21 @@ export default function HeaderProfile() {
           <Avatar
             isBordered
             src={
-              data?.data?.profile.avatar_url != ""
-                ? `${data?.data?.profile.avatar_url}`
+              data?.data?.profile?.avatar_url != ""
+                ? `${data?.data?.profile?.avatar_url}`
                 : avatarDefault.src
             }
             className="w-40 h-40 text-large"
           />
           <div className="flex justify-center absolute -bottom-5 z-10">
-            <UploadAvatar />
+            <button
+              color="default"
+              className="w-5/6"
+              onClick={() => handleOpen()}
+            >
+              <UploadAvatar />
+            </button>
+            <ModalProfile isOpen={isOpen} onClose={onClose} />
           </div>
         </div>
         {isFetching ? (
@@ -95,9 +123,8 @@ export default function HeaderProfile() {
         <div className="mt-2 pb-5">
           <AvatarGroup isBordered max={5} total={friends.length - 5}>
             {friends.map((friend: ListFriendType, index: number) => (
-              <Avatar key={index} src= {friend.avatar_url} />
+              <Avatar key={index} src={friend.avatar_url} />
             ))}
-          
           </AvatarGroup>
           {/* </div> */}
         </div>
