@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChatRoomController {
     private ChatRoomService service;
     @PostMapping("")
-    public ResponseEntity<Object> addOne(@AuthenticationPrincipal Account account,@RequestBody RoomDTO roomDTO) {
+    public ResponseEntity<Object> addOne(@RequestBody RoomDTO roomDTO) {
         try {
-            Object data = service.create(account.getId(), roomDTO);
+            Object data = service.create(roomDTO);
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){

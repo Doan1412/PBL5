@@ -43,10 +43,10 @@ public class ReportController {
         }
     }
     @PutMapping("/{reportId}/status")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> updateReportStatus(@PathVariable String reportId, @RequestParam ReportStatus newStatus) {
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Object> updateReportStatus(@PathVariable String reportId, @RequestParam ReportStatus newStatus) {
         reportService.updateReportStatus(reportId, newStatus);
-        return ResponseEntity.ok("Report status updated successfully");
+        return Respond.success(200,"I001",reportService.getAll());
     }
     @DeleteMapping("/{reportId}")
     public ResponseEntity<String> deleteReport(@PathVariable String reportId) {

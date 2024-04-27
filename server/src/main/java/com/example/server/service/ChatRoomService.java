@@ -46,7 +46,7 @@ public class ChatRoomService {
         return chatRoom.getMembers();
     }
 
-    public ChatRoom create(String id, RoomDTO roomDTO) {
+    public ChatRoom create(RoomDTO roomDTO) {
         ChatRoom room = ChatRoom.builder()
                 .name(roomDTO.getName())
                 .members(new HashSet<>())
@@ -56,6 +56,18 @@ public class ChatRoomService {
                     .orElseThrow(() -> new NotFoundException("User not found"));
             room.getMembers().add(user);
         });
+        return chatRoomRepository.save(room);
+    }
+    public ChatRoom createPrivateChatRoom(String user_id1, String user_id2){
+        User user1 = userRepository.findById(user_id1).orElseThrow();
+        User user2 = userRepository.findById(user_id2).orElseThrow();
+        Set<User> members = new HashSet<>();
+        members.add(user1);
+        members.add(user2);
+        ChatRoom room = ChatRoom.builder()
+                .name(user1.getLastname()+", "+ user2.getLastname())
+                .members(members)
+                .build();
         return chatRoomRepository.save(room);
     }
 }

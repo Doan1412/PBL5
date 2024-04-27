@@ -47,6 +47,7 @@ export default function ModalProfile({
   const { data, isFetching } = useGetUserInfoQuery(
     params.get("id_user") as string
   );
+
   // const [linkImageAvatar, setImageAvatar] = useState<string>(
   //   data?.data?.profile?.avatar_url != ""
   //     ? `${data?.data?.profile?.avatar_url}`

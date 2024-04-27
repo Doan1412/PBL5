@@ -65,7 +65,6 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
     data?.data?.profile?.bio,
   ]);
 
-
   return (
     <>
       <div className="dark:bg-[#242526] bg-[#f0f2f5] ml-15 mr-15 rounded-bl-lg pt-18 z-0">
@@ -104,7 +103,7 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
         <div className="flex justify-center -mt-14 relative shrink">
           <Avatar
             isBordered
-            src={linkImageAvatar != "" ? linkImageAvatar : avatarDefault.src }
+            src={linkImageAvatar != "" ? linkImageAvatar : avatarDefault.src}
             className="w-40 h-40 text-large"
           />
           <div className="flex justify-center absolute -bottom-5 z-10">
@@ -139,7 +138,7 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
         ) : (
           <div>
             <h1 className="flex justify-center mt-7 font-bold text-3xl dark:text-white">
-              {data?.data?.firstname +" "+data?.data?.lastname} 
+              {data?.data?.firstname + " " + data?.data?.lastname}
             </h1>
             <h2 className="flex justify-center mt-1 text-[#65676b] text-base dark:text-gray-600">
               @{data?.data?.username}
