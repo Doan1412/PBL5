@@ -3,6 +3,7 @@ import {
   Avatar,
   Button,
   Image,
+  Input,
   Modal,
   ModalBody,
   ModalContent,
@@ -28,20 +29,30 @@ interface ModalProps {
   linkImageCover?: string;
   linkImageAvatar?: string;
   bio?: string;
-  setImageAvatar: React.Dispatch<React.SetStateAction<string>>;
-  setImageCover: React.Dispatch<React.SetStateAction<string>>;
-  setBio: React.Dispatch<React.SetStateAction<string>>;
+  love?: string;
+  study?: string;
+  work?: string;
+  from?: string;
+  setLove: React.Dispatch<React.SetStateAction<string>>;
+  setStudy: React.Dispatch<React.SetStateAction<string>>;
+  setWork: React.Dispatch<React.SetStateAction<string>>;
+  setFrom: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function ModalProfile({
+export default function ModalHandleDetail({
   isOpen,
   onClose,
-  setImageAvatar,
-  setImageCover,
-  setBio,
   linkImageAvatar,
   linkImageCover,
   bio,
+  love,
+  study,
+  work,
+  from,
+  setLove,
+  setStudy,
+  setWork,
+  setFrom,
 }: ModalProps) {
   const params = useSearchParams();
   const { data, isFetching } = useGetUserInfoQuery(
@@ -62,15 +73,14 @@ export default function ModalProfile({
   const dispatch = useAppDispatch();
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
-  const [bioModal, setBioModal] = useState<string>("");
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    return value;
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): string => {
+    return e.target.value;
   };
 
   const handleUpdate = async () => {
-    setBio(bioModal);
     const token = getLocalStorage()?.token;
     if (!token) return;
     try {
@@ -80,6 +90,10 @@ export default function ModalProfile({
           avatar_url: linkImageAvatar,
           cover_url: linkImageCover,
           bio,
+          study_at: study,
+          work_at: work,
+          from: from,
+          relationship: love,
         },
         {
           signal: controller.signal,
@@ -108,64 +122,67 @@ export default function ModalProfile({
           {(onClose) => (
             <>
               <ModalHeader className="flex justify-center gap-1">
-                Chỉnh sửa thông tin
+                Chỉnh sửa chi tiết
               </ModalHeader>
               <ModalBody>
                 <div className="flex flex-col">
-                  <div className="flex flex-col">
-                    <h1 className="font-bold text-lg">Avatar</h1>
-                    <div className="flex justify-center mt-3 mb-3 relative">
-                      <Avatar
-                        isBordered
-                        src={linkImageAvatar}
-                        className="w-40 h-40 text-large"
-                      />
-                      <div className="absolute bottom-2 right-2 z-10">
-                        <CldUploadButton
-                          options={{ maxFiles: 1 }}
-                          onSuccess={(result: any) => {
-                            setImageAvatar(result?.info?.secure_url);
-                          }}
-                          uploadPreset="s2lo0hgq"
-                        >
-                          <UploadButton />
-                        </CldUploadButton>
-                      </div>
+                  <div className="flex gap-4">
+                    <div className="flex items-center">
+                      <h1 className="font-bold text-lg">Từng học tại</h1>
                     </div>
-                  </div>
-                  <div className="flex flex-col">
-                    <h1 className="font-bold text-lg">Cover Image</h1>
-                    <div className="flex justify-center mt-3 mb-3 relative shrink">
-                      <Image
-                        isBlurred
-                        width={300}
-                        height={100}
-                        alt="NextUI hero Image with delay"
-                        src={linkImageCover}
-                        // src={Poster.src}
-                        className="z-0"
-                      />
-                      <div className="absolute -bottom-4 right-1 z-10">
-                        <CldUploadButton
-                          options={{ maxFiles: 1 }}
-                          onSuccess={(result: any) => {
-                            setImageCover(result?.info?.secure_url);
-                          }}
-                          uploadPreset="s2lo0hgq"
-                        >
-                          <UploadAvatar />
-                        </CldUploadButton>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-col">
-                    <h1 className="font-bold text-lg">Bio</h1>
-                    <div className="flex justify-center mt-3">
-                      <Textarea
-                        defaultValue={data?.data?.profile?.bio as string}
+                    <div className="flex justify-center mt-3 flex-1">
+                      <Input
+                        type="text"
+                        value={study}
                         onChange={(e) => {
-                          setBioModal(handleInputChange(e));
+                          setStudy(handleInputChange(e));
                         }}
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="flex items-center">
+                      <h1 className="font-bold text-lg">Từng làm việc tại</h1>
+                    </div>
+                    <div className="flex justify-center mt-3 flex-1">
+                      <Input
+                        type="text"
+                        value={work}
+                        onChange={(e) => {
+                          setWork(handleInputChange(e));
+                        }}
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="flex items-center">
+                      <h1 className="font-bold text-lg">Đến từ</h1>
+                    </div>
+                    <div className="flex justify-center mt-3 flex-1">
+                      <Input
+                        type="text"
+                        value={from}
+                        onChange={(e) => {
+                          setFrom(handleInputChange(e));
+                        }}
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="flex items-center">
+                      <h1 className="font-bold text-lg">Tình trạng hôn nhân</h1>
+                    </div>
+                    <div className="flex justify-center mt-3 flex-1">
+                      <Input
+                        type="text"
+                        value={love}
+                        onChange={(e) => {
+                          setLove(handleInputChange(e));
+                        }}
+                        className="w-full"
                       />
                     </div>
                   </div>
