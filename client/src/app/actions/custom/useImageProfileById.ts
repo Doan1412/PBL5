@@ -9,7 +9,7 @@ import { failPopUp } from "../../hooks/features/popup.slice";
 export function useImageProfileById(
   setImages: React.Dispatch<React.SetStateAction<string[]>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  id_user?: string,
+  id_user?: string
 ) {
   const dispatch = useAppDispatch();
   const params = useSearchParams();
@@ -41,10 +41,18 @@ export function useImageProfileById(
           dispatch(failPopUp(response.data.message));
         }
       } catch (error) {
-        console.error("Error:", error);
+        // console.error("Error:", error);
         setLoading(false);
       }
     }
     fetchListPost();
-  }, [params, dispatch, httpPrivate, setImages, setLoading, controller, id_user]);
+  }, [
+    params,
+    dispatch,
+    httpPrivate,
+    setImages,
+    setLoading,
+    controller,
+    id_user,
+  ]);
 }

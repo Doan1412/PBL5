@@ -10,7 +10,6 @@ export default function useRefreshToken() {
   const controller = new AbortController();
 
   async function refreshToken(refresh_token: String) {
-    console.log(refresh_token);
     // const res = fetch(`{process.env.BACKEND_URL}auth/refresh-token`)
     const res = await http.post("auth/refresh-token", null, {
       headers: {
@@ -19,7 +18,7 @@ export default function useRefreshToken() {
       signal: controller.signal,
     });
     controller.abort();
-    console.log(res.data);
+    // // console.log(res.data);
     // setAuth((prev: any) => {
     if (!refresh_token) return;
     const access_token = res.data.body.data.access_token;
@@ -30,7 +29,7 @@ export default function useRefreshToken() {
 
     //   return { ...prev};
     // });
-    console.log(res.data.body.data.access_token);
+    // // console.log(res.data.body.data.access_token);
     return res.data.body.data.access_token;
   }
 

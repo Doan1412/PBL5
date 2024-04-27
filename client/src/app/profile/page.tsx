@@ -1,14 +1,9 @@
 "use client";
 import Navigation from "@/components/Navigation";
-import { Avatar, AvatarGroup, Image, Skeleton } from "@nextui-org/react";
 import React, { useRef, useState } from "react";
-import Poster from "@/static/images/Poster.jpg";
-import UploadButton from "../../components/UploadButton";
-import UploadAvatar from "../../components/UploadAvatar";
-import AddFriendButton from "@/components/AddFriendButton";
 import SidebarProfile from "@/components/SidebarProfile/SidebarProfile";
 import Post from "@/components/Post/Post";
-import { ImageType, PostType } from "../types";
+import { PostType } from "../types";
 import SidebarImage from "@/components/SidebarProfile/SidebarImage";
 import { useAppDispatch } from "../hooks/store";
 import { resetLoading } from "../hooks/features/loading.slice";
@@ -16,10 +11,8 @@ import Widget from "../widget";
 import SatatusPost from "@/components/SatatusPost";
 import { useGetUserInfoQuery } from "../hooks/services/user_info.service";
 import { useListPostById } from "../actions/custom/useListPostbyId";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import avatarDefault from "@/static/images/avatarDefault.jpg";
+import { useSearchParams } from "next/navigation";
 import SkeletonPost from "@/components/SkeletonPost/SkeletonPost";
-import Link from "next/link";
 import { useImageProfileById } from "../actions/custom/useImageProfileById";
 import HeaderProfile from "@/components/Profile/HeaderProfile";
 
@@ -38,10 +31,11 @@ export default function Profile() {
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   dispatch(resetLoading());
+  // console.log(data)
 
   useListPostById(setPosts, setLoading, params.get("id_user") as string);
   useImageProfileById(setImages, setLoading, params.get("id_user") as string);
-  console.log(images);
+  // console.log(images);
 
   return (
     <Widget>
@@ -49,11 +43,14 @@ export default function Profile() {
         <Navigation />
       </nav>
       <div className=" h-full dark:bg-[#18191a]">
-        <HeaderProfile />
+        <HeaderProfile data={data!} isFetching={isFetching} />
         {/* {pathname === "/profile"}( */}
         <div className="flex justify-center">
           <div className="flex flex-col mt-5 w-1/3 ml-44">
-            <SidebarProfile data={data?.data?.profile} />
+            <SidebarProfile
+              data={data?.data?.profile}
+              id_user={data?.data.id}
+            />
             <SidebarImage data={images} />
           </div>
           <div className="mt-2 h-full w-2/3">

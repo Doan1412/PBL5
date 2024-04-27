@@ -1,6 +1,14 @@
 "use client";
-import { Avatar, AvatarGroup, Image, Skeleton, user } from "@nextui-org/react";
-import React, { useState } from "react";
+import {
+  Avatar,
+  AvatarGroup,
+  Button,
+  Image,
+  Skeleton,
+  useDisclosure,
+  user,
+} from "@nextui-org/react";
+import React, { useEffect, useState } from "react";
 import Poster from "@/static/images/Poster.jpg";
 import UploadButton from "../../components/UploadButton";
 import UploadAvatar from "../../components/UploadAvatar";
@@ -10,27 +18,52 @@ import avatarDefault from "@/static/images/avatarDefault.jpg";
 import Link from "next/link";
 import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
 import { useListFriend } from "@/app/actions/custom/useListFriend";
-import { ListFriendType } from "@/app/types";
+import { ListFriendType, UserType } from "@/app/types";
+import { CldUploadButton } from "next-cloudinary";
+import ModalProfile from "./ModalProfile";
 
 interface LinkProfile {
-  name: string;
-  link: string;
+  // name: string;
+  // link: string;
+  data: UserType;
+  isFetching: boolean;
 }
 
-export default function HeaderProfile() {
+export default function HeaderProfile({ data, isFetching }: LinkProfile) {
   const [friends, setFiends] = useState<ListFriendType[]>([]);
   const [loading, setLoading] = useState(true);
+  const params = useSearchParams();
+
+  // const { data, isFetching } = useGetUserInfoQuery(
+  //   params.get("id_user") as string
+  // );
+  // console.log(data);
+  // console.log(data?.data?.profile?.avatar_url);
+
+  const [linkImageAvatar, setImageAvatar] = useState<string>("");
+  const [linkImageCover, setImageCover] = useState<string>("");
+
+  const [bio, setBio] = useState<string>(data?.data?.profile?.bio as string);
 
   const url = usePathname();
-  const params = useSearchParams();
   const router = useRouter();
-  const { data, isFetching } = useGetUserInfoQuery(
-    params.get("id_user") as string
-  );
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const handleOpen = () => {
+    onOpen();
+  };
 
   useListFriend(setFiends, setLoading, params.get("id_user") as string);
 
-  console.log(friends.length);
+  useEffect(() => {
+    setImageAvatar(data?.data?.profile?.avatar_url as string);
+    setImageCover(data?.data?.profile?.cover_url as string);
+    setBio(data?.data?.profile?.bio as string);
+  }, [
+    data?.data?.profile?.avatar_url,
+    data?.data?.profile?.cover_url,
+    data?.data?.profile?.bio,
+  ]);
 
   return (
     <>
@@ -42,31 +75,55 @@ export default function HeaderProfile() {
               width={900}
               height={300}
               alt="NextUI hero Image with delay"
-              src={
-                data?.data?.profile.avatar_url != ""
-                  ? `${data?.data?.profile.cover_url}`
-                  : Poster.src
-              }
+              src={linkImageCover != "" ? linkImageCover : Poster.src}
               // src={Poster.src}
               className="z-0"
             />
-            <div className=" absolute bottom-2 right-2 z-10">
-              <UploadButton />
+            <div className="absolute bottom-2 right-2 z-10">
+              <button
+                color="default"
+                className="w-5/6"
+                onClick={() => handleOpen()}
+              >
+                <UploadButton />
+              </button>
+              <ModalProfile
+                isOpen={isOpen}
+                onClose={onClose}
+                setImageCover={setImageCover}
+                setImageAvatar={setImageAvatar}
+                linkImageCover={linkImageCover}
+                linkImageAvatar={linkImageAvatar}
+                bio={bio}
+                setBio={setBio}
+              />
             </div>
           </div>
         </div>
         <div className="flex justify-center -mt-14 relative shrink">
           <Avatar
             isBordered
-            src={
-              data?.data?.profile.avatar_url != ""
-                ? `${data?.data?.profile.avatar_url}`
-                : avatarDefault.src
-            }
+            src={linkImageAvatar != "" ? linkImageAvatar : avatarDefault.src}
             className="w-40 h-40 text-large"
           />
           <div className="flex justify-center absolute -bottom-5 z-10">
-            <UploadAvatar />
+            <button
+              color="default"
+              className="w-5/6"
+              onClick={() => handleOpen()}
+            >
+              <UploadAvatar />
+            </button>
+            <ModalProfile
+              isOpen={isOpen}
+              onClose={onClose}
+              setImageCover={setImageCover}
+              setImageAvatar={setImageAvatar}
+              linkImageCover={linkImageCover}
+              linkImageAvatar={linkImageAvatar}
+              bio={bio}
+              setBio={setBio}
+            />
           </div>
         </div>
         {isFetching ? (
@@ -81,7 +138,7 @@ export default function HeaderProfile() {
         ) : (
           <div>
             <h1 className="flex justify-center mt-7 font-bold text-3xl dark:text-white">
-              {data?.data?.firstname}
+              {data?.data?.firstname + " " + data?.data?.lastname}
             </h1>
             <h2 className="flex justify-center mt-1 text-[#65676b] text-base dark:text-gray-600">
               @{data?.data?.username}
@@ -95,9 +152,8 @@ export default function HeaderProfile() {
         <div className="mt-2 pb-5">
           <AvatarGroup isBordered max={5} total={friends.length - 5}>
             {friends.map((friend: ListFriendType, index: number) => (
-              <Avatar key={index} src= {friend.avatar_url} />
+              <Avatar key={index} src={friend.avatar_url} />
             ))}
-          
           </AvatarGroup>
           {/* </div> */}
         </div>
@@ -114,7 +170,7 @@ export default function HeaderProfile() {
                     const currentUrl = `/profile/timeline?id_user=${
                       params.get("id_user") as string
                     }`;
-                    console.log(url);
+                    // console.log(url);
                     if (url !== currentUrl) {
                       router.push(currentUrl);
                     }
@@ -128,7 +184,7 @@ export default function HeaderProfile() {
                     const currentUrl = `/profile/about?id_user=${
                       params.get("id_user") as string
                     }`;
-                    console.log(url);
+                    // console.log(url);
                     if (url !== currentUrl) {
                       router.push(currentUrl);
                     }
@@ -142,7 +198,7 @@ export default function HeaderProfile() {
                     const currentUrl = `/profile/friend?id_user=${
                       params.get("id_user") as string
                     }`;
-                    console.log(url);
+                    // console.log(url);
                     if (url !== currentUrl) {
                       router.push(currentUrl);
                     }
@@ -156,7 +212,7 @@ export default function HeaderProfile() {
                     const currentUrl = `/profile/photo?id_user=${
                       params.get("id_user") as string
                     }`;
-                    console.log(url);
+                    // console.log(url);
                     if (url !== currentUrl) {
                       router.push(currentUrl);
                     }
@@ -179,7 +235,7 @@ export default function HeaderProfile() {
                       const currentUrl = `/profile/more?id_user=${
                         params.get("id_user") as string
                       }`;
-                      console.log(url);
+                      // console.log(url);
                       if (url !== currentUrl) {
                         router.push(currentUrl);
                       }
@@ -194,7 +250,7 @@ export default function HeaderProfile() {
                       const currentUrl = `/profile/edit?id_user=${
                         params.get("id_user") as string
                       }`;
-                      console.log(url);
+                      // console.log(url);
                       if (url !== currentUrl) {
                         router.push(currentUrl);
                       }

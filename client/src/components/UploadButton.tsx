@@ -8,7 +8,7 @@ export default function UploadButton() {
   // const handleFileChange = (event) => {
   //   const file = event.target.files[0];
   //   // Xử lý tệp tại đây (ví dụ: tải lên tệp, hiển thị trước tệp, vv.)
-  //   console.log("Selected file:", file);
+  //   // console.log("Selected file:", file);
   // };
 
   return (
@@ -21,7 +21,7 @@ export default function UploadButton() {
           <FaCameraRetro />
         </div>
         <div className="absolute right-3 transform translate-x-full opacity-0 text-white text-xs font-semibold transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-          Update Avatar
+          Update Cover
         </div>
       </label>
       <input

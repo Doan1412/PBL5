@@ -40,14 +40,14 @@ export default function Timeline() {
 
   useListPostById(setPosts, setLoading, params.get("id_user") as string);
   useImageProfileById(setImages, setLoading, params.get("id_user") as string);
-  console.log(images);
+  // console.log(images);
   return (
     <Widget>
       <nav className="fixed z-40 w-full">
         <Navigation />
       </nav>
       <div className=" h-full dark:bg-[#18191a]">
-        <HeaderProfile />
+      <HeaderProfile data = {data!} isFetching={isFetching}/>
         {/* {pathname === "/profile"}( */}
         <div className="flex justify-center">
           <div className="flex flex-col mt-5 w-1/3 ml-44">

@@ -24,6 +24,7 @@ export default function About() {
     params.get("id_user") as string
   );
 
+  console.log(data);
   // const pathname = usePathname();
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
@@ -35,17 +36,16 @@ export default function About() {
 
   useListPostById(setPosts, setLoading, params.get("id_user") as string);
   useImageProfileById(setImages, setLoading, params.get("id_user") as string);
-  console.log(images);
   return (
     <Widget>
       <nav className="fixed z-40 w-full">
         <Navigation />
       </nav>
       <div className=" h-full dark:bg-[#18191a]">
-        <HeaderProfile />
+        <HeaderProfile data={data!} isFetching={isFetching} />
         {/* {pathname === "/profile"}( */}
         <div className="hidden lg:flex justify-center">
-          <AboutProfile data = {data!}/>
+          <AboutProfile data={data!} />
         </div>
       </div>
     </Widget>

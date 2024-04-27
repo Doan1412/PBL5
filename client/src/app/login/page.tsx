@@ -35,7 +35,7 @@ export default function LoginPage() {
   const handleLogin = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    console.log("hello");
+    // console.log("hello");
     e.preventDefault();
     // dispatch(setLoading());
 
@@ -81,13 +81,14 @@ export default function LoginPage() {
           }, 2000);
         }
       } else {
-        console.log("Loi o day");
+        // console.log("Loi o day");
         setLoading_login(false);
         dispatch(failPopUp(response.data.error));
         dispatch(resetLoading());
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      // console.error("Error during login:", error);
+      setLoading_login(false);
       dispatch(failPopUp("An error occurred during login."));
       dispatch(resetLoading());
     }
@@ -125,9 +126,9 @@ export default function LoginPage() {
         dispatch(failPopUp(res.data.message));
         dispatch(resetLoading());
       }
-      console.log(res);
+      // console.log(res);
     } catch (error) {
-      console.error("Error during Google login:", error);
+      // console.error("Error during Google login:", error);
       dispatch(failPopUp("An error occurred during Google login."));
       dispatch(resetLoading());
     }
@@ -191,7 +192,7 @@ export default function LoginPage() {
                   <GoogleLogin
                     onSuccess={responseGoogle}
                     onError={() => {
-                      console.log("Login Failed");
+                      // console.log("Login Failed");
                     }}
                   />
                 </GoogleOAuthProvider>

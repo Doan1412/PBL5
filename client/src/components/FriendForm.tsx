@@ -47,11 +47,11 @@ export default function FriendForm({ data, setFiends }: PropFriendForm) {
     switch (key) {
       case "messenger":
         // Xử lý khi click vào Messenger
-        console.log("Clicked Messenger");
+        // console.log("Clicked Messenger");
         break;
       case "profile":
         // Xử lý khi click vào Profile
-        console.log("Clicked Profile");
+        // console.log("Clicked Profile");
         break;
       case "Delete":
         const handleDelete = async (id: string) => {
@@ -77,7 +77,7 @@ export default function FriendForm({ data, setFiends }: PropFriendForm) {
               dispatch(failPopUp(response.data.message));
             }
           } catch (error) {
-            console.error("Error:", error);
+            // console.error("Error:", error);
           }
         };
         handleDelete(data.id);

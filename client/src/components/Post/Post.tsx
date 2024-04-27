@@ -23,6 +23,8 @@ import { TbMessageCircle } from "react-icons/tb";
 import { Attachment, PostType } from "@/app/types";
 import CommentForm from "../CommentForm";
 import { useRouter } from "next/navigation";
+import avatarDefault from "@/static/images/avatarDefault.jpg";
+
 
 interface UserData {
   profilePic: string;
@@ -70,7 +72,7 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
         <div className="header">
           <div className="left">
             <Image
-              src={`${postData?.avatarUrl}`}
+              src={postData?.avatarUrl != "" ? postData.avatarUrl : avatarDefault.src}
               alt=""
               className="profileImg"
               onClick={() =>
