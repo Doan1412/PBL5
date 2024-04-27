@@ -161,6 +161,7 @@ export default function ModalHandleBio({
                     <div className="flex justify-center mt-3">
                       <Textarea
                         defaultValue={data?.data?.profile?.bio as string}
+                        value={bio}
                         onChange={(e) => {
                           setBio(handleInputChange(e));
                         }}

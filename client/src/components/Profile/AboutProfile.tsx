@@ -3,7 +3,7 @@ import { BsCake } from "react-icons/bs";
 import { IoMaleFemaleSharp } from "react-icons/io5";
 import { PiPhoneDuotone } from "react-icons/pi";
 import { TbMailFast, TbPencilMinus } from "react-icons/tb";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -17,17 +17,33 @@ import { getLocalStorage } from "@/app/actions/localStorage_State";
 import useHttp from "@/app/hooks/customs/useAxiosPrivate";
 import { useAppDispatch } from "@/app/hooks/store";
 import { useRouter } from "next/navigation";
+import ModalHandleInfo from "./ModalHandleInfo";
+import { MdOutlinePassword } from "react-icons/md";
 
 interface PropsAboutProfile {
   data: UserType;
+  id_user?: string;
 }
 
-export default function AboutProfile({ data }: PropsAboutProfile) {
+export default function AboutProfile({ data, id_user }: PropsAboutProfile) {
+  const [userId, setUserId] = useState<string>("");
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
   const dispatch = useAppDispatch();
+
+  const [phone, setPhone] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [sex, setSex] = useState<string>("");
+  const [birth, setBirth] = useState<string>("");
+
+
+  const {
+    isOpen: isInfoModalOpen,
+    onOpen: onOpenInfoModal,
+    onClose: onCloseInfoModal,
+  } = useDisclosure();
 
   const handleDelete = async (id: string) => {
     const token = getLocalStorage()?.token;
@@ -49,6 +65,32 @@ export default function AboutProfile({ data }: PropsAboutProfile) {
     }
   };
 
+  useEffect(() => {
+    setPhone(data?.data.phone || "");
+    setSex(data?.data.gender || "");
+    setBirth(data?.data.birth || "");
+    setEmail(data?.data.username || "");
+    // setFirstname(data?.data.firstname || "");
+    // setLastname(data?.data.lastname || "");
+    // setUsername(data?.data.username || "");
+
+  }, [
+    data?.data.phone,
+    data?.data.gender,
+    data?.data.birth,
+    data?.data.username,
+    // data?.data.firstname,
+    // data?.data.lastname,
+  ]);
+
+  useEffect(() => {
+    setUserId(getLocalStorage()?.user_id || "");
+  }, []);
+
+  const handleOpenInfoModal = () => {
+    onOpenInfoModal();
+  };
+
   return (
     <>
       <div className=" bg-[#ffffff] dark:bg-[#242526] rounded-lg mb-4 shrink drop-shadow-2xl dark:text-white w-full ml-48 mr-48 mt-4">
@@ -62,7 +104,7 @@ export default function AboutProfile({ data }: PropsAboutProfile) {
           >
             Lời mời kết bạn
           </Link> */}
-          {data?.data.id == getLocalStorage()?.user_id && (
+          {id_user === userId && (
             <div className="ml-5 mr-5 mt-5">
               <Button
                 onPress={onOpen}
@@ -131,15 +173,31 @@ export default function AboutProfile({ data }: PropsAboutProfile) {
               <PiPhoneDuotone />
             </div>
             <div>
-              <h1 className=" dark:text-white">{data?.data?.phone}</h1>
+              <h1 className=" dark:text-white">{phone}</h1>
               <h1 className="text-xs text-gray-600 dark:text-white">Phone</h1>
             </div>
           </div>
-          {data?.data.id == getLocalStorage()?.user_id && (
+          {id_user === userId && (
             <div className="flex items-center">
-              <button className="w-8 h-8 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 dark:bg-medium">
+              <Button
+                className="w-8 h-8 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 dark:bg-medium"
+                onPress={handleOpenInfoModal}
+              >
                 <TbPencilMinus />
-              </button>
+              </Button>
+              <ModalHandleInfo
+                isOpen={isInfoModalOpen}
+                onClose={onCloseInfoModal}
+                phone={phone}
+                sex={sex}
+                birth={birth}
+                email={email}
+                setPhone={setPhone}
+                setEmail={setEmail}
+                setBirth={setBirth}
+                setSex={setSex}
+                id_user = {id_user}
+              />
             </div>
           )}
         </div>
@@ -149,17 +207,10 @@ export default function AboutProfile({ data }: PropsAboutProfile) {
               <TbMailFast size={20} />
             </div>
             <div>
-              <h1 className=" dark:text-white">{data?.data?.username}</h1>
+              <h1 className=" dark:text-white">{email}</h1>
               <h1 className="text-xs text-gray-600 dark:text-white">Email</h1>
             </div>
           </div>
-          {data?.data.id == getLocalStorage()?.user_id && (
-            <div className="flex items-center">
-              <button className="w-8 h-8 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 dark:bg-medium">
-                <TbPencilMinus />
-              </button>
-            </div>
-          )}
         </div>
         <h1 className="ml-5 mt-5 font-bold text-xl dark:text-white">
           Thông tin cơ bản
@@ -170,19 +221,12 @@ export default function AboutProfile({ data }: PropsAboutProfile) {
               <IoMaleFemaleSharp />
             </div>
             <div>
-              <h1 className=" dark:text-white">{data?.data?.gender}</h1>
+              <h1 className=" dark:text-white">{sex}</h1>
               <h1 className="text-xs text-gray-600 dark:text-white">
                 Giới tính
               </h1>
             </div>
           </div>
-          {data?.data.id == getLocalStorage()?.user_id && (
-            <div className="flex items-center">
-              <button className="w-8 h-8 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 dark:bg-medium">
-                <TbPencilMinus />
-              </button>
-            </div>
-          )}
         </div>
         <div className="flex mt-2 ml-5 mb-7 justify-between mr-10">
           <div className="flex gap-2">
@@ -190,20 +234,28 @@ export default function AboutProfile({ data }: PropsAboutProfile) {
               <BsCake />
             </div>
             <div>
-              <h1 className=" dark:text-white">{data?.data?.birth}</h1>
+              <h1 className=" dark:text-white">{birth}</h1>
               <h1 className="text-xs text-gray-600 dark:text-white">
                 Sinh nhật
               </h1>
             </div>
           </div>
-          {data?.data.id == getLocalStorage()?.user_id && (
-            <div className="flex items-center">
-              <button className="w-8 h-8 flex justify-center items-center rounded-full bg-gray-300 hover:bg-gray-200 dark:bg-medium">
-                <TbPencilMinus />
-              </button>
-            </div>
-          )}
         </div>
+        {id_user === userId && (
+          <div className="flex mt-2 ml-5 mb-7 justify-between mr-10">
+            <div className="flex gap-2">
+              <div className="flex items-center">
+                <MdOutlinePassword />
+              </div>
+              <div>
+                <h1 className=" dark:text-white">{birth}</h1>
+                <h1 className="text-xs text-gray-600 dark:text-white">
+                  Mật khẩu
+                </h1>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
