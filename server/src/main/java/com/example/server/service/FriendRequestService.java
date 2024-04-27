@@ -1,13 +1,17 @@
 package com.example.server.service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.example.server.DTO.DisplayUserDTO;
+import com.example.server.models.Entity.ChatRoom;
 import com.example.server.models.Entity.FriendRequest;
 import org.springframework.stereotype.Service;
 
 import com.example.server.models.Entity.User;
+import com.example.server.repositories.ChatRoomRepository;
 import com.example.server.repositories.FriendRequestRepository;
 import com.example.server.repositories.UserRepository;
 
@@ -18,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class FriendRequestService {
     private final FriendRequestRepository friendRequestRepository;
     private final UserRepository repository;
+    private final ChatRoomRepository chatRoomRepository;
 
     public void addFriend(String request_id){
         FriendRequest friendRequest = friendRequestRepository.findById(request_id).orElseThrow();
@@ -33,6 +38,14 @@ public class FriendRequestService {
         friendRequestRepository.deleteFriendRequestByUser(user_1.getId(),user_2.getId());
         repository.save(user_1);
         repository.save(user_2);
+        Set<User> members = new HashSet<>();
+        members.add(user_1);
+        members.add(user_2);
+        ChatRoom room = ChatRoom.builder()
+                .name(user_1.getLastname()+", "+ user_2.getLastname())
+                .members(members)
+                .build();
+        chatRoomRepository.save(room);
     }
 
     public List<DisplayUserDTO> unfriend(String acc_id, String id2){
