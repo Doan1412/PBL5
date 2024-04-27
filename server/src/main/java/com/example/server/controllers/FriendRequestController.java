@@ -4,6 +4,7 @@ import com.example.server.DTO.DisplayUserDTO;
 import com.example.server.DTO.FriendRequestDTO;
 import com.example.server.models.Entity.Account;
 import com.example.server.models.Entity.FriendRequest;
+import com.example.server.service.ChatRoomService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

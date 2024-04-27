@@ -23,6 +23,7 @@ public class PostDTO {
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
     private String userId;
+    private String username;
     private String fullName;
     private String avatarUrl;
     private int like_count;
@@ -31,6 +32,7 @@ public class PostDTO {
     private Set<PostAttachment> attachments = new HashSet<>();
     public void loadFromEntity(Post post, int share_count,User user) {
         this.userId =post.getUser().getId();
+        this.username = post.getUser().getUsername();
         this.attachments = post.getAttachments();
         this.avatarUrl = post.getUser().getProfile().getAvatar_url();
         this.content = post.getContent();
