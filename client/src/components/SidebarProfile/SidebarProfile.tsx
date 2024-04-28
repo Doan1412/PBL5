@@ -17,6 +17,7 @@ import { getLocalStorage } from "@/app/actions/localStorage_State";
 import ModalHandleBio from "../Profile/ModalHandleBio";
 import { useRouter, useSearchParams } from "next/navigation";
 import ModalHandleDetail from "../Profile/ModalHandleDetail";
+import { useUserProfileTimeline } from "@/app/profile/timeline/page";
 
 interface PropsSidebar {
   data?: Profile;
@@ -25,13 +26,19 @@ interface PropsSidebar {
 
 export default function SidebarProfile({ data, id_user }: PropsSidebar) {
   const [userId, setUserId] = useState<string>("");
-  const [linkImageAvatar, setImageAvatar] = useState<string>("");
-  const [linkImageCover, setImageCover] = useState<string>("");
+  // const [linkImageAvatar, setImageAvatar] = useState<string>("");
+  // const [linkImageCover, setImageCover] = useState<string>("");
+  // const [bio, setBio] = useState<string>("");
   const [study, setStudy] = useState<string>("");
-  const [bio, setBio] = useState<string>("");
   const [work, setWork] = useState<string>("");
   const [from, setFrom] = useState<string>("");
   const [love, setLove] = useState<string>("");
+
+  const {
+    bio,
+    linkImageAvatar,
+    linkImageCover
+  } = useUserProfileTimeline();
 
   const {
     isOpen: isBioModalOpen,
@@ -45,17 +52,17 @@ export default function SidebarProfile({ data, id_user }: PropsSidebar) {
   } = useDisclosure();
 
   useEffect(() => {
-    setImageAvatar(data?.avatar_url || "");
-    setImageCover(data?.cover_url || "");
-    setBio(data?.bio || "");
+    // setImageAvatar(data?.avatar_url || "");
+    // setImageCover(data?.cover_url || "");
+    // setBio(data?.bio || "");
     setStudy(data?.study_at || "");
     setWork(data?.work_at || "");
     setFrom(data?.from || "");
     setLove(data?.relationship || "");
   }, [
-    data?.avatar_url,
-    data?.cover_url,
-    data?.bio,
+    // data?.avatar_url,
+    // data?.cover_url,
+    // data?.bio,
     data?.study_at,
     data?.work_at,
     data?.from,
@@ -90,13 +97,11 @@ export default function SidebarProfile({ data, id_user }: PropsSidebar) {
             </Button>
             <ModalHandleBio
               isOpen={isBioModalOpen}
-              onClose={onCloseBioModal}
-              setImageCover={setImageCover}
-              setImageAvatar={setImageAvatar}
-              linkImageCover={linkImageCover}
-              linkImageAvatar={linkImageAvatar}
-              bio={bio}
-              setBio={setBio}
+              onClose={onCloseBioModal}  
+              love={love}
+              study={study}
+              work={work}
+              from={from}      
             />
           </div>
         )}
@@ -138,9 +143,6 @@ export default function SidebarProfile({ data, id_user }: PropsSidebar) {
             <ModalHandleDetail
               isOpen={isDetailModalOpen}
               onClose={onCloseDetailModal}
-              linkImageCover={linkImageCover}
-              linkImageAvatar={linkImageAvatar}
-              bio={bio}
               setStudy={setStudy}
               setWork={setWork}
               setFrom={setFrom}
@@ -149,6 +151,9 @@ export default function SidebarProfile({ data, id_user }: PropsSidebar) {
               study={study}
               work={work}
               from={from}
+              bio={bio}
+              linkImageAvatar = {linkImageAvatar}
+              linkImageCover = {linkImageCover}
             />
           </div>
         )}
