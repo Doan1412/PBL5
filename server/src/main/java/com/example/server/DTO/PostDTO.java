@@ -39,8 +39,13 @@ public class PostDTO {
         this.created_at = post.getCreated_at();
         this.fullName = post.getUser().getFirstname()+" "+post.getUser().getLastname();
         this.id = post.getId();
-        this.like_count = post.getLikes().size();
-        this.isLike = post.getLikes().contains(user);
+        if(post.getLikes() == null){
+            this.like_count = 0;
+            this.isLike = false;
+        }else{
+            this.like_count = post.getLikes().size();
+            this.isLike = post.getLikes().contains(user);
+        }
         this.share_count = share_count;
     }
 }
