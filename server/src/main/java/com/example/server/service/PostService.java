@@ -33,7 +33,7 @@ public class PostService {
         return repository.getShareCount(postId);
     }
 
-    public Post create(String account_id, String content, Set<PostAttachment> attachments) {
+    public PostDTO create(String account_id, String content, Set<PostAttachment> attachments) {
         User user = userRepository.findByAccount_Id(account_id).orElseThrow();
         Post post = Post.builder()
                         .content(content)
@@ -55,10 +55,12 @@ public class PostService {
             post.addAttachment(savedAttachment);
         });
         userRepository.save(user);
-        return repository.save(post);
+        PostDTO res = new PostDTO();
+        res.loadFromEntity(post, 0, user);
+        return res;
     }
-    public Post comment(String post_id, String account_id, String content, Set<PostAttachment> attachments) {
-        Post comment = create(account_id,content,attachments);
+    public PostDTO comment(String post_id, String account_id, String content, Set<PostAttachment> attachments) {
+        PostDTO comment = create(account_id,content,attachments);
         repository.addCommentToPost(post_id,comment.getId());
         return comment;
     }
