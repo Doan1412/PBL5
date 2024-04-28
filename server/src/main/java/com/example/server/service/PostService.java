@@ -54,9 +54,11 @@ public class PostService {
             PostAttachment savedAttachment = attachmentRepository.save(postAttachment);
             post.addAttachment(savedAttachment);
         });
+        Post savedPost = repository.save(post);
+        // user.
         userRepository.save(user);
         PostDTO res = new PostDTO();
-        res.loadFromEntity(post, 0, user);
+        res.loadFromEntity(savedPost, 0, user);
         return res;
     }
     public PostDTO comment(String post_id, String account_id, String content, Set<PostAttachment> attachments) {
