@@ -1,7 +1,13 @@
 "use client";
 import Navigation from "@/components/Navigation";
 import { Avatar, AvatarGroup, Image, Skeleton } from "@nextui-org/react";
-import React, { useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Poster from "@/static/images/Poster.jpg";
 import AddFriendButton from "@/components/AddFriendButton";
 import SidebarProfile from "@/components/SidebarProfile/SidebarProfile";
@@ -22,6 +28,27 @@ import { useListPostById } from "@/app/actions/custom/useListPostbyId";
 import { useImageProfileById } from "@/app/actions/custom/useImageProfileById";
 import Widget from "@/app/widget";
 
+interface UserProfileContextType {
+  bio: string;
+  linkImageCover: string;
+  linkImageAvatar: string;
+  setBio: (newBio: string) => void;
+  setImageCover: (newImageCover: string) => void;
+  setImageAvatar: (newImageAvatar: string) => void;
+}
+
+const UserProfileContextTimeline = createContext<UserProfileContextType>({
+  bio: "",
+  linkImageCover: "",
+  linkImageAvatar: "",
+  setBio: () => {},
+  setImageCover: () => {},
+  setImageAvatar: () => {},
+});
+
+export const useUserProfileTimeline = () =>
+  useContext(UserProfileContextTimeline);
+
 export default function Timeline() {
   const params = useSearchParams();
 
@@ -38,50 +65,87 @@ export default function Timeline() {
   const dispatch = useAppDispatch();
   dispatch(resetLoading());
 
+  const [linkImageAvatar, setImageAvatar] = useState<string>("");
+  const [linkImageCover, setImageCover] = useState<string>("");
+  const [bio, setBio] = useState<string>(data?.data?.profile?.bio as string);
+
+  useEffect(() => {
+    setImageAvatar(data?.data?.profile?.avatar_url as string);
+    setImageCover(data?.data?.profile?.cover_url as string);
+    setBio(data?.data?.profile?.bio as string);
+    // setFirstname(data?.data?.firstname as string);
+    // setLastname(data?.data?.lastname as string);
+    // setUsername(data?.data?.username as string);
+  }, [
+    data?.data?.profile?.avatar_url,
+    data?.data?.profile?.cover_url,
+    data?.data?.profile?.bio,
+    // data?.data?.firstname,
+    // data?.data?.lastname,
+    // data?.data?.username,
+    // setFirstname,
+    // setLastname,
+    // setUsername,
+  ]);
+
   useListPostById(setPosts, setLoading, params.get("id_user") as string);
   useImageProfileById(setImages, setLoading, params.get("id_user") as string);
   // console.log(images);
   return (
-    <Widget>
-      <nav className="fixed z-40 w-full">
-        <Navigation />
-      </nav>
-      <div className=" h-full dark:bg-[#18191a]">
-      <HeaderProfile data = {data!} isFetching={isFetching}/>
-        {/* {pathname === "/profile"}( */}
-        <div className="flex justify-center">
-          <div className="flex flex-col mt-5 w-1/3 ml-44">
-            <SidebarProfile data={data?.data?.profile} id_user={data?.data.id} />
-            <SidebarImage data={images} />
-          </div>
-          <div className="mt-2 h-full w-2/3">
-            <div className="flex flex-col ml-3 mr-56">
-              <SatatusPost
-                reff={ref}
-                isFocused={isFocused}
-                setIsFocused={setIsFocused}
+    <UserProfileContextTimeline.Provider
+      value={{
+        bio,
+        linkImageCover,
+        linkImageAvatar,
+        setBio,
+        setImageCover,
+        setImageAvatar,
+      }}
+    >
+      <Widget>
+        <nav className="fixed z-40 w-full">
+          <Navigation />
+        </nav>
+        <div className=" h-full dark:bg-[#18191a]">
+          <HeaderProfile data={data!} isFetching={isFetching} />
+          {/* {pathname === "/profile"}( */}
+          <div className="flex justify-center">
+            <div className="flex flex-col mt-5 w-1/3 ml-44">
+              <SidebarProfile
+                data={data?.data?.profile}
+                id_user={data?.data.id}
               />
-              {loading ? (
-                <div className="mt-10 ml-6">
-                  <SkeletonPost />
-                  <SkeletonPost />
-                  <SkeletonPost />
-                  <SkeletonPost />
-                  <SkeletonPost />
-                  <SkeletonPost />
-                </div>
-              ) : (
-                <div>
-                  {posts.map((post: PostType, index: number) => {
-                    return <Post key={index} postData={post} />;
-                  })}
-                </div>
-              )}
+              <SidebarImage data={images} />
+            </div>
+            <div className="mt-2 h-full w-2/3">
+              <div className="flex flex-col ml-3 mr-56">
+                <SatatusPost
+                  reff={ref}
+                  isFocused={isFocused}
+                  setIsFocused={setIsFocused}
+                />
+                {loading ? (
+                  <div className="mt-10 ml-6">
+                    <SkeletonPost />
+                    <SkeletonPost />
+                    <SkeletonPost />
+                    <SkeletonPost />
+                    <SkeletonPost />
+                    <SkeletonPost />
+                  </div>
+                ) : (
+                  <div>
+                    {posts.map((post: PostType, index: number) => {
+                      return <Post key={index} postData={post} />;
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
+          {/* ) */}
         </div>
-        {/* ) */}
-      </div>
-    </Widget>
+      </Widget>
+    </UserProfileContextTimeline.Provider>
   );
 }

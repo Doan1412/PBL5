@@ -17,6 +17,7 @@ import { useListFriend } from "@/app/actions/custom/useListFriend";
 import { ListFriendType, UserType } from "@/app/types";
 import ModalHandleBio from "./ModalHandleBio";
 import { useUserProfile } from "@/app/profile/about/page";
+import { useUserProfileTimeline } from "@/app/profile/timeline/page";
 
 interface LinkProfile {
   // name: string;
@@ -35,6 +36,15 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
     setUsername,
   } = useUserProfile();
 
+  const {
+    bio,
+    linkImageCover,
+    linkImageAvatar,
+    setBio,
+    setImageCover,
+    setImageAvatar,
+  } = useUserProfileTimeline();
+
   const [friends, setFiends] = useState<ListFriendType[]>([]);
   const [loading, setLoading] = useState(true);
   const params = useSearchParams();
@@ -45,9 +55,9 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
   // console.log(data);
   // console.log(data?.data?.profile?.avatar_url);
 
-  const [linkImageAvatar, setImageAvatar] = useState<string>("");
-  const [linkImageCover, setImageCover] = useState<string>("");
-  const [bio, setBio] = useState<string>(data?.data?.profile?.bio as string);
+  // const [linkImageAvatar, setImageAvatar] = useState<string>("");
+  // const [linkImageCover, setImageCover] = useState<string>("");
+  // const [bio, setBio] = useState<string>(data?.data?.profile?.bio as string);
 
   const url = usePathname();
   const router = useRouter();
@@ -59,24 +69,24 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
 
   useListFriend(setFiends, setLoading, params.get("id_user") as string);
 
-  useEffect(() => {
-    setImageAvatar(data?.data?.profile?.avatar_url as string);
-    setImageCover(data?.data?.profile?.cover_url as string);
-    setBio(data?.data?.profile?.bio as string);
-    // setFirstname(data?.data?.firstname as string);
-    // setLastname(data?.data?.lastname as string);
-    // setUsername(data?.data?.username as string);
-  }, [
-    data?.data?.profile?.avatar_url,
-    data?.data?.profile?.cover_url,
-    data?.data?.profile?.bio,
-    // data?.data?.firstname,
-    // data?.data?.lastname,
-    // data?.data?.username,
-    // setFirstname,
-    // setLastname,
-    // setUsername,
-  ]);
+  // useEffect(() => {
+  //   setImageAvatar(data?.data?.profile?.avatar_url as string);
+  //   setImageCover(data?.data?.profile?.cover_url as string);
+  //   setBio(data?.data?.profile?.bio as string);
+  //   // setFirstname(data?.data?.firstname as string);
+  //   // setLastname(data?.data?.lastname as string);
+  //   // setUsername(data?.data?.username as string);
+  // }, [
+  //   data?.data?.profile?.avatar_url,
+  //   data?.data?.profile?.cover_url,
+  //   data?.data?.profile?.bio,
+  //   // data?.data?.firstname,
+  //   // data?.data?.lastname,
+  //   // data?.data?.username,
+  //   // setFirstname,
+  //   // setLastname,
+  //   // setUsername,
+  // ]);
 
   return (
     <>
@@ -88,8 +98,14 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
               width={900}
               height={300}
               alt="NextUI hero Image with delay"
-              src={linkImageCover != "" ? linkImageCover : Poster.src}
-              // src={Poster.src}
+              // src={linkImageCover != "" ? linkImageCover : Poster.src}
+              src={
+                linkImageCover != ""
+                  ? linkImageCover
+                  : data?.data?.profile?.cover_url != ""
+                  ? data?.data?.profile?.cover_url
+                  : Poster.src
+              }
               className="z-0"
             />
             <div className="absolute bottom-2 right-2 z-10">
@@ -103,12 +119,12 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
               <ModalHandleBio
                 isOpen={isOpen}
                 onClose={onClose}
-                setImageCover={setImageCover}
-                setImageAvatar={setImageAvatar}
-                linkImageCover={linkImageCover}
-                linkImageAvatar={linkImageAvatar}
-                bio={bio}
-                setBio={setBio}
+                // setImageCover={setImageCover}
+                // setImageAvatar={setImageAvatar}
+                // linkImageCover={linkImageCover}
+                // linkImageAvatar={linkImageAvatar}
+                // bio={bio}
+                // setBio={setBio}
               />
             </div>
           </div>
@@ -116,7 +132,14 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
         <div className="flex justify-center -mt-14 relative shrink">
           <Avatar
             isBordered
-            src={linkImageAvatar != "" ? linkImageAvatar : avatarDefault.src}
+            // src={linkImageAvatar != "" ? linkImageAvatar : avatarDefault.src}
+            src={
+              linkImageAvatar != ""
+                ? linkImageAvatar
+                : data?.data?.profile?.avatar_url != ""
+                ? data?.data?.profile?.avatar_url
+                : avatarDefault.src
+            }
             className="w-40 h-40 text-large"
           />
           <div className="flex justify-center absolute -bottom-5 z-10">
@@ -130,12 +153,12 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
             <ModalHandleBio
               isOpen={isOpen}
               onClose={onClose}
-              setImageCover={setImageCover}
-              setImageAvatar={setImageAvatar}
-              linkImageCover={linkImageCover}
-              linkImageAvatar={linkImageAvatar}
-              bio={bio}
-              setBio={setBio}
+              // setImageCover={setImageCover}
+              // setImageAvatar={setImageAvatar}
+              // linkImageCover={linkImageCover}
+              // linkImageAvatar={linkImageAvatar}
+              // bio={bio}
+              // setBio={setBio}
             />
           </div>
         </div>
@@ -152,10 +175,12 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
           <div>
             <h1 className="flex justify-center mt-7 font-bold text-3xl dark:text-white">
               {/* {data?.data?.firstname + " " + data?.data?.lastname} */}
-              {firstname + " " + lastname}
+              {(firstname != "" ? firstname : data?.data?.firstname) +
+                " " +
+                (lastname != "" ? lastname : data?.data?.lastname)}
             </h1>
             <h2 className="flex justify-center mt-1 text-[#65676b] text-base dark:text-gray-600">
-              @{username}
+              @{username != "" ? username : data?.data?.username}
             </h2>
             {/* <div className="flex justify-center mt-2 gap-4 pb-2"> */}
             <h2 className="flex justify-center mt-1 text-[#65676b] text-base dark:text-white">

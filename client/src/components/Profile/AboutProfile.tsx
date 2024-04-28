@@ -38,7 +38,6 @@ export default function AboutProfile({ data, id_user }: PropsAboutProfile) {
   const [sex, setSex] = useState<string>("");
   const [birth, setBirth] = useState<string>("");
 
-
   const {
     isOpen: isInfoModalOpen,
     onOpen: onOpenInfoModal,
@@ -73,7 +72,6 @@ export default function AboutProfile({ data, id_user }: PropsAboutProfile) {
     // setFirstname(data?.data.firstname || "");
     // setLastname(data?.data.lastname || "");
     // setUsername(data?.data.username || "");
-
   }, [
     data?.data.phone,
     data?.data.gender,
@@ -196,7 +194,7 @@ export default function AboutProfile({ data, id_user }: PropsAboutProfile) {
                 setEmail={setEmail}
                 setBirth={setBirth}
                 setSex={setSex}
-                id_user = {id_user}
+                id_user={id_user}
               />
             </div>
           )}
@@ -241,21 +239,6 @@ export default function AboutProfile({ data, id_user }: PropsAboutProfile) {
             </div>
           </div>
         </div>
-        {id_user === userId && (
-          <div className="flex mt-2 ml-5 mb-7 justify-between mr-10">
-            <div className="flex gap-2">
-              <div className="flex items-center">
-                <MdOutlinePassword />
-              </div>
-              <div>
-                <h1 className=" dark:text-white">{birth}</h1>
-                <h1 className="text-xs text-gray-600 dark:text-white">
-                  Mật khẩu
-                </h1>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );

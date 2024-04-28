@@ -21,32 +21,48 @@ import { getLocalStorage } from "@/app/actions/localStorage_State";
 import { useAppDispatch } from "@/app/hooks/store";
 import useHttp from "@/app/hooks/customs/useAxiosPrivate";
 import { failPopUp, successPopUp } from "@/app/hooks/features/popup.slice";
+import { useUserProfileTimeline } from "@/app/profile/timeline/page";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  linkImageCover?: string;
-  linkImageAvatar?: string;
-  bio?: string;
-  setImageAvatar: React.Dispatch<React.SetStateAction<string>>;
-  setImageCover: React.Dispatch<React.SetStateAction<string>>;
-  setBio: React.Dispatch<React.SetStateAction<string>>;
+  love?: string;
+  study?: string;
+  work?: string;
+  from?: string;
+  // linkImageCover?: string;
+  // linkImageAvatar?: string;
+  // bio?: string;
+  // setImageCover: (newImageCover: string) => void
+  // setImageAvatar: (newImageAvatar: string) => void
+  // setBio: (newBio: string) => void
+  // setImageAvatar: React.Dispatch<React.SetStateAction<string>>;
+  // setImageCover: React.Dispatch<React.SetStateAction<string>>;
+  // setBio: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function ModalHandleBio({
   isOpen,
   onClose,
-  setImageAvatar,
-  setImageCover,
-  setBio,
-  linkImageAvatar,
-  linkImageCover,
-  bio,
+  love,
+  study,
+  work,
+  from,
 }: ModalProps) {
   const params = useSearchParams();
   const { data, isFetching } = useGetUserInfoQuery(
     params.get("id_user") as string
   );
+
+
+  const {
+    bio,
+    linkImageCover,
+    linkImageAvatar,
+    setBio,
+    setImageCover,
+    setImageAvatar,
+  } = useUserProfileTimeline();
 
   // const [linkImageAvatar, setImageAvatar] = useState<string>(
   //   data?.data?.profile?.avatar_url != ""
@@ -78,6 +94,10 @@ export default function ModalHandleBio({
           avatar_url: linkImageAvatar,
           cover_url: linkImageCover,
           bio,
+          love,
+          study,
+          work,
+          from,
         },
         {
           signal: controller.signal,
