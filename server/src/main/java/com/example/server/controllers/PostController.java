@@ -32,9 +32,9 @@ public class PostController {
     private final PostAttachmentService postAttachmentService;
 
     @PostMapping("/create")
-    public ResponseEntity<Object> post(@RequestBody List<PostAttachment> attachments, @RequestParam String content,@AuthenticationPrincipal Account account) {
+    public ResponseEntity<Object> post(@RequestBody PostDTO postDTO,@AuthenticationPrincipal Account account) {
         try {
-            Object data = service.create(account.getId(), content,attachments);
+            Object data = service.create(account.getId(), postDTO.getContent(),postDTO.getAttachments());
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
