@@ -30,14 +30,14 @@ export default function Photo() {
 
   useListPostById(setPosts, setLoading, params.get("id_user") as string);
   useImageProfileById(setImages, setLoading, params.get("id_user") as string);
-  console.log(images);
+  // console.log(images);
   return (
     <Widget>
       <nav className="fixed z-40 w-full">
         <Navigation />
       </nav>
       <div className=" h-full dark:bg-[#18191a]">
-        <HeaderProfile />
+        <HeaderProfile data={data!} isFetching={isFetching} />
         {/* {pathname === "/profile"}( */}
         <div className="hidden md:flex justify-center">
           <PhotoProfile />

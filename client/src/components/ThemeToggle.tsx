@@ -25,7 +25,7 @@ export default function ThemeToggle() {
     setDarkMode(!darkMode);
   };
 
-  console.log(darkMode);
+  // console.log(darkMode);
 
   return (
     <div>

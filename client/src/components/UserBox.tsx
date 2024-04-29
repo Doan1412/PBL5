@@ -22,7 +22,7 @@ export default function UserBox() {
 
   const handleClick = useCallback(() => {
     router.push(`/conversations/1`);
-    console.log("1");
+    // console.log("1");
   }, [router]);
 
   return (

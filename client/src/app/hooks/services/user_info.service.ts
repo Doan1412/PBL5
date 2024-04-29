@@ -35,17 +35,17 @@ axiosInstance.interceptors.response.use(
       // if (!isRefreshing) {
       //   setIsRefreshing(true); // Bắt đầu quá trình refresh
       try {
-        console.log(getLocalStorage()?.refresh_token as string);
+        // console.log(getLocalStorage()?.refresh_token as string);
         const newToken = await refresh(
           getLocalStorage()?.refresh_token as string
         );
-        console.log(getLocalStorage()?.token as string);
+        // console.log(getLocalStorage()?.token as string);
         prevRequest.headers["Authorization"] = `Bearer ${newToken}`;
         // setIsRefreshing(false);
         return http(prevRequest);
       } catch (refreshError) {
         // Xử lý lỗi khi refresh token
-        console.error("Lỗi khi refresh token:", refreshError);
+        // console.error("Lỗi khi refresh token:", refreshError);
         // setIsRefreshing(false);
         return Promise.reject(refreshError); // Ném lỗi để interceptor response có thể xử lý tiếp
       }
@@ -128,8 +128,8 @@ export const { useGetUserInfoQuery } = userInfoApi;
 //           `Bearer ${getLocalStorage()?.token as string}`
 //         );
 //       }
-//       console.log(headers);
-//       console.log(getLocalStorage()?.token as string);
+//       // console.log(headers);
+//       // console.log(getLocalStorage()?.token as string);
 //       return headers;
 //     },
 //   }),

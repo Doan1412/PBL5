@@ -9,7 +9,7 @@ import { failPopUp } from "../../hooks/features/popup.slice";
 export function useListFriend(
   setFiends: React.Dispatch<React.SetStateAction<ListFriendType[]>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  id_user?: string,
+  id_user?: string
 ) {
   const dispatch = useAppDispatch();
   const params = useSearchParams();
@@ -35,17 +35,25 @@ export function useListFriend(
         controller.abort();
         if (response.data.status === 200) {
           const friendsData = response.data.data;
-          console.log(friendsData);
+          // console.log(friendsData);
           setFiends(friendsData);
           setLoading(false);
         } else {
           dispatch(failPopUp(response.data.message));
         }
       } catch (error) {
-        console.error("Error:", error);
+        // console.error("Error:", error);
         setLoading(false);
       }
     }
     fetchListFriend();
-  }, [params, dispatch, httpPrivate, setFiends, setLoading, controller, id_user]);
+  }, [
+    params,
+    dispatch,
+    httpPrivate,
+    setFiends,
+    setLoading,
+    controller,
+    id_user,
+  ]);
 }

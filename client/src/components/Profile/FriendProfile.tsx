@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import FriendForm from "../FriendForm";
 import { ListFriendType } from "@/app/types";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -7,6 +7,7 @@ import { useListFriend } from "@/app/actions/custom/useListFriend";
 
 export default function FriendProfile() {
   const [friends, setFiends] = useState<ListFriendType[]>([]);
+  const memoizedFriends = useMemo<ListFriendType[]>(() => friends, [friends]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const params = useSearchParams();
@@ -28,8 +29,8 @@ export default function FriendProfile() {
           </Link>
         </div>
         <div className="grid grid-cols-2 justify-items-center shrink mt-5">
-          {friends.map((friend: ListFriendType, index: number) => (
-            <FriendForm key = {index} data = {friend}/>
+          {memoizedFriends.map((friend: ListFriendType, index: number) => (
+            <FriendForm key = {index} data = {friend} setFiends = {setFiends}/>
           ))}
         </div>
       </div>
