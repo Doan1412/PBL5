@@ -11,5 +11,5 @@ public class FriendRequestDTO {
     private String senderAvatar;
     private String status;
     private LocalDateTime createdAt;
-
+    private String senderUsername;
 }
