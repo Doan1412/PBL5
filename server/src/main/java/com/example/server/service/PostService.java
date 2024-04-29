@@ -82,6 +82,19 @@ public class PostService {
         post.getLikes().add(user);
         repository.save(post);
     }
+    public void unlikePost(String postId, String acc_id) {
+        // Tìm kiếm bài đăng
+        Post post = repository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));
+        
+        // Tìm kiếm người dùng
+        User user = userRepository.findByAccount_Id(acc_id).orElseThrow(() -> new NotFoundException("User not found"));
+        
+        // Loại bỏ sự thích của người dùng khỏi danh sách thích của bài đăng
+        post.getLikes().remove(user);
+        
+        // Lưu bài đăng
+        repository.save(post);
+    }    
     public void sharePost(String postId, String acc_id, String caption) {
         User user = userRepository.findByAccount_Id(acc_id).orElseThrow();
         Post originalPost = repository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));

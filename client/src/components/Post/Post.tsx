@@ -72,7 +72,31 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
             liked ? prevLikesAmount - 1 : prevLikesAmount + 1
         );
     };
-    const unlike = async () => {};
+    const unlike = async () => {
+        // unlike post
+        try {
+            const response = await httpPrivate.post(
+                `/post/${postData?.id}/unlike`,
+                {
+                    signal: controller.signal,
+                }
+                // {
+                //   headers: {
+                //     Authorization: `Bearer ${token}`,
+                //   },
+                // }
+            );
+            controller.abort();
+            if (response.data.status === 200) {
+                setLoading(false);
+            } else {
+                dispatch(failPopUp(response.data.message));
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            setLoading(false);
+        }
+    };
     const like = async () => {
         // like post
         try {
@@ -98,6 +122,8 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
             setLoading(false);
         }
     };
+
+    
 
     return (
         <Widget>
@@ -183,7 +209,7 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
                             <div className="" onClick={toggleComment}>
                                 <TbMessageCircle />
                             </div>
-                            <div className="">
+                            <div className="" >
                                 <HiOutlineShare />
                             </div>
                         </div>
