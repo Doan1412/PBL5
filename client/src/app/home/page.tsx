@@ -5,13 +5,15 @@ import userData from "../data/UserData";
 import Post from "@/components/Post/Post";
 import Navigation from "@/components/Navigation";
 import ListPost from "@/components/SatatusPost";
-import { PostType, User } from "../types";
+import { FriendRequest, PostType, User } from "../types";
 import Widget from "../widget";
 import { useListPost } from "../actions/custom/useListPost";
 import useRefreshToken from "../actions/refreshToken";
 import { getLocalStorage } from "../actions/localStorage_State";
 import SatatusPost from "@/components/SatatusPost";
 import SkeletonPost from "@/components/SkeletonPost/SkeletonPost";
+import { useListFriendRequests } from "../actions/custom/useListFriendRequest";
+import RequestWidget from "@/components/RequestWidget";
 
 const Home: React.FC = () => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -20,10 +22,12 @@ const Home: React.FC = () => {
 
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState<PostType[]>([]);
+  const [requests, setRequests] = useState<FriendRequest[]>([]);
+
   // const refresh = useRefreshToken();
 
   useListPost(setPosts, setLoading);
-
+  useListFriendRequests(setRequests, setLoading); 
   // useRefreshToken()
 
   return (
@@ -68,36 +72,11 @@ const Home: React.FC = () => {
             <div className="rightSection mt-16 ">
               <div className="requestWidget">
                 <h1 className="dark:text-white font-semibold">Requests</h1>
-                <div className="requestProfile">
-                  <div className="details">
-                    <div className="profileImage">
-                      {/* <img src={"/assets/image/avatar_default.jpg"} alt="" /> */}
-                    </div>
-                    <div className="userDetails">
-                      <div className="name">Sophie Alexander</div>
-                      <div className="username">@johndoe</div>
-                    </div>
-                  </div>
-                  <div className="actions">
-                    <button className="actionBtn">Accept</button>
-                    <button className="actionBtn">Reject</button>
-                  </div>
-                </div>
-                <div className="requestProfile">
-                  <div className="details">
-                    <div className="profileImage">
-                      {/* <img src={"https://images.unsplash.com/photo-1505695716405-61e75ecc5bab?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybCxib3l8fHx8fHwxNjg5NzcxMTE5&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"} alt="" /> */}
-                    </div>
-                    <div className="userDetails">
-                      <div className="name">Phillip Tønder</div>
-                      <div className="username">@philipTonder</div>
-                    </div>
-                  </div>
-                  <div className="actions">
-                    <button className="actionBtn">Accept</button>
-                    <button className="actionBtn">Reject</button>
-                  </div>
-                </div>
+                {requests.map((request: FriendRequest, index: number) => {
+                  return (
+                    <RequestWidget request={request} key={index} ></RequestWidget>
+                  );
+                })}
               </div>
             </div>
           </section>

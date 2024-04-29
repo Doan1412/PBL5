@@ -84,6 +84,15 @@ export interface PostType {
   like?: boolean;
   username?: string;
 }
+export interface FriendRequest {
+  id?: string,
+  senderId?: string,
+  senderName?: string,
+  senderAvatar?: string,
+  status?: string,
+  createdAt?: string,
+  senderUsername?: string
+}
 
 export interface Attachment {
   id?: string;
