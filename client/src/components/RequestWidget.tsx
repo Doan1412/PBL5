@@ -14,7 +14,7 @@ export default function RequestWidget({ request }: RequestProps) {
     const controller = useMemo(() => new AbortController(), []);
     const dispatch = useAppDispatch();
     const [loading, setLoading] = useState(true);
-    const [accepted, setAccepted] = useState(false);
+    const [responed, setResponed] = useState(false);
     const handleAccept = async () => {
         try {
             const response = await httpPrivate.post(
@@ -25,7 +25,7 @@ export default function RequestWidget({ request }: RequestProps) {
             );
             controller.abort();
             if (response.data.status === 200) {
-                setAccepted(true);
+                setResponed(true);
                 dispatch(successPopUp("Friend request accepted"));
             } else {
                 dispatch(failPopUp(response.data.message));
@@ -35,7 +35,27 @@ export default function RequestWidget({ request }: RequestProps) {
             setLoading(false);
         }
     };
-    if (accepted) {
+    const handleReject = async () => {
+        try {
+            const response = await httpPrivate.post(
+                `/friend/reject/${request?.id}`,
+                {
+                    signal: controller.signal,
+                }
+            );
+            controller.abort();
+            if (response.data.status === 200) {
+                setResponed(true);
+                dispatch(successPopUp("Friend request rejected"));
+            } else {
+                dispatch(failPopUp(response.data.message));
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            setLoading(false);
+        }
+    };
+    if (responed) {
         return null;
     }
     return (
@@ -51,7 +71,7 @@ export default function RequestWidget({ request }: RequestProps) {
             </div>
             <div className="actions">
                 <button className="actionBtn" onClick={handleAccept}>Accept</button>
-                <button className="actionBtn">Reject</button>
+                <button className="actionBtn" onClick = {handleReject}>Reject</button>
             </div>
         </div>
     );
