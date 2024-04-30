@@ -1,6 +1,6 @@
 "use client";
 import React, { Fragment, useEffect, useMemo, useState } from "react";
-import { FaEllipsisH } from "react-icons/fa";
+import { FaEllipsisH, FaRegPaperPlane } from "react-icons/fa";
 import {
   HiOutlineHeart,
   HiOutlineChatBubbleOvalLeftEllipsis,
@@ -20,12 +20,21 @@ import {
   DropdownTrigger,
   Image,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  useDisclosure,
 } from "@nextui-org/react";
 import Widget from "@/app/widget";
 import { PiHeartDuotone } from "react-icons/pi";
 import "./style.css";
 import { TbMessageCircle } from "react-icons/tb";
-import { Attachment, PostType } from "@/app/types";
+import {
+  Attachment,
+  CommentAttachment,
+  CommentType,
+  PostType,
+} from "@/app/types";
 import CommentForm from "../CommentForm";
 import { useRouter } from "next/navigation";
 import avatarDefault from "@/static/images/avatarDefault.jpg";
@@ -36,6 +45,8 @@ import { failPopUp, successPopUp } from "@/app/hooks/features/popup.slice";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { CldUploadButton } from "next-cloudinary";
+import { IoMdImages } from "react-icons/io";
 // import Carousel from "../Carousel";
 
 interface UserData {
@@ -51,12 +62,16 @@ interface PostProps {
 
 const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
   const [open, setOpen] = useState(false);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [showComment, setShowComment] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
+  const [comment, setComment] = useState<string>("");
+  const [imageCmt, setImageCmt] = useState<CommentAttachment[]>([]);
+  const [listCmt, setListCmt] = useState<CommentType[]>([]);
 
   const router = useRouter();
 
@@ -71,11 +86,22 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
     }
   };
 
+  const handleRemoveImage = (index: number) => {
+    const updatedImagePost = [...imageCmt];
+    updatedImagePost.splice(index, 1);
+    setImageCmt(updatedImagePost);
+  };
+
   const [liked, setLiked] = useState<boolean>(postData?.like as boolean);
   const [likesAmount, setLikesAmount] = useState<number>(
     postData?.like_count as number
   );
   const [user_id, setUser_id] = useState<string>("");
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    return value;
+  };
 
   useEffect(() => {
     setUser_id(getLocalStorage()?.user_id as string);
@@ -140,16 +166,55 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
   const like = async () => {
     // like post
     try {
+      const response = await httpPrivate.post(`/post/${postData?.id}/like`, {
+        signal: controller.signal,
+      });
+      controller.abort();
+      if (response.data.status === 200) {
+        setLoading(false);
+      } else {
+        dispatch(failPopUp(response.data.message));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setLoading(false);
+    }
+  };
+
+  const getComment = async () => {
+    // getComment post
+    if (!localStorage.getItem("access_token")) return;
+    const token = localStorage.getItem("access_token")?.toString();
+    try {
+      const response = await httpPrivate.get(`/comment/post/${postData?.id}`, {
+        signal: controller.signal,
+      });
+      if (response.data.status === 200) {
+        const listCmt = response.data.data;
+        setListCmt(listCmt);
+        // setLoading(false);
+      } else {
+        dispatch(failPopUp(response.data.message));
+      }
+    } catch (error) {
+      // console.error("Error:", error);
+      // setLoading(false);
+    }
+  };
+
+  const Comment = async () => {
+    // comment post
+    try {
       const response = await httpPrivate.post(
-        `/post/${postData?.id}/like`,
+        `/post/comment`,
+        {
+          content: comment,
+          attachments: imageCmt,
+          postId: postData?.id,
+        },
         {
           signal: controller.signal,
         }
-        // {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`,
-        //   },
-        // }
       );
       controller.abort();
       if (response.data.status === 200) {
@@ -260,7 +325,7 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
             />
           ))} */}
 
-        <div className="cursor-zoom-in hover:skew-y-1">
+        <div>
           {postData?.attachments?.length! > 1 ? (
             <Slider {...settings}>
               {postData?.attachments?.map(
@@ -273,7 +338,40 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
                         src={items.url}
                         alt=""
                         className="postImage"
+                        onClick={onOpen}
                       />
+                      <Modal
+                        isOpen={isOpen}
+                        onOpenChange={onOpenChange}
+                        size="xl"
+                      >
+                        <ModalContent>
+                          {(onClose) => (
+                            <>
+                              <ModalBody>
+                                <Slider {...settings}>
+                                  {postData?.attachments?.map(
+                                    (items, index) => (
+                                      console.log(items),
+                                      (
+                                        <div>
+                                          <Image
+                                            key={index}
+                                            src={items.url}
+                                            alt=""
+                                            className="postImage"
+                                            width={900}
+                                          />
+                                        </div>
+                                      )
+                                    )
+                                  )}
+                                </Slider>
+                              </ModalBody>
+                            </>
+                          )}
+                        </ModalContent>
+                      </Modal>
                     </div>
                   )
                 )
@@ -281,7 +379,32 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
             </Slider>
           ) : (
             postData?.attachments?.map((items, index) => (
-              <Image key={index} src={items.url} alt="" className="postImage" />
+              <>
+                <Image
+                  key={index}
+                  src={items.url}
+                  alt=""
+                  className="postImage"
+                  onClick={onOpen}
+                />
+                <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
+                  <ModalContent>
+                    {(onClose) => (
+                      <>
+                        <ModalBody>
+                          <Image
+                            isZoomed
+                            key={index}
+                            src={items.url}
+                            alt=""
+                            className="postImage"
+                          />
+                        </ModalBody>
+                      </>
+                    )}
+                  </ModalContent>
+                </Modal>
+              </>
             ))
           )}
           {/* <Slider {...settings}>
@@ -325,7 +448,13 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
               <div>
                 <p className="dark:text-white">{likesAmount}</p>
               </div>
-              <div className="" onClick={toggleComment}>
+              <div
+                className=""
+                onClick={() => {
+                  toggleComment();
+                  getComment();
+                }}
+              >
                 <TbMessageCircle />
               </div>
               <div className="">
@@ -340,25 +469,108 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
           </div>
           {showComment && (
             <div className="flex flex-col gap-4">
-              <CommentForm />
-              <CommentForm />
+              {listCmt?.map((item, index) => (
+                <CommentForm
+                  key={index}
+                  fullName={item?.fullName}
+                  userName={item?.username}
+                  avatar={item?.avatarUrl}
+                  content={item?.content}
+                  created_at={item?.created_at}
+                  updated_at={item?.updated_at}
+                  urlImage={item?.attachments}
+                />
+              ))}
+              {/* <CommentForm /> */}
               <div className="flex gap-3">
                 <div className="flex items-center">
                   <Avatar
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+                    src={
+                      postData?.avatarUrl != ""
+                        ? postData.avatarUrl
+                        : avatarDefault.src
+                    }
                     size="sm"
                   />
                 </div>
-                <div className="basis-full">
+                <div className="basis-full flex gap-1">
                   <Input
                     key="full"
                     radius="full"
                     type="text"
                     placeholder="Viết bình luận..."
                     size="sm"
+                    value={comment}
+                    onChange={(e) => {
+                      setComment(handleInputChange(e));
+                    }}
                   />
+                  <div>
+                    <CldUploadButton
+                      options={{ maxFiles: 5 }}
+                      onSuccess={(result: any) => {
+                        const secureUrl = result?.info?.secure_url;
+                        if (secureUrl) {
+                          setImageCmt((prevImagePost) => [
+                            ...prevImagePost,
+                            { url: secureUrl, type: "image" },
+                          ]);
+                        }
+                      }}
+                      uploadPreset="s2lo0hgq"
+                    >
+                      <IoMdImages
+                        size={25}
+                        className="text-green-700 cursor-pointer"
+                      />
+                    </CldUploadButton>
+                  </div>
+                  <div className="flex items-center">
+                    <Button
+                      radius="full"
+                      className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg"
+                      size="sm"
+                      onClick={() => {
+                        Comment();
+                        setComment("");
+                        setImageCmt([]);
+                      }}
+                    >
+                      <FaRegPaperPlane />
+                    </Button>
+                  </div>
                 </div>
               </div>
+              {Array.isArray(imageCmt) && imageCmt.length > 0 ? (
+                imageCmt.map((imageUrl, index) => (
+                  <div key={index} className="flex items-center mr-3 relative">
+                    {imageUrl.url.endsWith(".mp4") ? (
+                      <video
+                        src={imageUrl.url}
+                        width="200"
+                        height="50"
+                        controls
+                      ></video>
+                    ) : (
+                      <Image
+                        isBlurred
+                        width={100}
+                        src={imageUrl.url}
+                        alt={`Image ${index}`}
+                        className="m-3 hover:bg-opacity-50 transition duration-300"
+                      />
+                    )}
+                    <button
+                      className="absolute top-4 right-0 rounded-full hover:bg-[#377375] text-white text-xs z-10"
+                      onClick={() => handleRemoveImage(index)}
+                    >
+                      x
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <></>
+              )}
             </div>
           )}
         </div>

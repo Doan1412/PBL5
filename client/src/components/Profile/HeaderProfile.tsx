@@ -18,6 +18,7 @@ import { ListFriendType, UserType } from "@/app/types";
 import ModalHandleBio from "./ModalHandleBio";
 import { useUserProfile } from "@/app/profile/about/page";
 import { useUserProfileTimeline } from "@/app/profile/timeline/page";
+import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
 
 interface LinkProfile {
   // name: string;
@@ -45,19 +46,15 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
     setImageAvatar,
   } = useUserProfileTimeline();
 
-  const [friends, setFiends] = useState<ListFriendType[]>([]);
-  const [loading, setLoading] = useState(true);
   const params = useSearchParams();
 
-  // const { data, isFetching } = useGetUserInfoQuery(
-  //   params.get("id_user") as string
-  // );
-  // console.log(data);
-  // console.log(data?.data?.profile?.avatar_url);
+  const [friends, setFiends] = useState<ListFriendType[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // const [linkImageAvatar, setImageAvatar] = useState<string>("");
-  // const [linkImageCover, setImageCover] = useState<string>("");
-  // const [bio, setBio] = useState<string>(data?.data?.profile?.bio as string);
+  const [study, setStudy] = useState<string>("");
+  const [work, setWork] = useState<string>("");
+  const [from, setFrom] = useState<string>("");
+  const [love, setLove] = useState<string>("");
 
   const url = usePathname();
   const router = useRouter();
@@ -66,6 +63,24 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
   const handleOpen = () => {
     onOpen();
   };
+
+  useEffect(() => {
+    // setImageAvatar(data?.avatar_url || "");
+    // setImageCover(data?.cover_url || "");
+    // setBio(data?.bio || "");
+    setStudy(data?.data?.profile.study_at || "");
+    setWork(data?.data?.profile.work_at || "");
+    setFrom(data?.data?.profile.from || "");
+    setLove(data?.data?.profile.relationship || "");
+  }, [
+    // data?.data?.profile.avatar_url,
+    // data?.data?.profile.cover_url,
+    // data?.data?.profile.bio,
+    data?.data?.profile.study_at,
+    data?.data?.profile.work_at,
+    data?.data?.profile.from,
+    data?.data?.profile.relationship,
+  ]);
 
   useListFriend(setFiends, setLoading, params.get("id_user") as string);
 
@@ -95,8 +110,7 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
           <div className="flex items-center relative">
             <Image
               isBlurred
-              width={900}
-              height={300}
+              width={850}
               alt="NextUI hero Image with delay"
               // src={linkImageCover != "" ? linkImageCover : Poster.src}
               src={
@@ -119,12 +133,10 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
               <ModalHandleBio
                 isOpen={isOpen}
                 onClose={onClose}
-                // setImageCover={setImageCover}
-                // setImageAvatar={setImageAvatar}
-                // linkImageCover={linkImageCover}
-                // linkImageAvatar={linkImageAvatar}
-                // bio={bio}
-                // setBio={setBio}
+                love={love}
+                study={study}
+                work={work}
+                from={from}
               />
             </div>
           </div>
@@ -153,12 +165,10 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
             <ModalHandleBio
               isOpen={isOpen}
               onClose={onClose}
-              // setImageCover={setImageCover}
-              // setImageAvatar={setImageAvatar}
-              // linkImageCover={linkImageCover}
-              // linkImageAvatar={linkImageAvatar}
-              // bio={bio}
-              // setBio={setBio}
+              love={love}
+              study={study}
+              work={work}
+              from={from}
             />
           </div>
         </div>

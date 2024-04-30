@@ -85,13 +85,13 @@ export interface PostType {
   username?: string;
 }
 export interface FriendRequest {
-  id?: string,
-  senderId?: string,
-  senderName?: string,
-  senderAvatar?: string,
-  status?: string,
-  createdAt?: string,
-  senderUsername?: string
+  id?: string;
+  senderId?: string;
+  senderName?: string;
+  senderAvatar?: string;
+  status?: string;
+  createdAt?: string;
+  senderUsername?: string;
 }
 
 export interface Attachment {
@@ -119,4 +119,24 @@ export interface Report {
   status: string;
   user: User;
   post: PostType;
+}
+
+export interface CommentAttachment {
+  url: string;
+  type: string;
+}
+
+export interface CommentType {
+  id: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  userId: string;
+  username: string;
+  fullName: string;
+  avatarUrl: string;
+  like_count: number;
+  share_count: number;
+  attachments: Attachment[];
+  like: false;
 }
