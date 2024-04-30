@@ -17,5 +17,5 @@ public class CommentDTO {
     private String content;
     private String postId;
     private int like_count;
-    private Set<PostAttachment> attachment;
+    private Set<PostAttachment> attachments;
 }
