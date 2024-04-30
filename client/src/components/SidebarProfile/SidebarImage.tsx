@@ -29,7 +29,7 @@ export default function SidebarImage({ data }: PropsSidebarImage) {
                 router.push(currentUrl);
               }
             }}
-            className="text-sky-500 ml-5 mt-5 "
+            className="text-sky-500 ml-5 mt-5 hover:cursor-pointer"
           >
             Xem tất cả ảnh
           </Link>
