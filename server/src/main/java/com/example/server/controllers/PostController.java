@@ -107,7 +107,7 @@ public class PostController {
     @PostMapping("/comment")
     public ResponseEntity<Object> reply(@RequestBody CommentDTO commentDTO, @AuthenticationPrincipal Account account) {
         try {
-            Object data = service.comment(commentDTO.getPostId(),account.getId(), commentDTO.getContent(),commentDTO.getAttachment());
+            Object data = service.comment(commentDTO.getPostId(),account.getId(), commentDTO.getContent(),commentDTO.getAttachments());
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
