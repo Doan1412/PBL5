@@ -52,6 +52,16 @@ public class PostController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
+    @PostMapping("{post_id}/unlike")
+    public ResponseEntity<Object> unlike (@PathVariable String post_id, @AuthenticationPrincipal Account account){
+        try {
+            service.unlikePost(post_id, account.getId());
+            return Respond.success(200,"I001","");
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
     @PostMapping("{post_id}/share")
     public ResponseEntity<Object> share (@PathVariable String post_id,@RequestParam String caption, @AuthenticationPrincipal Account account){
         try {

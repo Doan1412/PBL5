@@ -11,7 +11,6 @@ import React, {
 import Poster from "@/static/images/Poster.jpg";
 import AddFriendButton from "@/components/AddFriendButton";
 import SidebarProfile from "@/components/SidebarProfile/SidebarProfile";
-import Post from "@/components/Post/Post";
 import SidebarImage from "@/components/SidebarProfile/SidebarImage";
 import SatatusPost from "@/components/SatatusPost";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -27,6 +26,7 @@ import { resetLoading } from "@/app/hooks/features/loading.slice";
 import { useListPostById } from "@/app/actions/custom/useListPostbyId";
 import { useImageProfileById } from "@/app/actions/custom/useImageProfileById";
 import Widget from "@/app/widget";
+import Post from "@/components/Post/Post";
 
 interface UserProfileContextType {
   bio: string;

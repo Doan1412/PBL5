@@ -56,6 +56,7 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
 
@@ -80,7 +81,8 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
     setUser_id(getLocalStorage()?.user_id as string);
   }, []);
 
-  const handleLikeClick = () => {
+  const handleLikeClick = async () => {
+    liked ? unlike() : like();
     setLiked((prevLiked) => !prevLiked);
     setLikesAmount((prevLikesAmount) =>
       liked ? prevLikesAmount - 1 : prevLikesAmount + 1
@@ -107,6 +109,57 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
       }
     } catch (error) {
       // console.error("Error:", error);
+    }
+  };
+
+  const unlike = async () => {
+    // unlike post
+    try {
+      const response = await httpPrivate.post(
+        `/post/${postData?.id}/unlike`,
+        {
+          signal: controller.signal,
+        }
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // }
+      );
+      controller.abort();
+      if (response.data.status === 200) {
+        setLoading(false);
+      } else {
+        dispatch(failPopUp(response.data.message));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setLoading(false);
+    }
+  };
+  const like = async () => {
+    // like post
+    try {
+      const response = await httpPrivate.post(
+        `/post/${postData?.id}/like`,
+        {
+          signal: controller.signal,
+        }
+        // {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // }
+      );
+      controller.abort();
+      if (response.data.status === 200) {
+        setLoading(false);
+      } else {
+        dispatch(failPopUp(response.data.message));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setLoading(false);
     }
   };
 
