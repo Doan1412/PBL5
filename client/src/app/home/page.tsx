@@ -75,9 +75,11 @@ const Home: React.FC = () => {
               <div className="requestWidget">
                 <h1 className="dark:text-white font-semibold">Requests</h1>
                 {requests.map((request: FriendRequest, index: number) => {
-                  return (
-                    <RequestWidget request={request} key={index} ></RequestWidget>
-                  );
+                  if (request.status === "PENDING"){
+                    return (
+                      <RequestWidget request={request} key={index} ></RequestWidget>
+                    );
+                  }
                 })}
               </div>
             </div>

@@ -2,6 +2,7 @@ import useHttp from "@/app/hooks/customs/useAxiosPrivate";
 import { failPopUp, successPopUp } from "@/app/hooks/features/popup.slice";
 import { useAppDispatch } from "@/app/hooks/store";
 import { FriendRequest } from "@/app/types";
+import { Image } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
@@ -56,24 +57,30 @@ export default function RequestWidget({ request }: RequestProps) {
     return null;
   }
   return (
-    <div className="requestProfile">
-      <div className="details">
-        <div className="profileImage">
-          {/* <img src={"/assets/image/avatar_default.jpg"} alt="" /> */}
+    <>
+      <div className="requestProfile">
+        <div className="details">
+          <div className="profileImage">
+            <Image src={request.senderAvatar} alt="" />
+          </div>
+          <div className="userDetails">
+            <div className="name">{request.senderName}</div>
+            <div className="username">@{request.senderUsername}</div>
+          </div>
         </div>
-        <div className="userDetails">
-          <div className="name">{request.senderName}</div>
-          <div className="username">@{request.senderUsername}</div>
+        <div className="actions">
+          <button className="actionBtn" onClick={handleAccept}>
+            Accept
+          </button>
+          <button className="actionBtn" onClick={handleReject}>
+            Reject
+          </button>
         </div>
       </div>
-      <div className="actions">
-        <button className="actionBtn" onClick={() => handleAccept()}>
-          Accept
-        </button>
-        <button className="actionBtn" onClick={() => handleReject()}>
-          Reject
-        </button>
+      <div className="userDetails">
+        <div className="name">{request.senderName}</div>
+        <div className="username">@{request.senderUsername}</div>
       </div>
-    </div>
+    </>
   );
 }
