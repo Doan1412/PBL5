@@ -45,6 +45,9 @@ public class PostService {
                         .comments(new HashSet<>())
 //                        .sharedPosts(new HashSet<>())
                         .build();
+        if (attachments == null) {
+            attachments = new HashSet<>();
+        }
         attachments.forEach(attachment -> {
             String attachmentUrl = attachment.getUrl();
             PostAttachment postAttachment = PostAttachment.builder()
