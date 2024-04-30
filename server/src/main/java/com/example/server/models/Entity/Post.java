@@ -10,6 +10,8 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
+import com.example.server.DTO.PostDTO;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,5 +42,19 @@ public class Post {
 
     public void addAttachment(PostAttachment attachment) {
         this.attachments.add(attachment);
+    }
+    public PostDTO toDto() {
+        PostDTO dto = new PostDTO();
+        dto.setId(this.id);
+        dto.setContent(this.content);
+        dto.setCreated_at(this.created_at);
+        dto.setUpdated_at(this.updated_at);
+        dto.setUserId(this.user.getId());
+        dto.setUsername(this.user.getUsername());
+        dto.setFullName(this.user.getFirstname() + " " + this.user.getLastname());
+        dto.setAvatarUrl(this.user.getProfile().getAvatar_url());
+        dto.setLike_count(this.likes.size());
+        dto.setAttachments(this.attachments);
+        return dto;
     }
 }

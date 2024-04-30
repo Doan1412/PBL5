@@ -2,6 +2,8 @@ package com.example.server.repositories;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+
+import com.example.server.models.Entity.Comment;
 import com.example.server.models.Entity.Post;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,4 +32,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
     void addCommentToPost(@Param("postId") String postId,@Param("commentId") String commentId);
     @Query("MATCH (p1:Post {id: $postId})-[r:COMMENTED_ON]->(p2:Post) DETACH DELETE r,p2")
     void deleteComment(@Param("postId") String postId);
+
+    @Query("MATCH (p:Post {id: $postId})-[:COMMENTED_ON]->(c:Post) RETURN c.id ORDER BY c.createdAt DESC")
+    List<String> getCommentsForPost(@Param("postId") String postId);
 }
