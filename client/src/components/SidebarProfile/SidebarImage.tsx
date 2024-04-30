@@ -37,23 +37,27 @@ export default function SidebarImage({ data }: PropsSidebarImage) {
         <div>
           <div className="gap-1 grid grid-cols-2 sm:grid-cols-3 m-5">
             {data?.map((item, index) => (
-              <Card
-                shadow="sm"
-                key={index}
-                isPressable={true}
-                onPress={() => {}}
-              >
-                <CardBody className="overflow-visible p-0">
-                  <Image
+              <div key={index}>
+                {item.endsWith(".mp4") ? null : (
+                  <Card
                     shadow="sm"
-                    radius="lg"
-                    width={120}
-                    alt=""
-                    className="w-full object-cover h-[140px]"
-                    src={item}
-                  />
-                </CardBody>
-              </Card>
+                    key={index}
+                    isPressable={true}
+                    onPress={() => {}}
+                  >
+                    <CardBody className="overflow-visible p-0">
+                      <Image
+                        shadow="sm"
+                        radius="lg"
+                        width={120}
+                        alt=""
+                        className="w-full object-cover h-[140px]"
+                        src={item}
+                      />
+                    </CardBody>
+                  </Card>
+                )}
+              </div>
             ))}
           </div>
         </div>

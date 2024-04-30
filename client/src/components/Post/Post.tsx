@@ -260,7 +260,7 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
             />
           ))} */}
 
-        <div className="cursor-zoom-in hover:skew-y-1">
+        <div>
           {postData?.attachments?.length! > 1 ? (
             <Slider {...settings}>
               {postData?.attachments?.map(
