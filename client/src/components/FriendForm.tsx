@@ -91,12 +91,7 @@ export default function FriendForm({ data, setFiends }: PropFriendForm) {
         <CardBody>
           <div className="flex justify-between">
             <div className="flex gap-3">
-              <Avatar
-                isBordered
-                radius="sm"
-                src="https://i.pravatar.cc/150?u=a04258a2462d826712d"
-                size="lg"
-              />
+              <Avatar isBordered radius="sm" src={data?.avatar_url} size="lg" />
               <div className="flex items-center">
                 <div className="flex flex-col">
                   <p className="hover:text-[#377375]">{data?.fullname}</p>

@@ -25,7 +25,6 @@ const Home: React.FC = () => {
   useListPost(setPosts, setLoading);
 
   // useRefreshToken()
-
   return (
     <>
       <nav className="fixed z-40 w-full">
@@ -45,6 +44,7 @@ const Home: React.FC = () => {
                 reff={ref}
                 isFocused={isFocused}
                 setIsFocused={setIsFocused}
+                setPosts={setPosts}
               />
               {loading ? (
                 <div className="mt-10">
@@ -58,7 +58,9 @@ const Home: React.FC = () => {
               ) : (
                 <div>
                   {posts.map((post: PostType, index: number) => {
-                    return <Post key={index} postData={post} />;
+                    return (
+                      <Post key={index} postData={post} setPosts={setPosts} />
+                    );
                   })}
                 </div>
               )}

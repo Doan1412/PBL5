@@ -109,20 +109,21 @@ export default function Timeline() {
         <div className=" h-full dark:bg-[#18191a]">
           <HeaderProfile data={data!} isFetching={isFetching} />
           {/* {pathname === "/profile"}( */}
-          <div className="flex justify-center">
-            <div className="flex flex-col mt-5 w-1/3 ml-44">
+          <div className="hidden lg:flex justify-center">
+            <div className="flex flex-col mt-5 w-2/5 ml-44">
               <SidebarProfile
                 data={data?.data?.profile}
                 id_user={data?.data.id}
               />
               <SidebarImage data={images} />
             </div>
-            <div className="mt-2 h-full w-2/3">
+            <div className="mt-2 h-full w-3/5">
               <div className="flex flex-col ml-3 mr-56">
                 <SatatusPost
                   reff={ref}
                   isFocused={isFocused}
                   setIsFocused={setIsFocused}
+                  setPosts={setPosts}
                 />
                 {loading ? (
                   <div className="mt-10 ml-6">
@@ -136,7 +137,7 @@ export default function Timeline() {
                 ) : (
                   <div>
                     {posts.map((post: PostType, index: number) => {
-                      return <Post key={index} postData={post} />;
+                      return <Post key={index} postData={post} setPosts={setPosts}/>;
                     })}
                   </div>
                 )}

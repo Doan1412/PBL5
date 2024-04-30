@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useMemo, useState } from "react";
 import { FaEllipsisH } from "react-icons/fa";
 import {
   HiOutlineHeart,
@@ -10,9 +10,14 @@ import { HiOutlineShare } from "react-icons/hi";
 import { motion } from "framer-motion";
 import {
   Avatar,
+  Button,
   Card,
   CardBody,
   CardHeader,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Image,
   Input,
 } from "@nextui-org/react";
@@ -24,7 +29,14 @@ import { Attachment, PostType } from "@/app/types";
 import CommentForm from "../CommentForm";
 import { useRouter } from "next/navigation";
 import avatarDefault from "@/static/images/avatarDefault.jpg";
-
+import { getLocalStorage } from "@/app/actions/localStorage_State";
+import useHttp from "@/app/hooks/customs/useAxiosPrivate";
+import { useAppDispatch } from "@/app/hooks/store";
+import { failPopUp, successPopUp } from "@/app/hooks/features/popup.slice";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+// import Carousel from "../Carousel";
 
 interface UserData {
   profilePic: string;
@@ -34,12 +46,16 @@ interface UserData {
 
 interface PostProps {
   postData: PostType;
+  setPosts: React.Dispatch<React.SetStateAction<PostType[]>>;
 }
 
-const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
+const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
   const [open, setOpen] = useState(false);
   const [showComment, setShowComment] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const httpPrivate = useHttp();
+  const controller = useMemo(() => new AbortController(), []);
+  const dispatch = useAppDispatch();
 
   const router = useRouter();
 
@@ -58,6 +74,11 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
   const [likesAmount, setLikesAmount] = useState<number>(
     postData?.like_count as number
   );
+  const [user_id, setUser_id] = useState<string>("");
+
+  useEffect(() => {
+    setUser_id(getLocalStorage()?.user_id as string);
+  }, []);
 
   const handleLikeClick = () => {
     setLiked((prevLiked) => !prevLiked);
@@ -66,13 +87,48 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
     );
   };
 
+  const handleDeletePost = async () => {
+    const token = getLocalStorage()?.token;
+    if (!token) return;
+    try {
+      const response = await httpPrivate.delete(`/post/${postData?.id}`, {
+        signal: controller.signal,
+      });
+      controller.abort();
+      if (response.data.status == 200) {
+        setPosts((prevPosts) => {
+          return prevPosts.filter((post) => post.id != postData.id);
+        });
+        dispatch(successPopUp("Xóa bài thành công! 😘"));
+      } else {
+        dispatch(
+          failPopUp("Error:" + response.data.message + "Xóa bài thất bại! 😢")
+        );
+      }
+    } catch (error) {
+      // console.error("Error:", error);
+    }
+  };
+
+  var settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
   return (
     <Widget>
       <div className="postWrapper dark:bg-[#242526]">
         <div className="header">
           <div className="left">
             <Image
-              src={postData?.avatarUrl != "" ? postData.avatarUrl : avatarDefault.src}
+              src={
+                postData?.avatarUrl != ""
+                  ? postData.avatarUrl
+                  : avatarDefault.src
+              }
               alt=""
               className="profileImg"
               onClick={() =>
@@ -96,22 +152,102 @@ const Post: React.FC<PostProps> = ({ postData }: PostProps) => {
             </div>
           </div>
           <div className="right">
-            <div className="option ">
+            <Dropdown>
+              <DropdownTrigger>
+                <Button variant="light">
+                  <FaEllipsisH />
+                </Button>
+              </DropdownTrigger>
+              {user_id == postData.userId ? (
+                <DropdownMenu aria-label="Example with disabled actions">
+                  {/* <DropdownItem key="edit">Chỉnh sửa bài viết</DropdownItem> */}
+                  <DropdownItem
+                    key="delete"
+                    className="text-danger"
+                    color="danger"
+                    onClick={() => {
+                      handleDeletePost();
+                    }}
+                  >
+                    Xóa bài viết
+                  </DropdownItem>
+                </DropdownMenu>
+              ) : (
+                <DropdownMenu aria-label="Example with disabled actions">
+                  <DropdownItem key="report">Báo cáo</DropdownItem>
+                </DropdownMenu>
+              )}
+            </Dropdown>
+            {/* <div className="option ">
               <FaEllipsisH />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="feeling">
           <p className="dark:text-white">{postData?.content}</p>
         </div>
-        <div className="mainPostContent cursor-zoom-in hover:skew-y-1">
-          <motion.img
-            src={postData?.attachments?.[0]?.url}
-            alt=""
-            className="postImage"
-            onClick={() => setOpen(!open)}
-            animate={{ scale: open ? 2 : 1 }}
-          />
+        {/* <div className="mainPostContent cursor-zoom-in hover:skew-y-1">
+          {postData?.attachments?.[0]?.url && (
+            <Image
+              src={postData?.attachments?.[0]?.url}
+              alt=""
+              className="postImage"
+              // onClick={() => setOpen(!open)}
+              // animate={{ scale: open ? 2 : 1 }}
+            />
+          )}
+        </div> */}
+
+        {/* {postData?.attachments?.map((items, index) => (
+            <Image
+              key={index}
+              src={items.url}
+              alt=""
+              className="h-full w-full object-cover"
+            />
+          ))} */}
+
+        <div className="cursor-zoom-in hover:skew-y-1">
+          {postData?.attachments?.length! > 1 ? (
+            <Slider {...settings}>
+              {postData?.attachments?.map(
+                (items, index) => (
+                  console.log(items),
+                  (
+                    <div>
+                      <Image
+                        key={index}
+                        src={items.url}
+                        alt=""
+                        className="postImage"
+                      />
+                    </div>
+                  )
+                )
+              )}
+            </Slider>
+          ) : (
+            postData?.attachments?.map((items, index) => (
+              <Image key={index} src={items.url} alt="" className="postImage" />
+            ))
+          )}
+          {/* <Slider {...settings}>
+            {postData?.attachments?.map(
+              (items, index) => (
+                console.log(items),
+                (
+                  <div>
+                    <Image
+                      key={index}
+                      src={items.url}
+                      alt=""
+                      className="postImage"
+                    />
+                  </div>
+                )
+              )
+            )}
+          </Slider> */}
         </div>
         <div className="postFooter flex flex-col">
           <div className="postActions">

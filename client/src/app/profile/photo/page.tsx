@@ -40,7 +40,7 @@ export default function Photo() {
         <HeaderProfile data={data!} isFetching={isFetching} />
         {/* {pathname === "/profile"}( */}
         <div className="hidden md:flex justify-center">
-          <PhotoProfile />
+          <PhotoProfile  data={images}/>
         </div>
       </div>
     </Widget>
