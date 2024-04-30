@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import com.example.server.DTO.PostDTO;
+import com.example.server.models.Entity.Comment;
 import com.example.server.models.Entity.Post;
 import com.example.server.models.Entity.PostAttachment;
 import com.example.server.models.Entity.SharedPost;
@@ -132,6 +133,18 @@ public class PostService {
             p.loadFromEntity(post,share_count,user);
             data.add(p);
         }));
+        return data;
+    }
+    public List<PostDTO> getCommentsForPost(String postId) {
+        List<String> data_id = repository.getCommentsForPost(postId);
+        List<PostDTO> data = new ArrayList<>();
+        for (String post_id : data_id) {
+            Post post = repository.findById(post_id).orElseThrow();
+            int share_count = repository.getShareCount(post_id);
+            PostDTO p = new PostDTO();
+            p.loadFromEntity(post,share_count,post.getUser());
+            data.add(p);
+        }
         return data;
     }
 }
