@@ -57,6 +57,7 @@ public class FriendRequest {
         dto.setStatus(this.status);
         dto.setCreatedAt(this.created_at);
         dto.setSenderUsername(this.sender.getUsername() );
+        
         return dto;
     }
     @Override
