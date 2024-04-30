@@ -1,9 +1,11 @@
 package com.example.server.controllers;
 
 import com.example.server.DTO.CommentDTO;
+import com.example.server.DTO.PostDTO;
 import com.example.server.models.Entity.Account;
 import com.example.server.models.Entity.Comment;
 import com.example.server.service.CommentService;
+import com.example.server.service.PostService;
 import com.example.server.utils.Respond;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping("/api/v1/comment")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
+    private final PostService postService;
 
     @PostMapping("/add")
     public ResponseEntity<Object> addComment(@RequestBody CommentDTO commentDto,@AuthenticationPrincipal Account account) {
@@ -33,7 +36,7 @@ public class CommentController {
     @GetMapping("/post/{postId}")
     public ResponseEntity<Object> getCommentsForPost(@PathVariable String postId) {
         try {
-            List<Comment> comments = commentService.getCommentsForPost(postId);
+            List<PostDTO> comments = postService.getCommentsForPost(postId);
             return Respond.success(200,"I001",comments);
         }
         catch (Exception e) {
