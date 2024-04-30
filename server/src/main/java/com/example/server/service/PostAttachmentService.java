@@ -20,7 +20,7 @@ public class PostAttachmentService {
     }
 
     public List<String> getImgByUserId(String userId) {
-        System.out.println("on loi lia userId: " + userId);
+        System.out.println("userId: " + userId);
         return repository.getImgByUserId(userId);
     }
 }
