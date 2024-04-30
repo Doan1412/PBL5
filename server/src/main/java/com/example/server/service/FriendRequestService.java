@@ -38,6 +38,8 @@ public class FriendRequestService {
         friendRequestRepository.deleteFriendRequestByUser(user_1.getId(),user_2.getId());
         repository.save(user_1);
         repository.save(user_2);
+        String r = chatRoomRepository.findChatRoomByMembers(user_1.getId(),user_2.getId());
+        if (r != null) return;
         Set<User> members = new HashSet<>();
         members.add(user_1);
         members.add(user_2);
