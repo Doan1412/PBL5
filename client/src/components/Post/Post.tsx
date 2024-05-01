@@ -1,6 +1,6 @@
 "use client";
 import React, { Fragment, useEffect, useMemo, useState } from "react";
-import { FaEllipsisH, FaRegPaperPlane } from "react-icons/fa";
+import { FaCheck, FaEllipsisH, FaRegPaperPlane } from "react-icons/fa";
 import {
   HiOutlineHeart,
   HiOutlineChatBubbleOvalLeftEllipsis,
@@ -72,8 +72,86 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
   const [comment, setComment] = useState<string>("");
   const [imageCmt, setImageCmt] = useState<CommentAttachment[]>([]);
   const [listCmt, setListCmt] = useState<CommentType[]>([]);
+  const [currentCmt, setCurrentCmt] = useState<CommentType | null>(null);
 
   const router = useRouter();
+
+  const startEditCmt = (id: string) => {
+    const findedCmt = listCmt.find((cmt) => cmt.id === id);
+    if (findedCmt) {
+      setCurrentCmt(findedCmt);
+    }
+  };
+
+  const editCmt = (content: string) => {
+    setCurrentCmt((prev) => {
+      if (prev) return { ...prev, content };
+      return null;
+    });
+  };
+
+  const findIdComment = (cmtObj: CommentType[]): string | undefined => {
+    const foundCmt = cmtObj.find(
+      (cmt) => cmt.id === (currentCmt as CommentType).id
+    );
+    if (foundCmt) {
+      console.log(currentCmt?.id as string);
+      return currentCmt?.id as string;
+    }
+    return undefined;
+  };
+
+  const finishEditCmt = async () => {
+    const token = getLocalStorage()?.token;
+    if (!token) return;
+    try {
+      console.log(findIdComment(listCmt));
+      const response = await httpPrivate.put(
+        `/post/${findIdComment(listCmt)}`,
+        {
+          content: currentCmt?.content,
+        },
+        {
+          signal: controller.signal,
+        }
+      );
+      controller.abort();
+      if (response.data.status == 200) {
+        const handler = (cmtObj: CommentType[]) => {
+          return cmtObj.map((cmt) => {
+            if (cmt.id === (currentCmt as CommentType).id) {
+              return currentCmt as CommentType;
+            }
+            return cmt;
+          });
+        };
+        setListCmt(handler);
+        setCurrentCmt(null);
+        dispatch(successPopUp("Chỉnh sửa comment thành công! 😘"));
+      } else {
+        dispatch(
+          failPopUp(
+            "Error:" + response.data.message + "Chỉnh sửa comment thất bại! 😢"
+          )
+        );
+      }
+    } catch (error) {
+      // console.error("Error:", error);
+    }
+  };
+
+  // const finishEditCmt = () => {
+  //   // const handler = (cmtObj: CommentType[]) => {
+  //   //   return cmtObj.map((cmt) => {
+  //   //     if (cmt.id === (currentCmt as CommentType).id) {
+  //   //       return currentCmt as CommentType
+  //   //     }
+  //   //     return cmt
+  //   //   })
+  //   // }
+  //   // setListCmt(handler)
+  //   // setCurrentCmt(null)
+  // }
 
   const toggleComment = () => {
     if (!isClicked) {
@@ -484,6 +562,9 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
                   id_userPost={postData?.userId}
                   setListCmt={setListCmt}
                   id_Cmt={item?.id}
+                  startEditCmt={startEditCmt}
+                  currentCmt={currentCmt}
+                  setCurrentCmt={setCurrentCmt}
                 />
               ))}
               {/* <CommentForm /> */}
@@ -505,9 +586,13 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
                     type="text"
                     placeholder="Viết bình luận..."
                     size="sm"
-                    value={comment}
+                    value={currentCmt ? currentCmt.content : comment}
                     onChange={(e) => {
-                      setComment(handleInputChange(e));
+                      if (currentCmt) {
+                        editCmt(handleInputChange(e));
+                      } else {
+                        setComment(handleInputChange(e));
+                      }
                     }}
                   />
                   <div>
@@ -535,13 +620,19 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
                       radius="full"
                       className="bg-gradient-to-tr from-pink-500 to-yellow-500 text-white shadow-lg"
                       size="sm"
-                      onClick={() => {
-                        Comment();
-                        setComment("");
-                        setImageCmt([]);
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentCmt) {
+                          finishEditCmt();
+                          if (comment) setComment("");
+                        } else {
+                          Comment();
+                          setComment("");
+                          setImageCmt([]);
+                        }
                       }}
                     >
-                      <FaRegPaperPlane />
+                      {currentCmt ? <FaCheck /> : <FaRegPaperPlane />}
                     </Button>
                   </div>
                 </div>

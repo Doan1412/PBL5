@@ -34,6 +34,9 @@ interface PropsCommentForm {
   id_userPost?: string;
   setListCmt: React.Dispatch<React.SetStateAction<CommentType[]>>;
   id_Cmt?: string;
+  startEditCmt: (id: string) => void;
+  currentCmt: CommentType | null;
+  setCurrentCmt: React.Dispatch<React.SetStateAction<CommentType | null>>;
 }
 
 export default function CommentForm({
@@ -47,7 +50,10 @@ export default function CommentForm({
   id_userCmt,
   id_userPost,
   setListCmt,
+  startEditCmt,
   id_Cmt,
+  currentCmt,
+  setCurrentCmt,
 }: PropsCommentForm) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [id_userAuth, setId_UserAuth] = useState<string>();
@@ -92,6 +98,44 @@ export default function CommentForm({
     }
   };
 
+  // const finishEditCmt = async () => {
+  //   const token = getLocalStorage()?.token;
+  //   if (!token) return;
+  //   try {
+  //     const response = await httpPrivate.put(
+  //       `/post/${id_Cmt}`,
+  //       {
+  //         content: currentCmt?.content,
+  //       },
+  //       {
+  //         signal: controller.signal,
+  //       }
+  //     );
+  //     controller.abort();
+  //     if (response.data.status == 200) {
+  //       const handler = (cmtObj: CommentType[]) => {
+  //         return cmtObj.map((cmt) => {
+  //           if (cmt.id === (currentCmt as CommentType).id) {
+  //             return currentCmt as CommentType;
+  //           }
+  //           return cmt;
+  //         });
+  //       };
+  //       setListCmt(handler);
+  //       setCurrentCmt(null);
+  //       dispatch(successPopUp("Chỉnh sửa comment thành công! 😘"));
+  //     } else {
+  //       dispatch(
+  //         failPopUp(
+  //           "Error:" + response.data.message + "Chỉnh sửa comment thất bại! 😢"
+  //         )
+  //       );
+  //     }
+  //   } catch (error) {
+  //     // console.error("Error:", error);
+  //   }
+  // };
+
   return (
     <div>
       <div className="flex gap-2">
@@ -113,16 +157,29 @@ export default function CommentForm({
                     <div>
                       <Dropdown>
                         <DropdownTrigger>
-                          <Button variant="light">
+                          <Button variant="light" size="sm">
                             <FaEllipsisH />
                           </Button>
                         </DropdownTrigger>
                         {id_userAuth == id_userPost ||
                         id_userAuth == id_userCmt ? (
-                          <DropdownMenu aria-label="Example with disabled actions">
-                            <DropdownItem key="edit">
-                              Chỉnh sửa bình luận
-                            </DropdownItem>
+                          <DropdownMenu
+                            aria-label="Example with disabled actions"
+                            disabledKeys={["no_edit"]}
+                          >
+                            {id_userAuth == id_userCmt ? (
+                              <DropdownItem
+                                key="edit"
+                                onClick={() => startEditCmt(id_Cmt!)}
+                              >
+                                Chỉnh sửa bình luận
+                              </DropdownItem>
+                            ) : (
+                              <DropdownItem isReadOnly key="no_edit">
+                                Chỉnh sửa bình luận
+                              </DropdownItem>
+                            )}
+
                             <DropdownItem
                               key="delete"
                               className="text-danger"
@@ -158,46 +215,42 @@ export default function CommentForm({
                         ))}
                       </Slider>
                     ) : ( */}
-                    {urlImage?.map((items, index) => (
-                      <div key={index}>
-                        <Image
-                          key={index}
-                          src={items.url}
-                          alt=""
-                          className="postImage"
-                          width={100}
-                          onClick={onOpen}
-                        />
-                        <Modal
-                          isOpen={isOpen}
-                          onOpenChange={onOpenChange}
-                          size="2xl"
-                        >
-                          <ModalContent>
-                            {(onClose) => (
-                              <>
-                                <ModalBody>
-                                  <Image
-                                    isZoomed
-                                    key={index}
-                                    src={items.url}
-                                    alt=""
-                                    className="postImage"
-                                    width={900}
-                                    onClick={onOpen}
-                                  />
-                                </ModalBody>
-                              </>
-                            )}
-                          </ModalContent>
-                        </Modal>
-                      </div>
-                    ))}
                   </div>
                 </div>
               </div>
             </CardHeader>
           </Card>
+          {urlImage?.map((items, index) => (
+            <div key={index} className="mt-3">
+              <Image
+                key={index}
+                src={items.url}
+                alt=""
+                className="postImage"
+                width={100}
+                onClick={onOpen}
+              />
+              <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="2xl">
+                <ModalContent>
+                  {(onClose) => (
+                    <>
+                      <ModalBody>
+                        <Image
+                          isZoomed
+                          key={index}
+                          src={items.url}
+                          alt=""
+                          className="postImage"
+                          width={900}
+                          onClick={onOpen}
+                        />
+                      </ModalBody>
+                    </>
+                  )}
+                </ModalContent>
+              </Modal>
+            </div>
+          ))}
           <span className="ml-2 text-sm text-gray-500">
             {" "}
             {created_at?.slice(0, 10)} {created_at?.slice(11, 19)}
