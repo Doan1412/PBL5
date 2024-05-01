@@ -23,6 +23,10 @@ import com.example.server.utils.Respond;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping("/api/v1/post")
@@ -90,6 +94,15 @@ public class PostController {
             return Respond.success(200,"I001","");
         }
         catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> putMethodName(@PathVariable String id, @RequestBody PostDTO entity) {
+        try {
+            Object data = service.updatePost(id, entity.getContent());
+            return Respond.success(200,"I001",data);
+        } catch (Exception e) {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
