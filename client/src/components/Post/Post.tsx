@@ -218,6 +218,7 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
       );
       controller.abort();
       if (response.data.status === 200) {
+        setListCmt((prev) => [response.data.data, ...prev]);
         setLoading(false);
       } else {
         dispatch(failPopUp(response.data.message));
@@ -278,7 +279,7 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
               </DropdownTrigger>
               {user_id == postData.userId ? (
                 <DropdownMenu aria-label="Example with disabled actions">
-                  {/* <DropdownItem key="edit">Chỉnh sửa bài viết</DropdownItem> */}
+                  <DropdownItem key="edit">Chỉnh sửa bài viết</DropdownItem>
                   <DropdownItem
                     key="delete"
                     className="text-danger"
@@ -479,6 +480,10 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
                   created_at={item?.created_at}
                   updated_at={item?.updated_at}
                   urlImage={item?.attachments}
+                  id_userCmt={item?.userId}
+                  id_userPost={postData?.userId}
+                  setListCmt={setListCmt}
+                  id_Cmt={item?.id}
                 />
               ))}
               {/* <CommentForm /> */}
