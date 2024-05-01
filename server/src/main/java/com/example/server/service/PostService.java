@@ -150,4 +150,15 @@ public class PostService {
         }
         return data;
     }
+
+    public PostDTO updatePost(String id, String content) {
+        Post post = repository.findById(id).orElseThrow();
+        post.setContent(content);
+        post.setUpdated_at(LocalDateTime.now());
+        repository.save(post);
+        int share_count = repository.getShareCount(id);
+        PostDTO p = new PostDTO();
+        p.loadFromEntity(post,share_count,post.getUser());
+        return p;
+    }
 }
