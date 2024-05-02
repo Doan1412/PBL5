@@ -68,18 +68,18 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
     // setImageAvatar(data?.avatar_url || "");
     // setImageCover(data?.cover_url || "");
     // setBio(data?.bio || "");
-    setStudy(data?.data?.profile.study_at || "");
-    setWork(data?.data?.profile.work_at || "");
-    setFrom(data?.data?.profile.from || "");
-    setLove(data?.data?.profile.relationship || "");
+    setStudy(data?.data?.profile?.study_at || "");
+    setWork(data?.data?.profile?.work_at || "");
+    setFrom(data?.data?.profile?.from || "");
+    setLove(data?.data?.profile?.relationship || "");
   }, [
     // data?.data?.profile.avatar_url,
     // data?.data?.profile.cover_url,
     // data?.data?.profile.bio,
-    data?.data?.profile.study_at,
-    data?.data?.profile.work_at,
-    data?.data?.profile.from,
-    data?.data?.profile.relationship,
+    data?.data?.profile?.study_at,
+    data?.data?.profile?.work_at,
+    data?.data?.profile?.from,
+    data?.data?.profile?.relationship,
   ]);
 
   useListFriend(setFiends, setLoading, params.get("id_user") as string);

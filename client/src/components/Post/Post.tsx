@@ -47,6 +47,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { CldUploadButton } from "next-cloudinary";
 import { IoMdImages } from "react-icons/io";
+import ReactComment from "../ReactComment/ReactComment";
 // import Carousel from "../Carousel";
 
 interface UserData {
@@ -61,7 +62,6 @@ interface PostProps {
 }
 
 const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
-  const [open, setOpen] = useState(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [showComment, setShowComment] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
@@ -95,7 +95,6 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
       (cmt) => cmt.id === (currentCmt as CommentType).id
     );
     if (foundCmt) {
-      console.log(currentCmt?.id as string);
       return currentCmt?.id as string;
     }
     return undefined;
@@ -174,6 +173,7 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
   const [likesAmount, setLikesAmount] = useState<number>(
     postData?.like_count as number
   );
+
   const [user_id, setUser_id] = useState<string>("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -241,6 +241,7 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
       setLoading(false);
     }
   };
+
   const like = async () => {
     // like post
     try {
@@ -528,7 +529,6 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
                 <p className="dark:text-white">{likesAmount}</p>
               </div>
               <div
-                className=""
                 onClick={() => {
                   toggleComment();
                   getComment();
@@ -549,25 +549,31 @@ const Post: React.FC<PostProps> = ({ postData, setPosts }: PostProps) => {
           {showComment && (
             <div className="flex flex-col gap-4">
               {listCmt?.map((item, index) => (
-                <CommentForm
-                  key={index}
-                  fullName={item?.fullName}
-                  userName={item?.username}
-                  avatar={item?.avatarUrl}
-                  content={item?.content}
-                  created_at={item?.created_at}
-                  updated_at={item?.updated_at}
-                  urlImage={item?.attachments}
-                  id_userCmt={item?.userId}
-                  id_userPost={postData?.userId}
-                  setListCmt={setListCmt}
-                  id_Cmt={item?.id}
-                  startEditCmt={startEditCmt}
-                  currentCmt={currentCmt}
-                  setCurrentCmt={setCurrentCmt}
-                />
+                <div key={index}>
+                  <CommentForm
+                    key={index}
+                    fullName={item?.fullName}
+                    userName={item?.username}
+                    avatar={item?.avatarUrl}
+                    content={item?.content}
+                    created_at={item?.created_at}
+                    updated_at={item?.updated_at}
+                    urlImage={item?.attachments}
+                    id_userCmt={item?.userId}
+                    id_userPost={postData?.userId}
+                    setListCmt={setListCmt}
+                    id_Cmt={item?.id}
+                    startEditCmt={startEditCmt}
+                    currentCmt={currentCmt}
+                    setCurrentCmt={setCurrentCmt}
+                  />
+                  <div className="postActions ml-7">
+                    <ReactComment dataComment = {item} dataPost = {postData}/>
+                  </div>
+                  
+                </div>
               ))}
-              {/* <CommentForm /> */}
+
               <div className="flex gap-3">
                 <div className="flex items-center">
                   <Avatar
