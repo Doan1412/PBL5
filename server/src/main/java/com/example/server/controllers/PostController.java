@@ -25,9 +25,6 @@ import com.example.server.utils.Respond;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 
@@ -157,9 +154,9 @@ public class PostController {
         }
     }
     @GetMapping("/search")
-    public ResponseEntity<Object> search(@RequestParam String query) {
+    public ResponseEntity<Object> search(@RequestParam String query, @AuthenticationPrincipal Account account) {
         try {
-            List<PostDTO> posts = service.search(query);
+            List<PostDTO> posts = service.search(query,account.getId());
             return Respond.success(200,"I001",posts);
         }
         catch (Exception e){
@@ -200,6 +197,16 @@ public class PostController {
         try {
             service.unlikeSharePost(post_id, account.getId());
             return Respond.success(200,"I001","");
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @PostMapping("/share/comment")
+    public ResponseEntity<Object> replyShare(@RequestBody CommentDTO commentDTO, @AuthenticationPrincipal Account account) {
+        try {
+            Object data = service.commentSharePost(commentDTO.getPostId(),account.getId(), commentDTO.getContent(),commentDTO.getAttachments());
+            return Respond.success(200,"I001",data);
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getMessage());

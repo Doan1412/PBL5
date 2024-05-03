@@ -37,7 +37,7 @@ public class Post {
     private User user;
     @Relationship(type = "CONTAINS", direction = Relationship.Direction.OUTGOING)
     private Set<PostAttachment> attachments = new HashSet<>();
-    @Relationship(type = "COMMENTED_ON", direction = Relationship.Direction.INCOMING)
+    @Relationship(type = "COMMENTED_ON", direction = Relationship.Direction.OUTGOING)
     private Set<Post> comments = new HashSet<>();
 
     public void addAttachment(PostAttachment attachment) {
