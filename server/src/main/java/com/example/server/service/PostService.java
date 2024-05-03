@@ -185,4 +185,23 @@ public class PostService {
         }));
         return data;
     }
+
+    public List<PostDTO> search(String query) {
+        try {
+            List<String> list = new ArrayList<>();
+            //Goi api o day
+            //Tra ve list id post ở đây list = ...
+            List<PostDTO> data = new ArrayList<>();
+            list.forEach((post_id -> {
+                Post post = repository.findById(post_id).orElseThrow();
+                int share_count = repository.getShareCount(post_id);
+                PostDTO p = new PostDTO();
+                p.loadFromEntity(post,share_count,post.getUser());
+                data.add(p);
+            }));
+            return data;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -24,8 +25,6 @@ import com.example.server.utils.Respond;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -71,7 +70,8 @@ public class PostController {
     @PostMapping("{post_id}/share")
     public ResponseEntity<Object> share (@PathVariable String post_id,@RequestParam String caption, @AuthenticationPrincipal Account account){
         try {
-            service.sharePost(post_id, account.getId(),caption);
+            String cap = URLDecoder.decode(caption, "UTF-8");
+            service.sharePost(post_id, account.getId(),cap);
             return Respond.success(200,"I001","");
         }
         catch (Exception e){
@@ -153,8 +153,14 @@ public class PostController {
         }
     }
     @GetMapping("/search")
-    public String getMethodName(@RequestParam String param) {
-        return new String();
+    public ResponseEntity<Object> search(@RequestParam String query) {
+        try {
+            List<PostDTO> posts = service.search(query);
+            return Respond.success(200,"I001",posts);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
     }
     
 }
