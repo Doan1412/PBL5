@@ -185,4 +185,24 @@ public class PostController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
+    @PostMapping("/share/{post_id}/like")
+    public ResponseEntity<Object> likeSharePost (@PathVariable String post_id, @AuthenticationPrincipal Account account){
+        try {
+            service.likeSharePost(post_id, account.getId());
+            return Respond.success(200,"I001","");
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @PostMapping("/share/{post_id}/unlike")
+    public ResponseEntity<Object> unlikeSharePost (@PathVariable String post_id, @AuthenticationPrincipal Account account){
+        try {
+            service.unlikeSharePost(post_id, account.getId());
+            return Respond.success(200,"I001","");
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
 }

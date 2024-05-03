@@ -216,4 +216,23 @@ public class PostService {
         p.loadFromEntity(post,post.getSharedBy());
         return p;
     }
+    public void likeSharePost(String postId, String acc_id) {
+        SharedPost post = sharePostRepository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));
+        User user = userRepository.findByAccount_Id(acc_id).orElseThrow(()->new NotFoundException("User not found"));
+        post.getLikes().add(user);
+        sharePostRepository.save(post);
+    }
+    public void unlikeSharePost(String postId, String acc_id) {
+        // Tìm kiếm bài đăng
+        SharedPost post = sharePostRepository.findById(postId).orElseThrow(() -> new NotFoundException("Post not found"));
+        
+        // Tìm kiếm người dùng
+        User user = userRepository.findByAccount_Id(acc_id).orElseThrow(() -> new NotFoundException("User not found"));
+        
+        // Loại bỏ sự thích của người dùng khỏi danh sách thích của bài đăng
+        post.getLikes().remove(user);
+        
+        // Lưu bài đăng
+        sharePostRepository.save(post);
+    }    
 }
