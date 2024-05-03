@@ -1,5 +1,6 @@
 package com.example.server.models.Entity;
 
+import com.example.server.DTO.UserDTO;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -54,6 +55,17 @@ public class User {
     public void removeFriend(User friend) {
         this.friends.remove(friend);
     }
-
+    public UserDTO toDto(){
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(this.id);
+        userDTO.setFirstname(this.firstname);
+        userDTO.setLastname(this.lastname);
+        userDTO.setUsername(this.username);
+        userDTO.setBirth(this.birth);
+        userDTO.setGender(this.gender);
+        userDTO.setPhone(this.phone);
+        userDTO.setProfile(this.profile);
+        return userDTO;
+    }
 
 }

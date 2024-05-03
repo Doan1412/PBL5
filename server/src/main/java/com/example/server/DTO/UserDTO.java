@@ -1,5 +1,6 @@
 package com.example.server.DTO;
 
+import com.example.server.models.Entity.Profile;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -28,4 +29,6 @@ public class UserDTO {
     private String gender; //gioi tinh
     @NotBlank
     private String phone;
+    private Profile profile;
+    private boolean friend;
 }
