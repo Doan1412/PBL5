@@ -17,11 +17,11 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
     @Query("MATCH (p:Post)-[:SHARED_BY]->(u:User) WHERE id(p) = $postId RETURN count(u) AS shareCount")
     int getShareCount(@Param("postId") String postId);
     @Query("MATCH (p:Post)<-[:POSTED_BY]-(:User{id : $user_id}) " +
-            "WHERE NOT (p)<-[:COMMENTED_ON]-(:Post) " +
+            "WHERE NOT (p)<-[:COMMENTED_ON]-(:Post) AND NOT (post)<-[:COMMENTED_ON]-(:Share_post)" +
             "RETURN p.id")
     List<String> findByUserId(@Param("user_id") String user_id);
     @Query("MATCH (u:User {id : $id})-[:FRIEND]-(user:User)-[p:POSTED_BY]->(post:Post) " +
-            "WHERE NOT (post)<-[:COMMENTED_ON]-(:Post) " +
+            "WHERE NOT (post)<-[:COMMENTED_ON]-(:Post) AND NOT (post)<-[:COMMENTED_ON]-(:Share_post)" +
             "WITH DISTINCT post " +
             "RETURN post.id " +
             "ORDER BY post.timestamp DESC " +

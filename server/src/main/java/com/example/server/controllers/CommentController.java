@@ -34,9 +34,19 @@ public class CommentController {
     }
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<Object> getCommentsForPost(@PathVariable String postId) {
+    public ResponseEntity<Object> getCommentsForPost(@PathVariable String postId,@AuthenticationPrincipal Account account) {
         try {
-            List<PostDTO> comments = postService.getCommentsForPost(postId);
+            List<PostDTO> comments = postService.getCommentsForPost(postId,account.getId());
+            return Respond.success(200,"I001",comments);
+        }
+        catch (Exception e) {
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @GetMapping("/share/{post_id}")
+    public ResponseEntity<Object> getCommentsForSharePost(@PathVariable String post_id,@AuthenticationPrincipal Account account) {
+        try {
+            List<PostDTO> comments = postService.getCommentsForSharePost(post_id,account.getId());
             return Respond.success(200,"I001",comments);
         }
         catch (Exception e) {

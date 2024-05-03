@@ -139,14 +139,15 @@ public class PostService {
         }));
         return data;
     }
-    public List<PostDTO> getCommentsForPost(String postId) {
+    public List<PostDTO> getCommentsForPost(String postId, String acc_id) {
         List<String> data_id = repository.getCommentsForPost(postId);
+        User user = userRepository.findByAccount_Id(acc_id).orElseThrow();
         List<PostDTO> data = new ArrayList<>();
         for (String post_id : data_id) {
             Post post = repository.findById(post_id).orElseThrow();
             int share_count = repository.getShareCount(post_id);
             PostDTO p = new PostDTO();
-            p.loadFromEntity(post,share_count,post.getUser());
+            p.loadFromEntity(post,share_count,user);
             data.add(p);
         }
         return data;
@@ -186,9 +187,10 @@ public class PostService {
         return data;
     }
 
-    public List<PostDTO> search(String query) {
+    public List<PostDTO> search(String query,String account_id) {
         try {
             List<String> list = new ArrayList<>();
+            User user = userRepository.findByAccount_Id(account_id).orElseThrow();
             //Goi api o day
             //Tra ve list id post ở đây list = ...
             List<PostDTO> data = new ArrayList<>();
@@ -196,7 +198,7 @@ public class PostService {
                 Post post = repository.findById(post_id).orElseThrow();
                 int share_count = repository.getShareCount(post_id);
                 PostDTO p = new PostDTO();
-                p.loadFromEntity(post,share_count,post.getUser());
+                p.loadFromEntity(post,share_count,user);
                 data.add(p);
             }));
             return data;
@@ -235,4 +237,22 @@ public class PostService {
         // Lưu bài đăng
         sharePostRepository.save(post);
     }    
+    public PostDTO commentSharePost(String post_id, String account_id, String content, Set<PostAttachment> attachments) {
+        PostDTO comment = create(account_id,content,attachments);
+        sharePostRepository.addCommentToPost(post_id,comment.getId());
+        return comment;
+    }
+    public List<PostDTO> getCommentsForSharePost(String postId,String account_id) {
+        List<String> data_id = sharePostRepository.getCommentsForPost(postId);
+        User user = userRepository.findByAccount_Id(account_id).orElseThrow();
+        List<PostDTO> data = new ArrayList<>();
+        for (String post_id : data_id) {
+            Post post = repository.findById(post_id).orElseThrow();
+            int share_count = repository.getShareCount(post_id);
+            PostDTO p = new PostDTO();
+            p.loadFromEntity(post,share_count,user);
+            data.add(p);
+        }
+        return data;
+    }
 }
