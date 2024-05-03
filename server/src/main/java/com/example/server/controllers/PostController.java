@@ -162,5 +162,14 @@ public class PostController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
-    
+    @DeleteMapping("/share/{id}")
+    public ResponseEntity<Object> deleteShare(@PathVariable String id) {
+        try {
+            service.deleteSharePost(id);
+            return Respond.success(200,"I001","");
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
 }

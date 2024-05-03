@@ -204,4 +204,7 @@ public class PostService {
             throw e;
         }
     }
+    public void deleteSharePost(String postId) {
+        sharePostRepository.deleteById(postId);
+    }
 }
