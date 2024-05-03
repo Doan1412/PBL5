@@ -24,6 +24,9 @@ import com.example.server.utils.Respond;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -126,7 +129,7 @@ public class PostController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
-    @GetMapping("share/user/{user_id}")
+    @GetMapping("/share/user/{user_id}")
     public ResponseEntity<Object> getShareUser(@PathVariable String user_id){ 
         try {
             List<SharePostDTO> data = service.getShareByUser(user_id);
@@ -136,7 +139,7 @@ public class PostController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
-    @GetMapping("share/homepage")
+    @GetMapping("/share/homepage")
     public ResponseEntity<Object> getTimelineSharePosts (
         @RequestParam int skip,
         @RequestParam int limit,
@@ -148,6 +151,10 @@ public class PostController {
         catch (Exception e){
             return Respond.fail(500,"E001",e.getMessage());
         }
+    }
+    @GetMapping("/search")
+    public String getMethodName(@RequestParam String param) {
+        return new String();
     }
     
 }
