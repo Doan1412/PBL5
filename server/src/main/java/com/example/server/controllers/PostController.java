@@ -2,6 +2,7 @@ package com.example.server.controllers;
 
 import com.example.server.DTO.CommentDTO;
 import com.example.server.DTO.PostDTO;
+import com.example.server.DTO.SharePostDTO;
 import com.example.server.models.Entity.Account;
 import com.example.server.models.Entity.Post;
 import com.example.server.models.Entity.PostAttachment;
@@ -23,9 +24,7 @@ import com.example.server.utils.Respond;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 @RestController
@@ -127,4 +126,28 @@ public class PostController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
+    @GetMapping("share/user/{user_id}")
+    public ResponseEntity<Object> getShareUser(@PathVariable String user_id){ 
+        try {
+            List<SharePostDTO> data = service.getShareByUser(user_id);
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @GetMapping("share/homepage")
+    public ResponseEntity<Object> getTimelineSharePosts (
+        @RequestParam int skip,
+        @RequestParam int limit,
+        @AuthenticationPrincipal Account account) {
+        try {
+            List<SharePostDTO> timelinePosts = service.getTimelineSharePosts(account.getId(), skip, limit);
+            return Respond.success(200,"I001",timelinePosts);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    
 }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import com.example.server.DTO.PostDTO;
+import com.example.server.DTO.SharePostDTO;
 import com.example.server.models.Entity.Comment;
 import com.example.server.models.Entity.Post;
 import com.example.server.models.Entity.PostAttachment;
@@ -160,5 +161,28 @@ public class PostService {
         PostDTO p = new PostDTO();
         p.loadFromEntity(post,share_count,post.getUser());
         return p;
+    }
+    public List<SharePostDTO> getTimelineSharePosts(String acc_id, int skip, int limit) {
+        User user = userRepository.findByAccount_Id(acc_id).orElseThrow();
+        List<String> list = sharePostRepository.getTimelineSharePosts(user.getId(), skip, limit);
+        List<SharePostDTO> data = new ArrayList<>();
+        list.forEach((post_id -> {
+            SharedPost post = sharePostRepository.findById(post_id).orElseThrow();
+            SharePostDTO p = new SharePostDTO();
+            p.loadFromEntity(post,user);
+            data.add(p);
+        }));
+        return data;
+    }
+    public List<SharePostDTO> getShareByUser (String userId) {
+        List<String> list = sharePostRepository.getShareByUser(userId);
+        List<SharePostDTO> data = new ArrayList<>();
+        list.forEach((post_id -> {
+            SharedPost post = sharePostRepository.findById(post_id).orElseThrow();
+            SharePostDTO p = new SharePostDTO();
+            p.loadFromEntity(post,post.getSharedBy());
+            data.add(p);
+        }));
+        return data;
     }
 }

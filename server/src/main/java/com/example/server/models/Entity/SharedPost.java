@@ -10,6 +10,8 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
+import com.example.server.DTO.SharePostDTO;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
