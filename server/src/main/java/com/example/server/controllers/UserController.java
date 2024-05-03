@@ -2,6 +2,7 @@ package com.example.server.controllers;
 
 import com.example.server.DTO.PostDTO;
 import com.example.server.DTO.UserDTO;
+import com.example.server.models.Entity.Account;
 import com.example.server.models.Entity.User;
 import com.example.server.models.Enum.AccountStatus;
 import com.example.server.service.PostAttachmentService;
@@ -22,9 +23,9 @@ public class UserController {
     private final UserService service;
     private final PostAttachmentService postAttachmentService;
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getById(@PathVariable String id) {
+    public ResponseEntity<Object> getById(@PathVariable String id,@AuthenticationPrincipal Account account) {
         try {
-            User user = service.getInfoById(id);
+            UserDTO user = service.getInfoById(id, account.getId());
             return Respond.success(200,"I001",user);
         }
         catch (Exception e){

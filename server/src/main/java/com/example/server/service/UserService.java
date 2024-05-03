@@ -24,8 +24,17 @@ public class UserService {
     public List<User> getAll (){
         return repository.findAll();
     }
-    public User getInfoById(String id){
-        return repository.findById(id).orElseThrow();
+    public UserDTO getInfoById(String id, String acc_id){
+        User user =  repository.findById(id).orElseThrow();
+        UserDTO dto = user.toDto();
+        User me = repository.findByAccount_Id(acc_id).orElseThrow();
+        if (me.getFriends().contains(user) || user.getFriends().contains(me)){
+            dto.setFriend(true);
+        }
+        else {
+            dto.setFriend(false);
+        }
+        return dto;
     }
 
     public User updateInfo(UserDTO user){
