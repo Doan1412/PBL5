@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -24,6 +25,11 @@ import com.example.server.utils.Respond;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
+
 
 
 
@@ -68,7 +74,8 @@ public class PostController {
     @PostMapping("{post_id}/share")
     public ResponseEntity<Object> share (@PathVariable String post_id,@RequestParam String caption, @AuthenticationPrincipal Account account){
         try {
-            service.sharePost(post_id, account.getId(),caption);
+            String cap = URLDecoder.decode(caption, "UTF-8");
+            service.sharePost(post_id, account.getId(),cap);
             return Respond.success(200,"I001","");
         }
         catch (Exception e){
@@ -126,7 +133,7 @@ public class PostController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
-    @GetMapping("share/user/{user_id}")
+    @GetMapping("/share/user/{user_id}")
     public ResponseEntity<Object> getShareUser(@PathVariable String user_id){ 
         try {
             List<SharePostDTO> data = service.getShareByUser(user_id);
@@ -136,7 +143,7 @@ public class PostController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
-    @GetMapping("share/homepage")
+    @GetMapping("/share/homepage")
     public ResponseEntity<Object> getTimelineSharePosts (
         @RequestParam int skip,
         @RequestParam int limit,
@@ -149,5 +156,33 @@ public class PostController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
-    
+    @GetMapping("/search")
+    public ResponseEntity<Object> search(@RequestParam String query) {
+        try {
+            List<PostDTO> posts = service.search(query);
+            return Respond.success(200,"I001",posts);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @DeleteMapping("/share/{id}")
+    public ResponseEntity<Object> deleteSharePost(@PathVariable String id) {
+        try {
+            service.deleteSharePost(id);
+            return Respond.success(200,"I001","");
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @PutMapping("share/{id}")
+    public ResponseEntity<Object> updateSharePost(@PathVariable String id, @RequestBody SharePostDTO entity) {
+        try {
+            Object data = service.updateSharePost(id, entity.getCaption());
+            return Respond.success(200,"I001",data);
+        } catch (Exception e) {
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
 }

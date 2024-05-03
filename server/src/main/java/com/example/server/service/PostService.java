@@ -185,4 +185,35 @@ public class PostService {
         }));
         return data;
     }
+
+    public List<PostDTO> search(String query) {
+        try {
+            List<String> list = new ArrayList<>();
+            //Goi api o day
+            //Tra ve list id post ở đây list = ...
+            List<PostDTO> data = new ArrayList<>();
+            list.forEach((post_id -> {
+                Post post = repository.findById(post_id).orElseThrow();
+                int share_count = repository.getShareCount(post_id);
+                PostDTO p = new PostDTO();
+                p.loadFromEntity(post,share_count,post.getUser());
+                data.add(p);
+            }));
+            return data;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+    public void deleteSharePost(String postId) {
+        sharePostRepository.deleteById(postId);
+    }
+    public SharePostDTO updateSharePost(String postId, String caption){
+        SharedPost post = sharePostRepository.findById(postId).orElseThrow();
+        post.setCaption(caption);
+        // post.setUpdated_at(LocalDateTime.now());
+        sharePostRepository.save(post);
+        SharePostDTO p = new SharePostDTO();
+        p.loadFromEntity(post,post.getSharedBy());
+        return p;
+    }
 }
