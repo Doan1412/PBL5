@@ -25,6 +25,10 @@ import com.example.server.utils.Respond;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 
@@ -163,12 +167,21 @@ public class PostController {
         }
     }
     @DeleteMapping("/share/{id}")
-    public ResponseEntity<Object> deleteShare(@PathVariable String id) {
+    public ResponseEntity<Object> deleteSharePost(@PathVariable String id) {
         try {
             service.deleteSharePost(id);
             return Respond.success(200,"I001","");
         }
         catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @PutMapping("share/{id}")
+    public ResponseEntity<Object> updateSharePost(@PathVariable String id, @RequestBody SharePostDTO entity) {
+        try {
+            Object data = service.updateSharePost(id, entity.getCaption());
+            return Respond.success(200,"I001",data);
+        } catch (Exception e) {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }

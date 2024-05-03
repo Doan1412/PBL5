@@ -207,4 +207,13 @@ public class PostService {
     public void deleteSharePost(String postId) {
         sharePostRepository.deleteById(postId);
     }
+    public SharePostDTO updateSharePost(String postId, String caption){
+        SharedPost post = sharePostRepository.findById(postId).orElseThrow();
+        post.setCaption(caption);
+        // post.setUpdated_at(LocalDateTime.now());
+        sharePostRepository.save(post);
+        SharePostDTO p = new SharePostDTO();
+        p.loadFromEntity(post,post.getSharedBy());
+        return p;
+    }
 }
