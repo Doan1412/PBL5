@@ -251,10 +251,7 @@ export default function CommentForm({
               </Modal>
             </div>
           ))}
-          <span className="ml-2 text-sm text-gray-500">
-            {" "}
-            {created_at?.slice(0, 10)} {created_at?.slice(11, 19)}
-          </span>
+     
         </div>
       </div>
     </div>

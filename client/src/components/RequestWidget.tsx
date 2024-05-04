@@ -77,10 +77,10 @@ export default function RequestWidget({ request }: RequestProps) {
           </button>
         </div>
       </div>
-      <div className="userDetails">
+      {/* <div className="userDetails">
         <div className="name">{request.senderName}</div>
         <div className="username">@{request.senderUsername}</div>
-      </div>
+      </div> */}
     </>
   );
 }

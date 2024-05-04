@@ -49,6 +49,7 @@ export type UserType = {
     emailVerified: Date;
     image?: string;
     password?: string;
+    friend?: boolean;
   };
 };
 
@@ -139,4 +140,21 @@ export interface CommentType {
   share_count: number;
   attachments: Attachment[];
   like: false;
+}
+
+export interface ShareByType {
+  id: string;
+  fullname: string;
+  avatar_url: string;
+  username: string;
+}
+
+export interface SharePostType {
+  id: string;
+  caption: string;
+  created_at: string;
+  originalPost: PostType;
+  sharedBy: ShareByType;
+  like_count: number;
+  like: boolean;
 }

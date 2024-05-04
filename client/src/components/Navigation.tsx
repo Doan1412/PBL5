@@ -118,7 +118,12 @@ export default function Navigation() {
           </li>
           <li>
             <div className="w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg dark:hover:bg-medium dark:hover:border-none">
-              <button className="hover:translate-y-[-3px] dark:text-white">
+              <button
+                className="hover:translate-y-[-3px] dark:text-white"
+                onClick={() => {
+                  router.push("/share");
+                }}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="1.6em"
