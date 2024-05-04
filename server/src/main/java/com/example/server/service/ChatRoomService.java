@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -70,4 +71,21 @@ public class ChatRoomService {
                 .build();
         return chatRoomRepository.save(room);
     }
+    public void deleteChatRoom(String id){
+        chatRoomRepository.deleteById(id);
+    }
+    public ChatRoom getChatRoom(String id){
+        return chatRoomRepository.findById(id).orElseThrow();
+    }
+    public Set<ChatRoom> getChatRooms(String acc_id){
+        User user = userRepository.findByAccount_Id(acc_id).orElseThrow();
+        List<String> chatroom_ids = chatRoomRepository.findChatRoomByUserId(user.getId());
+        System.out.println(chatroom_ids);
+        Set<ChatRoom> chatRooms = new HashSet<>();
+        chatroom_ids.forEach((id)->{
+            chatRooms.add(chatRoomRepository.findById(id).orElseThrow());
+        });
+        return chatRooms;
+    }
+
 }
