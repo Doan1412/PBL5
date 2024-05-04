@@ -16,12 +16,12 @@ import { CiPaperplane } from "react-icons/ci";
 
 interface PropsReactComment {
   dataComment: CommentType;
-  dataPost: PostType;
+  avatarPost: string;
 }
 
 export default function ReactComment({
   dataComment,
-  dataPost,
+  avatarPost,
 }: PropsReactComment) {
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
@@ -302,11 +302,7 @@ export default function ReactComment({
           <div className="flex gap-3 mt-2">
             <div className="flex items-center">
               <Avatar
-                src={
-                  dataPost?.avatarUrl != ""
-                    ? dataPost.avatarUrl
-                    : avatarDefault.src
-                }
+                src={avatarPost != "" ? avatarPost : avatarDefault.src}
                 size="sm"
               />
             </div>
@@ -363,7 +359,11 @@ export default function ReactComment({
                     }
                   }}
                 >
-                  {currentCmt ? <IoMdCheckmark className="text-white" /> : <CiPaperplane className="text-white"/>}
+                  {currentCmt ? (
+                    <IoMdCheckmark className="text-white" />
+                  ) : (
+                    <CiPaperplane className="text-white" />
+                  )}
                 </Button>
               </div>
             </div>

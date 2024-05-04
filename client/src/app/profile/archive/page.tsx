@@ -20,13 +20,15 @@ import Link from "next/link";
 
 import HeaderProfile from "@/components/Profile/HeaderProfile";
 import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
-import { PostType } from "@/app/types";
+import { PostType, SharePostType } from "@/app/types";
 import { useAppDispatch } from "@/app/hooks/store";
 import { resetLoading } from "@/app/hooks/features/loading.slice";
 import { useListPostById } from "@/app/actions/custom/useListPostbyId";
 import { useImageProfileById } from "@/app/actions/custom/useImageProfileById";
 import Widget from "@/app/widget";
 import Post from "@/components/Post/Post";
+import { useListPostShareOfUser } from "@/app/actions/custom/useListPostShareOfUser";
+import SharePost from "@/components/SharePost/SharePost";
 
 interface UserProfileContextType {
   bio: string;
@@ -59,7 +61,7 @@ export default function Timeline() {
   // const pathname = usePathname();
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
-  const [posts, setPosts] = useState<PostType[]>([]);
+  const [posts, setPosts] = useState<SharePostType[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const ref = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
@@ -68,6 +70,7 @@ export default function Timeline() {
   const [linkImageAvatar, setImageAvatar] = useState<string>("");
   const [linkImageCover, setImageCover] = useState<string>("");
   const [bio, setBio] = useState<string>(data?.data?.profile?.bio as string);
+  const [originalPosts, setOriginalPosts] = useState<PostType[]>([]);
 
   useEffect(() => {
     setImageAvatar(data?.data?.profile?.avatar_url as string);
@@ -88,7 +91,12 @@ export default function Timeline() {
     // setUsername,
   ]);
 
-  useListPostById(setPosts, setLoading, params.get("id_user") as string);
+  useListPostShareOfUser(
+    setPosts,
+    setOriginalPosts,
+    setLoading,
+    params.get("id_user") as string
+  );
   useImageProfileById(setImages, setLoading, params.get("id_user") as string);
   // console.log(images);
   return (
@@ -119,12 +127,12 @@ export default function Timeline() {
             </div>
             <div className="mt-2 h-full w-3/5">
               <div className="flex flex-col ml-3 mr-56">
-                <SatatusPost
+                {/* <SatatusPost
                   reff={ref}
                   isFocused={isFocused}
                   setIsFocused={setIsFocused}
                   setPosts={setPosts}
-                />
+                /> */}
                 {loading ? (
                   <div className="mt-10 ml-6">
                     <SkeletonPost />
@@ -136,8 +144,14 @@ export default function Timeline() {
                   </div>
                 ) : (
                   <div>
-                    {posts.map((post: PostType, index: number) => {
-                      return <Post key={index} postData={post} setPosts={setPosts} hiddenComment = {false}/>;
+                    {posts.map((post: SharePostType, index: number) => {
+                      return (
+                        <SharePost
+                          key={index}
+                          dataSharePost={post}
+                          dataPostOrigin={originalPosts}
+                        />
+                      );
                     })}
                   </div>
                 )}

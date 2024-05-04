@@ -2,15 +2,15 @@
 import {
   Avatar,
   AvatarGroup,
+  Button,
   Image,
   Skeleton,
   useDisclosure,
 } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Poster from "@/static/images/Poster.jpg";
 import UploadButton from "../../components/UploadButton";
 import UploadAvatar from "../../components/UploadAvatar";
-import AddFriendButton from "@/components/AddFriendButton";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import avatarDefault from "@/static/images/avatarDefault.jpg";
 import { useListFriend } from "@/app/actions/custom/useListFriend";
@@ -19,6 +19,12 @@ import ModalHandleBio from "./ModalHandleBio";
 import { useUserProfile } from "@/app/profile/about/page";
 import { useUserProfileTimeline } from "@/app/profile/timeline/page";
 import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
+import { getLocalStorage } from "@/app/actions/localStorage_State";
+import { BsPersonCheck, BsPersonDash } from "react-icons/bs";
+import { failPopUp } from "@/app/hooks/features/popup.slice";
+import useHttp from "@/app/hooks/customs/useAxiosPrivate";
+import { useAppDispatch } from "@/app/hooks/store";
+import { IoMdPersonAdd } from "react-icons/io";
 
 interface LinkProfile {
   // name: string;
@@ -55,6 +61,12 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
   const [work, setWork] = useState<string>("");
   const [from, setFrom] = useState<string>("");
   const [love, setLove] = useState<string>("");
+  const [userId, setUserId] = useState<string>("");
+  const [isFriend, setIsFriend] = useState<boolean>(data?.data?.friend!);
+  const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false);
+  const httpPrivate = useHttp();
+  const controller = useMemo(() => new AbortController(), []);
+  const dispatch = useAppDispatch();
 
   const url = usePathname();
   const router = useRouter();
@@ -72,17 +84,46 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
     setWork(data?.data?.profile?.work_at || "");
     setFrom(data?.data?.profile?.from || "");
     setLove(data?.data?.profile?.relationship || "");
+    setIsFriend(data?.data?.friend!);
   }, [
     // data?.data?.profile.avatar_url,
     // data?.data?.profile.cover_url,
     // data?.data?.profile.bio,
+    data?.data?.friend!,
     data?.data?.profile?.study_at,
     data?.data?.profile?.work_at,
     data?.data?.profile?.from,
     data?.data?.profile?.relationship,
   ]);
 
+  useEffect(() => {
+    setUserId(getLocalStorage()?.user_id || "");
+  }, []);
+
   useListFriend(setFiends, setLoading, params.get("id_user") as string);
+
+  console.log(isFriend);
+
+  const handleFriendButtonClick = async () => {
+    try {
+      const response = await httpPrivate.post(
+        `/friend/send_friend_request/${data?.data?.id}`,
+        {
+          signal: controller.signal,
+        }
+      );
+      controller.abort();
+      if (response.data.status === 200) {
+        setIsWaitingConfirmation(true);
+        setLoading(false);
+      } else {
+        dispatch(failPopUp(response.data.message));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setLoading(false);
+    }
+  };
 
   // useEffect(() => {
   //   setImageAvatar(data?.data?.profile?.avatar_url as string);
@@ -230,6 +271,20 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
                 <li
                   className="rounded-lg p-3 font-medium dark:text-[#b0b3b8] text-[#606266] hover:bg-gray-50 cursor-pointer dark:hover:bg-slate-700 dark:hover:text-white dark:hover:rounded-lg"
                   onClick={() => {
+                    const currentUrl = `/profile/archive?id_user=${
+                      params.get("id_user") as string
+                    }`;
+                    // console.log(url);
+                    if (url !== currentUrl) {
+                      router.push(currentUrl);
+                    }
+                  }}
+                >
+                  <h3>Archive</h3>
+                </li>
+                <li
+                  className="rounded-lg p-3 font-medium dark:text-[#b0b3b8] text-[#606266] hover:bg-gray-50 cursor-pointer dark:hover:bg-slate-700 dark:hover:text-white dark:hover:rounded-lg"
+                  onClick={() => {
                     const currentUrl = `/profile/about?id_user=${
                       params.get("id_user") as string
                     }`;
@@ -314,9 +369,48 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
           </div>
           <div>
             <ul className="gap-4">
-              <li className="p-1 cursor-pointer">
-                <AddFriendButton />
-              </li>
+              {data?.data.id !== userId && (
+                <li className="p-1 cursor-pointer">
+                  {isWaitingConfirmation ? (
+                    <div>
+                      <Button className="bg-blue-600 text-white">
+                        <div className="flex justify-between gap-2">
+                          <div className="flex items-center">
+                            <BsPersonDash />
+                          </div>
+                          <p>Pending</p>
+                        </div>
+                      </Button>
+                    </div>
+                  ) : isFriend ? (
+                    <div>
+                      <Button className="bg-[#4e4f50] text-white">
+                        <div className="flex justify-between gap-2">
+                          <div className="flex items-center">
+                            <BsPersonCheck />
+                          </div>
+                          <p>Friend</p>
+                        </div>
+                      </Button>
+                    </div>
+                  ) : (
+                    <div>
+                      {/* <AddFriendButton handleFriendButtonClick = {}/> */}
+                      <Button
+                        className="bg-blue-600 text-white"
+                        onClick={() => handleFriendButtonClick()}
+                      >
+                        <div className="flex justify-between gap-2">
+                          <div className="flex items-center">
+                            <IoMdPersonAdd />
+                          </div>
+                          <p>Add Friend</p>
+                        </div>
+                      </Button>
+                    </div>
+                  )}
+                </li>
+              )}
             </ul>
           </div>
         </div>
