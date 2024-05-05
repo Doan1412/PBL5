@@ -1,17 +1,74 @@
 "use client";
-import { ConversationType, UserType } from "@/app/types";
-import { Avatar } from "@nextui-org/react";
+import { getLocalStorage } from "@/app/actions/localStorage_State";
+import useHttp from "@/app/hooks/customs/useAxiosPrivate";
+import { failPopUp } from "@/app/hooks/features/popup.slice";
+import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
+import { useAppDispatch } from "@/app/hooks/store";
+import {
+  ConversationType,
+  MessageBoxType,
+  UserMessageType,
+  UserType,
+} from "@/app/types";
+import { Avatar, AvatarGroup } from "@nextui-org/react";
 import Link from "next/link";
-import React, { useMemo } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useMemo, useState } from "react";
 import { HiChevronLeft, HiEllipsisHorizontal } from "react-icons/hi2";
 
 interface HeaderProps {
-  conversation: ConversationType & {
-    users: UserType[];
-  };
+  conversationId: String;
 }
 
-export default function Header() {
+export default function Header({ conversationId }: HeaderProps) {
+  const httpPrivate = useHttp();
+  const controller = useMemo(() => new AbortController(), []);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
+  const [boxMessage, setBoxMessage] = useState<MessageBoxType>();
+  const [uniqueLastNames, setUniqueLastNames] = useState<string[]>([]);
+  const [uniqueMembers, setUniqueMembers] = useState<UserMessageType[]>([]);
+
+  const { data, isFetching } = useGetUserInfoQuery(
+    getLocalStorage()?.user_id as string
+  );
+
+  useEffect(() => {
+    async function getListBoxChat() {
+      try {
+        const response = await httpPrivate.get(`room/${conversationId}`, {
+          signal: controller.signal,
+        });
+        controller.abort();
+        if (response.data.status === 200) {
+          setBoxMessage(response.data.data);
+        } else {
+          dispatch(failPopUp(response.data.message));
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+    getListBoxChat();
+  }, [controller, dispatch, httpPrivate, conversationId]);
+
+  useEffect(() => {
+    if (boxMessage?.name) {
+      const parts = boxMessage.name.split(", ");
+      const lastName = parts.filter(
+        (part) => !part.includes(data?.data?.lastname!)
+      );
+      setUniqueLastNames((prevLastNames) => [...lastName]);
+    }
+  }, [data?.data?.lastname, boxMessage?.name]);
+
+  useEffect(() => {
+    const idToRemove = data?.data?.id;
+    const members = boxMessage?.members as UserMessageType[];
+    setUniqueMembers(members?.filter((member) => member.id !== idToRemove));
+  }, [data?.data?.id, boxMessage?.members]);
+
   const statusText = useMemo(() => {
     if (0) {
       return `10 member`;
@@ -27,9 +84,23 @@ export default function Header() {
         >
           <HiChevronLeft size={32} />
         </Link>
-        <Avatar src="https://scontent.fdad1-1.fna.fbcdn.net/v/t39.30808-6/422893890_416818450687332_2295614885100060112_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeH2tadtw99Ri27_UQqXhmYWXv94TwYypQxe_3hPBjKlDNFufAKKOamh_gdc3ZA5kSnTrE8SbV-vj07G36zVCaLN&_nc_ohc=ICdmGBgOc4UAX_Qld2Z&_nc_ht=scontent.fdad1-1.fna&cb_e2o_trans=t&oh=00_AfB4e-nO5gPT1dbXhiPqV5vWs11eaOnPo9LFO_08cLxt5A&oe=65F8D890" />
+        {boxMessage?.members?.length == 2 ? (
+          <Avatar
+            src={uniqueMembers?.map((item) => item.profile.avatar_url).join(",")}
+          />
+        ) : (
+          <AvatarGroup
+            isBordered
+            max={1}
+            total={boxMessage?.members?.length! - 1}
+          >
+            {uniqueMembers?.map((item, index) => (
+              <Avatar key={index} src={item.profile.avatar_url} />
+            ))}
+          </AvatarGroup>
+        )}
         <div className="flex flex-col">
-          <div className="font-semibold">Thái Khắc Dược</div>
+          <div className="font-semibold"> {uniqueLastNames.join(", ")}</div>
           <div className="text-sm font-light text-neutral-500">
             {statusText}
           </div>

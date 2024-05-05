@@ -33,6 +33,7 @@ public class ChatController {
 
     @MessageMapping("/chatroom")
     public MessageDTO recMessage(@Payload MessageDTO message){
+        System.out.println("Nhan duoc");
         Set<User> users = chatRoomService.getMembersOfChatRoom(message.getRoomId());
         users.forEach(u -> {
             simpMessagingTemplate.convertAndSendToUser(u.getId(),"/private",message);

@@ -14,6 +14,7 @@ import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
 import { getLocalStorage } from "@/app/actions/localStorage_State";
 import avatarDefault from "@/static/images/avatarDefault.jpg";
 import SkeletonUser from "@/app/actions/getSkeleton";
+import { useRouter } from "next/navigation";
 
 interface LinkItem {
   name: string;
@@ -26,10 +27,6 @@ const links: LinkItem[] = [
     icon: <FaHome />,
   },
   {
-    name: "Explore",
-    icon: <FaCompass />,
-  },
-  {
     name: "Notifications",
     icon: <FaBell />,
   },
@@ -37,24 +34,14 @@ const links: LinkItem[] = [
     name: "Messages",
     icon: <FaEnvelope />,
   },
-  {
-    name: "Bookmarks",
-    icon: <FaBookmark />,
-  },
-  {
-    name: "Theme",
-    icon: <FaBrush />,
-  },
-  {
-    name: "Settings",
-    icon: <MdSettings />,
-  },
 ];
 
 const Sidebar: React.FC = () => {
   const { data, isFetching } = useGetUserInfoQuery(
     getLocalStorage()?.user_id as string
   );
+
+  const router = useRouter();
   return (
     <div className="leftSection dark:text-white">
       <div className="userProfileWidget dark:bg-[#242526] dark:text-white dark:shadow-lg">
@@ -74,7 +61,10 @@ const Sidebar: React.FC = () => {
             </div>
             <div className="userDetails dark:text-white flex items-center">
               <div className="flex flex-col">
-                <Link href={`/profile?id_user=${getLocalStorage()?.user_id}`} className="name dark:text-white">
+                <Link
+                  href={`/profile?id_user=${getLocalStorage()?.user_id}`}
+                  className="name dark:text-white"
+                >
                   {data?.data.firstname} {data?.data.lastname}
                 </Link>
                 <div className="username dark:text-white">
@@ -87,12 +77,27 @@ const Sidebar: React.FC = () => {
       </div>
 
       <div className="inSidebar dark:bg-[#242526] dark:text-white">
-        {links.map((link, index) => (
-          <div className="link" key={index}>
-            <div className="icon">{link.icon}</div>
-            <h3>{link.name}</h3>
+        <div className="link" onClick={() => router.push("/home")}>
+          <div className="icon">
+            {" "}
+            <FaHome />
           </div>
-        ))}
+          <h3>Home</h3>
+        </div>
+        <div className="link" onClick={() => router.push("/conversations")}>
+          <div className="icon">
+            {" "}
+            <FaBell />
+          </div>
+          <h3>Notifications</h3>
+        </div>
+        <div className="link">
+          <div className="icon">
+            {" "}
+            <FaEnvelope />
+          </div>
+          <h3>Messages</h3>
+        </div>
       </div>
 
       <label htmlFor="createNewPost" className="inBtn sidebarCreateBtn">

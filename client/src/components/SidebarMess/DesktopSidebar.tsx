@@ -8,11 +8,25 @@ import {
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
+  Skeleton,
 } from "@nextui-org/react";
+import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
+import { getLocalStorage } from "@/app/actions/localStorage_State";
+import avatarDefault from "@/static/images/avatarDefault.jpg";
+import { UserType } from "@/app/types";
+import { useRouter } from "next/navigation";
+import { successPopUp } from "@/app/hooks/features/popup.slice";
+import { useAppDispatch } from "@/app/hooks/store";
 
 export default function DesktopSidebar() {
   const routers = useRoutes();
   const [isOpen, setIsOpen] = useState(false);
+  const { data, isFetching } = useGetUserInfoQuery(
+    getLocalStorage()?.user_id as string
+  );
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
 
   return (
     <div
@@ -57,7 +71,11 @@ export default function DesktopSidebar() {
                 color="secondary"
                 name="Jason Hughes"
                 size="sm"
-                src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                src={
+                  data?.data?.profile?.avatar_url != ""
+                    ? `${data?.data?.profile?.avatar_url}`
+                    : avatarDefault.src
+                }
               />
               <span className=" absolute flex h-3 w-3 top-0 right-1">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-600 opacity-75"></span>
@@ -67,16 +85,43 @@ export default function DesktopSidebar() {
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+              {isFetching ? (
+                <div className="w-full flex flex-col gap-2">
+                  <Skeleton className="h-3 w-3/5 rounded-lg" />
+                  <Skeleton className="h-3 w-4/5 rounded-lg" />
+                </div>
+              ) : (
+                <div
+                  onClick={() => {
+                    const currentUrl = `/profile/photo?id_user=${
+                      data?.data?.id as string
+                    }`;
+                    router.push(currentUrl);
+                  }}
+                >
+                  <p className="font-semibold">Signed in as</p>
+                  <p className="font-semibold">
+                    {data?.data?.firstname} {data?.data?.lastname}
+                  </p>
+                </div>
+              )}
             </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="system">System</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem
+              key="help_and_feedback"
+              onClick={() => {
+                dispatch(successPopUp("Tính năng đang phát triển!"));
+              }}
+            >
+              Help & Feedback
+            </DropdownItem>
+            <DropdownItem
+              key="logout"
+              color="danger"
+              onClick={() => {
+                localStorage.clear();
+                router.push("/");
+              }}
+            >
               Log Out
             </DropdownItem>
           </DropdownMenu>
