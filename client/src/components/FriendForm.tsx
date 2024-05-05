@@ -13,8 +13,10 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
 import { PiDotsThreeOutlineBold } from "react-icons/pi";
+import avatarDefault from "@/static/images/avatarDefault.jpg";
 
 interface PropFriendForm {
   data: ListFriendType;
@@ -40,6 +42,7 @@ export default function FriendForm({ data, setFiends }: PropFriendForm) {
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   // const removeFriend = useRemoveFriend(data.id);
   const handleItemClick = (key: any) => {
@@ -91,10 +94,22 @@ export default function FriendForm({ data, setFiends }: PropFriendForm) {
         <CardBody>
           <div className="flex justify-between">
             <div className="flex gap-3">
-              <Avatar isBordered radius="sm" src={data?.avatar_url} size="lg" />
+              <Avatar
+                isBordered
+                radius="sm"
+                src={
+                  data?.avatar_url != "" ? data?.avatar_url : avatarDefault.src
+                }
+                size="lg"
+              />
               <div className="flex items-center">
                 <div className="flex flex-col">
-                  <p className="hover:text-[#377375]">{data?.fullname}</p>
+                  <p
+                    className="hover:text-[#377375]"
+                    onClick={() => router.push(`/profile?id_user=${data?.id}`)}
+                  >
+                    {data?.fullname}
+                  </p>
                   <p className="text-xs text-gray-600 dark:text-white">
                     @{data?.username}
                   </p>

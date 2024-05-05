@@ -1,9 +1,13 @@
 "use client";
-import React, { useRef } from "react";
+import React, { MouseEvent, useRef } from "react";
 import { IoMdPersonAdd } from "react-icons/io";
 
-export default function AddFriendButton() {
-  const fileInputRef = useRef(null);
+interface AddFriendButtonProps {
+  handleFriendButtonClick: () => Promise<void>
+}
+
+export default function AddFriendButton({handleFriendButtonClick} : AddFriendButtonProps) {
+  // const fileInputRef = useRef(null);
 
   // const handleFileChange = (event) => {
   //   const file = event.target.files[0];
@@ -12,7 +16,7 @@ export default function AddFriendButton() {
   // };
 
   return (
-    <div>
+    <div onClick={() => handleFriendButtonClick()}>
       <label
         htmlFor="avatarInput"
         className="group flex items-center justify-start w-8 h-8 bg-blue-500 rounded-lg cursor-pointer relative overflow-hidden transition-all duration-200 shadow-lg hover:w-32 hover:rounded-lg active:translate-x-1 active:translate-y-1"
@@ -26,8 +30,8 @@ export default function AddFriendButton() {
       </label>
       <input
         id="avatarInput"
-        type="file"
-        ref={fileInputRef}
+        // type="file"
+        // ref={fileInputRef}
         style={{ display: "none" }}
         // onChange={handleFileChange}
       />

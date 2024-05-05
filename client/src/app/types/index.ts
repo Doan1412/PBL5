@@ -49,6 +49,7 @@ export type UserType = {
     emailVerified: Date;
     image?: string;
     password?: string;
+    friend?: boolean;
   };
 };
 
@@ -85,13 +86,13 @@ export interface PostType {
   username?: string;
 }
 export interface FriendRequest {
-  id?: string,
-  senderId?: string,
-  senderName?: string,
-  senderAvatar?: string,
-  status?: string,
-  createdAt?: string,
-  senderUsername?: string
+  id?: string;
+  senderId?: string;
+  senderName?: string;
+  senderAvatar?: string;
+  status?: string;
+  createdAt?: string;
+  senderUsername?: string;
 }
 
 export interface Attachment {
@@ -119,4 +120,41 @@ export interface Report {
   status: string;
   user: User;
   post: PostType;
+}
+
+export interface CommentAttachment {
+  url: string;
+  type: string;
+}
+
+export interface CommentType {
+  id: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+  userId: string;
+  username: string;
+  fullName: string;
+  avatarUrl: string;
+  like_count: number;
+  share_count: number;
+  attachments: Attachment[];
+  like: false;
+}
+
+export interface ShareByType {
+  id: string;
+  fullname: string;
+  avatar_url: string;
+  username: string;
+}
+
+export interface SharePostType {
+  id: string;
+  caption: string;
+  created_at: string;
+  originalPost: PostType;
+  sharedBy: ShareByType;
+  like_count: number;
+  like: boolean;
 }

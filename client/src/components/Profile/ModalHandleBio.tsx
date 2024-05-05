@@ -94,9 +94,9 @@ export default function ModalHandleBio({
           avatar_url: linkImageAvatar,
           cover_url: linkImageCover,
           bio,
-          love,
-          study,
-          work,
+          relationship:love,
+          study_at: study,
+          work_at: work,
           from,
         },
         {
