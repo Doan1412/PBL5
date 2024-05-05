@@ -8,10 +8,10 @@ import http from "@/app/utils/http";
 import { CldUploadButton } from "next-cloudinary";
 
 interface FormProps {
-  onSend: () => void
+  handleSend: () => void;
 }
 
-export default function Form(props: FormProps) {
+export default function Form({ handleSend }: FormProps) {
   const { conversationId } = useConversation();
 
   const {
@@ -23,13 +23,13 @@ export default function Form(props: FormProps) {
     defaultValues: { message: "" },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    setValue("message", "", { shouldValidate: true });
-    http.post("/api/messages", {
-      ...data,
-      conversationId: conversationId,
-    });
-  };
+  // const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  //   setValue("message", "", { shouldValidate: true });
+  //   http.post("/api/messages", {
+  //     ...data,
+  //     conversationId: conversationId,
+  //   });
+  // };
 
   const handleUpload = (result: any) => {
     http.post("/api/messages", {
@@ -48,7 +48,7 @@ export default function Form(props: FormProps) {
         <HiPhoto size={30} className="text-sky-500" />
       </CldUploadButton>
       <form
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(handleSend)}
         className="flex items-center gap-2 lg:gap-4 w-full"
       >
         <MessageInput
@@ -67,6 +67,7 @@ export default function Form(props: FormProps) {
             hover:bg-sky-600 
             transition
           "
+      
         >
           <HiPaperAirplane size={18} className="text-white" />
         </button>

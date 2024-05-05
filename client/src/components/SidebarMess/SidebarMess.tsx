@@ -1,7 +1,7 @@
 import DesktopSidebar from "./DesktopSidebar";
 import MobileFooter from "./MobileFooter";
 
-export default async function SidebarMess({
+export default function SidebarMess({
   children,
 }: {
   children: React.ReactNode;

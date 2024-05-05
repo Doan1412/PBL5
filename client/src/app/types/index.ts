@@ -158,3 +158,26 @@ export interface SharePostType {
   like_count: number;
   like: boolean;
 }
+
+export type UserMessageType = {
+  id: string;
+  name?: string;
+  email: string;
+  firstname?: string;
+  lastname?: string;
+  username: string;
+  birth?: string;
+  gender?: string;
+  phone?: string;
+  profile: Profile;
+  emailVerified: Date;
+  image?: string;
+  password?: string;
+  friend?: boolean;
+};
+
+export interface MessageBoxType {
+  id: string;
+  name: string;
+  members: UserMessageType[];
+}

@@ -1,10 +1,14 @@
+"use client"
 import useConversation from "@/app/hooks/customs/useConversation";
-import { FullMessageType } from "@/app/types";
+import { FullMessageType, MessageBoxType } from "@/app/types";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import ConversationBox from "./ConversationBox";
+import useHttp from "@/app/hooks/customs/useAxiosPrivate";
+import { useAppDispatch } from "@/app/hooks/store";
+import { failPopUp } from "@/app/hooks/features/popup.slice";
 
 interface ConversationsProps {
   initialItems: FullMessageType;
@@ -12,10 +16,32 @@ interface ConversationsProps {
 
 export default function ConversationsList(initialItems: ConversationsProps) {
   const [items, setItems] = useState(initialItems);
-
+  const httpPrivate = useHttp();
+  const controller = useMemo(() => new AbortController(), []);
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const { conversationId, isOpen } = useConversation();
+  const [listBoxMessage, setListBoxMessage] = useState<MessageBoxType[]>([]);
+
+  useEffect(() => {
+    async function getListBoxChat() {
+      try {
+        const response = await httpPrivate.get(`/room`, {
+          signal: controller.signal,
+        });
+        controller.abort();
+        if (response.data.status === 200) {
+          setListBoxMessage(response.data.data);
+        } else {
+          dispatch(failPopUp(response.data.message));
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+    getListBoxChat();
+  }, [controller, dispatch, httpPrivate]);
 
   return (
     <div>
@@ -32,15 +58,9 @@ export default function ConversationsList(initialItems: ConversationsProps) {
               <MdOutlineGroupAdd size={20} />
             </div>
           </div>
-          <ConversationBox />
-          <ConversationBox />
-          <ConversationBox />
-          <ConversationBox />
-          <ConversationBox />
-          <ConversationBox />
-          <ConversationBox />
-          <ConversationBox />
-          <ConversationBox />
+          {Array.isArray(listBoxMessage) && listBoxMessage?.map((item, index) => (
+            <ConversationBox key={index} dataBox = {item}/>
+          ))}
         </div>
       </aside>
     </div>
