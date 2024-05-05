@@ -1,5 +1,7 @@
 package com.example.server.DTO;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +17,5 @@ public class MessageDTO {
     private String senderId;
     private String roomId;
     private String content;
+    private Date timestamp;
 }

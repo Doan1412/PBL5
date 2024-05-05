@@ -1,5 +1,6 @@
 package com.example.server.service;
 
+import com.example.server.DTO.MessageDTO;
 import com.example.server.DTO.RoomDTO;
 import com.example.server.models.Entity.ChatRoom;
 import com.example.server.models.Entity.User;
@@ -86,6 +87,14 @@ public class ChatRoomService {
             chatRooms.add(chatRoomRepository.findById(id).orElseThrow());
         });
         return chatRooms;
+    }
+    public ChatRoom findChatRoom(String id){
+        return chatRoomRepository.findById(id).orElseThrow();
+    }
+
+    public List<MessageDTO> getMessages(String id, int page, int size) {
+        List<MessageDTO> messages = chatRoomRepository.getMessages(id, page, size);
+        return messages;
     }
 
 }
