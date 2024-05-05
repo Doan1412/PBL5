@@ -2,8 +2,11 @@ package com.example.server.controllers;
 
 import com.example.server.DTO.DisplayUserDTO;
 import com.example.server.DTO.FriendRequestDTO;
+import com.example.server.DTO.LocationDTO;
+import com.example.server.DTO.UserDTO;
 import com.example.server.models.Entity.Account;
 import com.example.server.models.Entity.FriendRequest;
+import com.example.server.models.Entity.User;
 import com.example.server.service.ChatRoomService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -93,6 +96,16 @@ public class FriendRequestController {
         try {
             System.out.println(user_id);
             List<DisplayUserDTO> data = service.get_list_friend(user_id);
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @PostMapping("/nearby")
+    public ResponseEntity<Object> listSuggestFriends(@RequestBody LocationDTO location,  @AuthenticationPrincipal Account account) {
+        try {
+            List<User> data = service.listSuggestFriends(location,account.getId());
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){

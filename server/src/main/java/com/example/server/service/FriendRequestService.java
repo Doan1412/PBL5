@@ -1,11 +1,14 @@
 package com.example.server.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.example.server.DTO.DisplayUserDTO;
+import com.example.server.DTO.LocationDTO;
+import com.example.server.DTO.UserDTO;
 import com.example.server.models.Entity.ChatRoom;
 import com.example.server.models.Entity.FriendRequest;
 import org.springframework.stereotype.Service;
@@ -94,6 +97,18 @@ public class FriendRequestService {
     public List<DisplayUserDTO> get_list_friend(String user_id){
         List<DisplayUserDTO> data = friendRequestRepository.getListDisplayUsers(user_id);
         System.out.println(data.toString());
+        return data;
+    }
+
+    public List<User> listSuggestFriends(LocationDTO location, String acc_id) {
+        User user = repository.findByAccount_Id(acc_id).orElseThrow();
+        List<String> fidList = new ArrayList<>();
+        List<User> data = new ArrayList<>();
+        //Tra ve list id tai day
+        for(String id : fidList){
+            User friend = repository.findById(id).orElseThrow();
+            data.add(friend);
+        }
         return data;
     }
 }
