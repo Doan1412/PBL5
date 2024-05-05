@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -38,6 +39,26 @@ public class ChatRoomController {
         try {
             System.out.println(account.getId());
             Object data = service.getChatRooms(account.getId());
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getChatRoom(@PathVariable String id) {
+        try {
+            Object data = service.findChatRoom(id);
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @GetMapping("/{id}/messages")
+    public ResponseEntity<Object> getMessages(@PathVariable String id, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        try {
+            Object data = service.getMessages(id, page, size);
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
