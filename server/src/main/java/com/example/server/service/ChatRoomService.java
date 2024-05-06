@@ -93,7 +93,10 @@ public class ChatRoomService {
     }
 
     public List<MessageDTO> getMessages(String id, int page, int size) {
-        List<MessageDTO> messages = chatRoomRepository.getMessages(id, page, size);
+        if (page<1){
+            page = 1;
+        }
+        List<MessageDTO> messages = chatRoomRepository.getMessages(id, (page-1)*size, size);
         return messages;
     }
 
