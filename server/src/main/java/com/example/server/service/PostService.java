@@ -164,8 +164,9 @@ public class PostService {
         return p;
     }
     public List<SharePostDTO> getTimelineSharePosts(String acc_id, int skip, int limit) {
+        if(skip<1) skip = 1;
         User user = userRepository.findByAccount_Id(acc_id).orElseThrow();
-        List<String> list = sharePostRepository.getTimelineSharePosts(user.getId(), skip, limit);
+        List<String> list = sharePostRepository.getTimelineSharePosts(user.getId(), (skip-1)*limit, limit);
         List<SharePostDTO> data = new ArrayList<>();
         list.forEach((post_id -> {
             SharedPost post = sharePostRepository.findById(post_id).orElseThrow();
