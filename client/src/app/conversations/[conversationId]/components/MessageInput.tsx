@@ -5,15 +5,19 @@ import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 
 interface MessageInputProps {
   id: string;
+  value: string;
   required?: boolean;
   register: UseFormRegister<FieldValues>;
   errors: FieldErrors;
+  onChange: (value: string) => void; 
 }
 
 export default function MessageInput({
   id,
   required,
   register,
+  onChange,
+  value
 }: MessageInputProps) {
   return (
     <input
@@ -32,6 +36,8 @@ export default function MessageInput({
         rounded-full
         focus:outline-none
       "
+      onChange={(e) => onChange(e.target.value)} 
+      value={value}
     />
   );
 }

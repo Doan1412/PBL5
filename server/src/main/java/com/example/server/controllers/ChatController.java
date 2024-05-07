@@ -37,8 +37,8 @@ public class ChatController {
         Set<User> users = chatRoomService.getMembersOfChatRoom(message.getRoomId());
         users.forEach(u -> {
             simpMessagingTemplate.convertAndSendToUser(u.getId(),"/private",message);
-            messageService.sendMessage(message.getSenderId(), message.getRoomId(), message.getContent());
         }); 
+        messageService.sendMessage(message.getSenderId(), message.getRoomId(), message.getContent());
         System.out.println(message.toString());
         return message;
     }
