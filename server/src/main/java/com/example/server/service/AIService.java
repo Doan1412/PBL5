@@ -82,7 +82,7 @@ public class AIService {
 
     public List<String> nearbyFidList(LocationDTO location) throws IOException {
         HttpEntity<LocationDTO> requestEntity = new HttpEntity<>(location);
-        String apiUrl = uri+"/findfriend";
+        String apiUrl = uri+"/findfriendnearby";
         ResponseEntity<String> responseEntity = restTemplate.exchange(
             apiUrl,
             HttpMethod.POST,
@@ -98,6 +98,23 @@ public class AIService {
         return data;
     }
 
+    public List<String> find_friend(String user_id) throws IOException {
+        HttpEntity<String> requestEntity = new HttpEntity<>("{\"user_id\": \""+user_id+"\"}");
+        String apiUrl = uri+"/findfriend";
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+            apiUrl,
+            HttpMethod.POST,
+            requestEntity,
+            String.class
+        );
+        HttpStatusCode statusCode = responseEntity.getStatusCode();
+        if(statusCode != HttpStatusCode.valueOf(200)) {
+            throw new RuntimeException("Failed : Can't call to AI");
+        }// Change the data type to HttpStatusCode
+        String responseBody = responseEntity.getBody();
+        List<String> data = parseResponseToList(responseBody);
+        return data;
+    }
     public Boolean checknsfw(Post savedPost) {
         HttpEntity<Post> requestEntity = new HttpEntity<>(savedPost);
         String apiUrl = uri+"/checknsfw";

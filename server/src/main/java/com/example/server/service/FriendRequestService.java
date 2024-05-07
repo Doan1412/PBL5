@@ -102,13 +102,25 @@ public class FriendRequestService {
         return data;
     }
 
-    public List<User> listSuggestFriends(LocationDTO location, String acc_id) throws IOException {
+    public List<User> listNearByFriends(LocationDTO location, String acc_id) throws IOException {
         User user = repository.findByAccount_Id(acc_id).orElseThrow();
         List<String> fidList = new ArrayList<>();
         List<User> data = new ArrayList<>();
         location.setUser_id(user.getId());
         //Tra ve list id tai day
         fidList = aIService.nearbyFidList(location);
+        for(String id : fidList){
+            User friend = repository.findById(id).orElseThrow();
+            data.add(friend);
+        }
+        return data;
+    }
+    public List<User> listSuggestFriends(String acc_id) throws IOException {
+        User user = repository.findByAccount_Id(acc_id).orElseThrow();
+        List<String> fidList = new ArrayList<>();
+        List<User> data = new ArrayList<>();
+        //Tra ve list id tai day
+        fidList = aIService.find_friend(user.getId());
         for(String id : fidList){
             User friend = repository.findById(id).orElseThrow();
             data.add(friend);
