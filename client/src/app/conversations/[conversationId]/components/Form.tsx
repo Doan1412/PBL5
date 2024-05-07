@@ -74,7 +74,7 @@ export default function Form({ conversationId }: FormProps) {
         timestamp: new Date().toISOString(),
       };
       console.log("chatMessage chatroom", chatMessage);
-      setListMessenger([...listMessenger, chatMessage]);
+      // setListMessenger([...listMessenger, chatMessage]);
       stompClient.send("/app/chatroom", {}, JSON.stringify(chatMessage));
     }
   };

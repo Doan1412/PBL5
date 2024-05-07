@@ -39,7 +39,7 @@ export const StompClientProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [payloadData, setPayloadData] = useState<any>(null);
-  const [privateChats, setPrivateChats] = useState(new Map());
+  // const [privateChats, setPrivateChats] = useState(new Map());
   const [userData, setUserData] = useState({
     id: "",
     connected: false,
@@ -82,19 +82,20 @@ export const StompClientProvider: React.FC<{ children: ReactNode }> = ({
   const onPrivateMessage = (payload: any) => {
     console.log(payload);
     var payloadData = JSON.parse(payload.body);
-    if (privateChats.get(payloadData.senderName)) {
-      privateChats.get(payloadData.senderName).push(payloadData);
-      setPrivateChats(new Map(privateChats));
-      setPayloadData(payloadData);
-    } else {
+    // if (privateChats.get(payloadData.senderName)) {
+    //   privateChats.get(payloadData.senderName).push(payloadData);
+      // setPrivateChats(new Map(privateChats));
+      // setPayloadData(payloadData);
+    // } else {
       let list = [];
       list.push(payloadData);
-      privateChats.set(payloadData.senderName, list);
-      setPrivateChats(new Map(privateChats));
-    }
+      // privateChats.set(payloadData.senderName, list);
+      // setPrivateChats(new Map(privateChats));
+      setPayloadData(payloadData);
+    // }
   };
 
-  console.log(privateChats)
+  // console.log(payloadData)
 
   const onError = (err: any) => {
     console.log(err);
