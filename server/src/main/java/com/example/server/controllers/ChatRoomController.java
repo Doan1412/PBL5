@@ -6,6 +6,8 @@ import com.example.server.service.ChatRoomService;
 import com.example.server.utils.Respond;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,6 +36,17 @@ public class ChatRoomController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
+    @PostMapping("/create")
+    public ResponseEntity<Object> createRoom(@RequestBody RoomDTO entity) {
+        try {
+            Object data = service.create(entity);
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    
     @GetMapping("")
     public ResponseEntity<Object> getChatRooms(@AuthenticationPrincipal Account account) {
         try {
