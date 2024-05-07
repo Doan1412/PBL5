@@ -112,7 +112,7 @@ public class FriendRequestController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
-    @PostMapping("/suggest")
+    @GetMapping("/suggest")
     public ResponseEntity<Object> listSuggestFriends(@AuthenticationPrincipal Account account) {
         try {
             List<User> data = service.listSuggestFriends(account.getId());
