@@ -181,3 +181,11 @@ export interface MessageBoxType {
   name: string;
   members: UserMessageType[];
 }
+
+export interface MessengerType {
+  id: string;
+  senderId: string;
+  roomId: string;
+  content: string;
+  timestamp: string;
+}

@@ -13,111 +13,117 @@ import { useAppDispatch } from "@/app/hooks/store";
 import { MessageBoxType, UserMessageType } from "@/app/types";
 import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
 import { failPopUp } from "@/app/hooks/features/popup.slice";
+import { useStompClient } from "../useContextStorm";
+import { MessengerProvider, useMessenger } from "./useContextlistMess";
 
 interface IParams {
   conversationId: String;
 }
 var stompClient: any = null;
 export default function ConversationId({ params }: { params: IParams }) {
+  const { stompClient } = useStompClient();
   const param = useParams();
-  const [privateChats, setPrivateChats] = useState(new Map());
-  const [userData, setUserData] = useState({
-    username: "",
-    connected: false,
-    message: "",
-  });
+  // const [privateChats, setPrivateChats] = useState(new Map());
+  // const [userData, setUserData] = useState({
+  //   username: "",
+  //   connected: false,
+  //   message: "",
+  // });
 
-  const httpPrivate = useHttp();
-  const controller = useMemo(() => new AbortController(), []);
-  const router = useRouter();
-  const dispatch = useAppDispatch();
+  // const httpPrivate = useHttp();
+  // const controller = useMemo(() => new AbortController(), []);
+  // const router = useRouter();
+  // const dispatch = useAppDispatch();
 
   const [boxMessage, setBoxMessage] = useState<MessageBoxType>();
-  const [uniqueLastNames, setUniqueLastNames] = useState<string[]>([]);
-  const [uniqueMembers, setUniqueMembers] = useState<UserMessageType[]>([]);
+  // const [uniqueLastNames, setUniqueLastNames] = useState<string[]>([]);
+  // const [uniqueMembers, setUniqueMembers] = useState<UserMessageType[]>([]);
 
-  const { data, isFetching } = useGetUserInfoQuery(
-    getLocalStorage()?.user_id as string
-  );
+  // const { data, isFetching } = useGetUserInfoQuery(
+  //   getLocalStorage()?.user_id as string
+  // );
 
-  useEffect(() => {
-    setUserData({
-      username: data?.data?.username as string,
-      connected: false,
-      message: "",
-    });
-  }, [data?.data?.username]);
+  // useEffect(() => {
+  //   setUserData({
+  //     username: data?.data?.username as string,
+  //     connected: false,
+  //     message: "",
+  //   });
+  // }, [data?.data?.username]);
 
-  useEffect(() => {
-    async function getListBoxChat() {
-      try {
-        const response = await httpPrivate.get(
-          `room/${params.conversationId}`,
-          {
-            signal: controller.signal,
-          }
-        );
-        controller.abort();
-        if (response.data.status === 200) {
-          setBoxMessage(response.data.data);
-        } else {
-          dispatch(failPopUp(response.data.message));
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-    getListBoxChat();
-  }, [controller, dispatch, httpPrivate, params.conversationId]);
+  // useEffect(() => {
+  //   async function getListBoxChat() {
+  //     try {
+  //       const response = await httpPrivate.get(
+  //         `room/${params.conversationId}`,
+  //         {
+  //           signal: controller.signal,
+  //         }
+  //       );
+  //       controller.abort();
+  //       if (response.data.status === 200) {
+  //         setBoxMessage(response.data.data);
+  //       } else {
+  //         dispatch(failPopUp(response.data.message));
+  //       }
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   }
+  //   getListBoxChat();
+  // }, [controller, dispatch, httpPrivate, params.conversationId]);
 
-  const connect = () => {
-    let Sock = new SockJS("http://localhost:8080/ws");
-    stompClient = over(Sock);
-    stompClient.connect({}, onConnected, onError);
-  };
+  // const connect = () => {
+  //   let Sock = new SockJS("http://localhost:8080/ws");
+  //   stompClient = over(Sock);
+  //   stompClient.connect({}, onConnected, onError);
+  // };
 
-  useEffect(() => {
-    connect();
-  }, []);
+  // // useEffect(() => {
+  // //   connect();
+  // // }, []);
 
-  const onConnected = () => {
-    setUserData({ ...userData, connected: true });
-    stompClient.subscribe(
-      "/user/" + userData.username + "/private",
-      onPrivateMessage
-    );
-  };
+  // const onConnected = () => {
+  //   setUserData({ ...userData, connected: true });
+  //   stompClient.subscribe(
+  //     "/user/" + userData.username + "/private",
+  //     onPrivateMessage
+  //   );
+  // };
 
-  const onPrivateMessage = (payload: any) => {
-    console.log(payload);
-    var payloadData = JSON.parse(payload.body);
-    if (privateChats.get(payloadData.senderName)) {
-      privateChats.get(payloadData.senderName).push(payloadData);
-      setPrivateChats(new Map(privateChats));
-    } else {
-      let list = [];
-      list.push(payloadData);
-      privateChats.set(payloadData.senderName, list);
-      setPrivateChats(new Map(privateChats));
-    }
-  };
+  // const onPrivateMessage = (payload: any) => {
+  //   console.log(payload);
+  //   var payloadData = JSON.parse(payload.body);
+  //   if (privateChats.get(payloadData.senderName)) {
+  //     privateChats.get(payloadData.senderName).push(payloadData);
+  //     setPrivateChats(new Map(privateChats));
+  //   } else {
+  //     let list = [];
+  //     list.push(payloadData);
+  //     privateChats.set(payloadData.senderName, list);
+  //     setPrivateChats(new Map(privateChats));
+  //   }
+  // };
+  // const { listMessenger, setListMessenger } = useMessenger();
 
-  const hand = () => {
+  const hand = (content: string) => {
     console.log("send");
     console.log(stompClient);
     if (stompClient) {
       var chatMessage = {
-        senderId: getLocalStorage()?.user_id,
-        roomId: boxMessage?.id,
-        content: "test",
-        // date: Math.round(new Date().getTime() / 1000),
+        id: "" as string,
+        senderId: getLocalStorage()?.user_id as string,
+        roomId: boxMessage?.id as string,
+        content: content,
+        timestamp: new Date().toISOString(),
       };
       console.log("chatMessage chatroom", chatMessage);
+      // setListMessenger([...listMessenger, chatMessage]);
       stompClient.send("/app/chatroom", {}, JSON.stringify(chatMessage));
     }
   };
 
-  const onError = (err) => {
+  const onError = (err: any) => {
     console.log(err);
   };
 
@@ -133,9 +139,11 @@ export default function ConversationId({ params }: { params: IParams }) {
   return (
     <div className="lg:pl-80 h-full">
       <div className="h-full flex flex-col">
-        <Header conversationId={params.conversationId} />
-        <Body />
-        <Form handleSend={hand} />
+        <MessengerProvider>
+          <Header conversationId={params.conversationId} />
+          <Body conversationId={params.conversationId} />
+          <Form conversationId={params.conversationId} />
+        </MessengerProvider>
       </div>
     </div>
   );
