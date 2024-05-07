@@ -25,7 +25,7 @@ export default function LandingPage() {
   useEffect(() => {
     if (animationComplete) {
       const redirectTimeout = setTimeout(() => {
-        router.push("/friend_suggestion");
+        router.push("/home");
       }, 3500);
 
       setRedirectTimeout(redirectTimeout);

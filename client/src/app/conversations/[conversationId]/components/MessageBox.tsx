@@ -164,24 +164,33 @@ export default function MessageBox({
           <div className="flex items-center gap-1">
             <div className="text-sm text-gray-500">Bạn</div>
           </div>
-          <div className={message}>
-            {image ? (
-              <Image
-                alt="Image"
-                height="288"
-                width="288"
-                src={avatarr.src}
-                className="
-                object-cover 
-                cursor-pointer 
-                hover:scale-110 
-                transition 
-                translate
-                "
-              />
-            ) : (
-              <div className="p-3">{messenger.content}</div>
-            )}
+          <div>
+            <div>
+              {messenger.content &&
+              (messenger.content.endsWith(".jpg") ||
+                messenger.content.endsWith(".mp4")) ? (
+                messenger.content.endsWith(".mp4") ? (
+                  <video
+                    src={messenger.content}
+                    width="300"
+                    height="100"
+                    controls
+                  ></video>
+                ) : (
+                  <Image
+                    isBlurred
+                    width={300}
+                    src={messenger.content}
+                    alt=""
+                    className="m-3 hover:bg-opacity-50 transition duration-300"
+                  />
+                )
+              ) : (
+                <div className={message}>
+                  <div className="p-3">{messenger.content}</div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
