@@ -19,7 +19,7 @@ import java.util.Set;
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
-    public void addMemberToChatRoom(String chatRoomId, String userId) {
+    public ChatRoom addMemberToChatRoom(String chatRoomId, String userId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(() -> new NotFoundException("Chat room not found"));
 
@@ -27,7 +27,7 @@ public class ChatRoomService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         chatRoom.getMembers().add(user);
-        chatRoomRepository.save(chatRoom);
+        return chatRoomRepository.save(chatRoom);
     }
 
     public void removeMemberFromChatRoom(String chatRoomId, String userId) {
