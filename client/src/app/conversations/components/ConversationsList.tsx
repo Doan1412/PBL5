@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import useConversation from "@/app/hooks/customs/useConversation";
 import { FullMessageType, MessageBoxType } from "@/app/types";
 import { useRouter } from "next/navigation";
@@ -10,12 +10,7 @@ import useHttp from "@/app/hooks/customs/useAxiosPrivate";
 import { useAppDispatch } from "@/app/hooks/store";
 import { failPopUp } from "@/app/hooks/features/popup.slice";
 
-interface ConversationsProps {
-  initialItems: FullMessageType;
-}
-
-export default function ConversationsList(initialItems: ConversationsProps) {
-  const [items, setItems] = useState(initialItems);
+export default function ConversationsList() {
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
   const router = useRouter();
@@ -58,9 +53,10 @@ export default function ConversationsList(initialItems: ConversationsProps) {
               <MdOutlineGroupAdd size={20} />
             </div>
           </div>
-          {Array.isArray(listBoxMessage) && listBoxMessage?.map((item, index) => (
-            <ConversationBox key={index} dataBox = {item}/>
-          ))}
+          {Array.isArray(listBoxMessage) &&
+            listBoxMessage?.map((item, index) => (
+              <ConversationBox key={index} dataBox={item} />
+            ))}
         </div>
       </aside>
     </div>

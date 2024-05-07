@@ -87,16 +87,16 @@ const Sidebar: React.FC = () => {
         <div className="link" onClick={() => router.push("/conversations")}>
           <div className="icon">
             {" "}
-            <FaBell />
+            <FaEnvelope />
           </div>
-          <h3>Notifications</h3>
+          <h3>Messages</h3>
         </div>
         <div className="link">
           <div className="icon">
             {" "}
-            <FaEnvelope />
+            <FaBell />
           </div>
-          <h3>Messages</h3>
+          <h3>Notifications</h3>
         </div>
       </div>
 
