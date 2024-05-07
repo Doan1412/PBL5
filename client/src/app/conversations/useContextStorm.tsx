@@ -55,6 +55,7 @@ export const StompClientProvider: React.FC<{ children: ReactNode }> = ({
     let Sock = new SockJS("http://localhost:8080/ws");
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
+    console.log(stompClient);
   };
 
   useEffect(() => {
