@@ -154,9 +154,9 @@ public class PostController {
         }
     }
     @GetMapping("/search")
-    public ResponseEntity<Object> search(@RequestParam String query, @AuthenticationPrincipal Account account) {
+    public ResponseEntity<Object> search(@RequestParam String type,@RequestParam String query, @AuthenticationPrincipal Account account) {
         try {
-            List<PostDTO> posts = service.search(query,account.getId());
+            List<PostDTO> posts = service.search(type,query,account.getId());
             return Respond.success(200,"I001",posts);
         }
         catch (Exception e){
