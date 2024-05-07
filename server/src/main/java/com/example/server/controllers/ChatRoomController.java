@@ -26,10 +26,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ChatRoomController {
     @Autowired
     private final ChatRoomService service;
-    @PostMapping("")
-    public ResponseEntity<Object> addOne(@RequestBody RoomDTO roomDTO) {
+    @PostMapping("/addmember")
+    public ResponseEntity<Object> addMemberToChatRoom(@RequestParam String room_id, @RequestParam String user_id) {
         try {
-            Object data = service.create(roomDTO);
+            Object data = service.addMemberToChatRoom(room_id, user_id);
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
