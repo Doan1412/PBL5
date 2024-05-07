@@ -5,7 +5,7 @@ import { Field, FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { HiPaperAirplane, HiPhoto } from "react-icons/hi2";
 import MessageInput from "./MessageInput";
 import http from "@/app/utils/http";
-import { CldUploadButton } from "next-cloudinary";
+import { CldUploadButton, CloudinaryUploadWidgetInfo } from "next-cloudinary";
 import { useStompClient } from "../../useContextStorm";
 import { getLocalStorage } from "@/app/actions/localStorage_State";
 import { MessageBoxType } from "@/app/types";
@@ -19,6 +19,11 @@ interface FormProps {
   conversationId: String;
 }
 
+interface ImageProps {
+  url: string;
+  type: string;
+}
+
 export default function Form({ conversationId }: FormProps) {
   const { stompClient } = useStompClient();
   const [message, setMessage] = useState<string>("");
@@ -27,6 +32,7 @@ export default function Form({ conversationId }: FormProps) {
   const params = useSearchParams();
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
+  const [imagePost, setImagePost] = useState<ImageProps>();
   const { listMessenger, setListMessenger } = useMessenger();
 
   const {
@@ -93,17 +99,17 @@ export default function Form({ conversationId }: FormProps) {
     <div className="py-4 px-4 bg-white border-t flex items-center gap-2 lg:gap-4 w-full">
       <CldUploadButton
         options={{ maxFiles: 1 }}
-        onSuccess={(result: any) => {
-          const secureUrl = result?.info?.secure_url;
+        onSuccess={(result) => {
+          // console.log("res", result);
+          const secureUrl: CloudinaryUploadWidgetInfo =
+            result?.info as CloudinaryUploadWidgetInfo;
           if (secureUrl) {
-            // hand(`${secureUrl}`);
-            setMessage(secureUrl);
-            console.log(message);
-            hand(secureUrl);
-            setMessage(""); // Xóa nội dung của message sau khi gửi
-            console.log(typeof secureUrl);
+            setMessage(secureUrl.secure_url);
+            // console.log("secureUrl", secureUrl.secure_url);
+            // setImagePost({ url: secureUrl.secure_url, type: "image" });
+            // hand(secureUrl.secure_url);
+            // setMessage("");
           }
-          console.log("ko gui dc");
         }}
         uploadPreset="s2lo0hgq"
       >
