@@ -16,20 +16,18 @@ import { failPopUp } from "@/app/hooks/features/popup.slice";
 import { useMessenger } from "../useContextlistMess";
 
 interface FormProps {
- 
-  conversationId: String
+  conversationId: String;
 }
 
 export default function Form({ conversationId }: FormProps) {
   const { stompClient } = useStompClient();
-  const [message, setMessage] = useState(""); 
+  const [message, setMessage] = useState<string>("");
   const [boxMessage, setBoxMessage] = useState<MessageBoxType>();
   const dispatch = useAppDispatch();
   const params = useSearchParams();
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
   const { listMessenger, setListMessenger } = useMessenger();
-
 
   const {
     register,
@@ -41,29 +39,27 @@ export default function Form({ conversationId }: FormProps) {
   });
 
   useEffect(() => {
-      async function getListBoxChat() {
-        try {
-          const response = await httpPrivate.get(
-            `room/${conversationId}`,
-            {
-              signal: controller.signal,
-            }
-          );
-          controller.abort();
-          if (response.data.status === 200) {
-            setBoxMessage(response.data.data);
-          } else {
-            dispatch(failPopUp(response.data.message));
-          }
-        } catch (error) {
-          console.error("Error:", error);
+    async function getListBoxChat() {
+      try {
+        const response = await httpPrivate.get(`room/${conversationId}`, {
+          signal: controller.signal,
+        });
+        controller.abort();
+        if (response.data.status === 200) {
+          setBoxMessage(response.data.data);
+        } else {
+          dispatch(failPopUp(response.data.message));
         }
+      } catch (error) {
+        console.error("Error:", error);
       }
-      getListBoxChat();
-    }, [controller, dispatch, httpPrivate, conversationId]);
+    }
+    getListBoxChat();
+  }, [controller, dispatch, httpPrivate, conversationId]);
 
   const hand = (content: string) => {
     console.log("send");
+    console.log(content);
     console.log(stompClient);
     if (stompClient) {
       var chatMessage = {
@@ -97,7 +93,18 @@ export default function Form({ conversationId }: FormProps) {
     <div className="py-4 px-4 bg-white border-t flex items-center gap-2 lg:gap-4 w-full">
       <CldUploadButton
         options={{ maxFiles: 1 }}
-        onSuccess={handleUpload}
+        onSuccess={(result: any) => {
+          const secureUrl = result?.info?.secure_url;
+          if (secureUrl) {
+            // hand(`${secureUrl}`);
+            setMessage(secureUrl);
+            console.log(message);
+            hand(secureUrl);
+            setMessage(""); // Xóa nội dung của message sau khi gửi
+            console.log(typeof secureUrl);
+          }
+          console.log("ko gui dc");
+        }}
         uploadPreset="s2lo0hgq"
       >
         <HiPhoto size={30} className="text-sky-500" />
@@ -116,7 +123,7 @@ export default function Form({ conversationId }: FormProps) {
           errors={errors}
           required
           onChange={(value) => setMessage(value)}
-          value = {message}
+          value={message}
         />
         <button
           type="submit"
@@ -128,7 +135,6 @@ export default function Form({ conversationId }: FormProps) {
             hover:bg-sky-600 
             transition
           "
-      
         >
           <HiPaperAirplane size={18} className="text-white" />
         </button>
