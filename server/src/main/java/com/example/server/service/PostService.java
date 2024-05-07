@@ -9,6 +9,7 @@ import com.example.server.DTO.SharePostDTO;
 import com.example.server.models.Entity.Comment;
 import com.example.server.models.Entity.Post;
 import com.example.server.models.Entity.PostAttachment;
+import com.example.server.models.Entity.Report;
 import com.example.server.models.Entity.SharedPost;
 import com.example.server.models.Entity.User;
 import com.example.server.repositories.*;
@@ -27,6 +28,8 @@ public class PostService {
     private final UserRepository userRepository;
     private final PostAttachmentRepository attachmentRepository;
     private final SharePostRepository sharePostRepository;
+    private final AIService aiService;
+    private final ReportRepository reportRepository;
 //    public int getLikeCount(String postId) {
 //        return repository.getLikeCount(postId);
 //    }
@@ -60,6 +63,14 @@ public class PostService {
             post.addAttachment(savedAttachment);
         });
         Post savedPost = repository.save(post);
+        Boolean c = aiService.checknsfw(savedPost);
+        if (!c){
+            Report re = new Report();
+            re.setPost(savedPost);
+            re.setReason("NSFW");
+            reportRepository.save(re);
+            throw new NotFoundException("This post contains NSFW content");
+        }
         // user.
         userRepository.save(user);
         PostDTO res = new PostDTO();
@@ -188,12 +199,13 @@ public class PostService {
         return data;
     }
 
-    public List<PostDTO> search(String query,String account_id) {
+    public List<PostDTO> search(String type,String query,String account_id) throws Exception {
         try {
             List<String> list = new ArrayList<>();
             User user = userRepository.findByAccount_Id(account_id).orElseThrow();
             //Goi api o day
             //Tra ve list id post ở đây list = ...
+            list = aiService.searchPost(type, query);
             List<PostDTO> data = new ArrayList<>();
             list.forEach((post_id -> {
                 Post post = repository.findById(post_id).orElseThrow();

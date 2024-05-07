@@ -1,5 +1,6 @@
 package com.example.server.service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,6 +27,7 @@ public class FriendRequestService {
     private final FriendRequestRepository friendRequestRepository;
     private final UserRepository repository;
     private final ChatRoomRepository chatRoomRepository;
+    private final AIService aIService;
 
     public void addFriend(String request_id){
         FriendRequest friendRequest = friendRequestRepository.findById(request_id).orElseThrow();
@@ -100,11 +102,25 @@ public class FriendRequestService {
         return data;
     }
 
-    public List<User> listSuggestFriends(LocationDTO location, String acc_id) {
+    public List<User> listNearByFriends(LocationDTO location, String acc_id) throws IOException {
+        User user = repository.findByAccount_Id(acc_id).orElseThrow();
+        List<String> fidList = new ArrayList<>();
+        List<User> data = new ArrayList<>();
+        location.setUser_id(user.getId());
+        //Tra ve list id tai day
+        fidList = aIService.nearbyFidList(location);
+        for(String id : fidList){
+            User friend = repository.findById(id).orElseThrow();
+            data.add(friend);
+        }
+        return data;
+    }
+    public List<User> listSuggestFriends(String acc_id) throws IOException {
         User user = repository.findByAccount_Id(acc_id).orElseThrow();
         List<String> fidList = new ArrayList<>();
         List<User> data = new ArrayList<>();
         //Tra ve list id tai day
+        fidList = aIService.find_friend(user.getId());
         for(String id : fidList){
             User friend = repository.findById(id).orElseThrow();
             data.add(friend);
