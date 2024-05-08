@@ -1,5 +1,6 @@
 package com.example.server.controllers;
 
+import com.example.server.DTO.DisplayUserDTO;
 import com.example.server.DTO.PostDTO;
 import com.example.server.DTO.UserDTO;
 import com.example.server.models.Entity.Account;
@@ -103,6 +104,16 @@ public class UserController {
             return Respond.success(200,"I001","");
         } catch (Exception e) {
             return Respond.fail(500,"E001",e.getStackTrace());
+        }
+    }
+    @GetMapping("/search")
+    public ResponseEntity<Object> listSuggestFriends(@RequestParam String query ,@AuthenticationPrincipal Account account) {
+        try {
+            List<DisplayUserDTO> data = service.search(account.getId(), query);
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
         }
     }
 }
