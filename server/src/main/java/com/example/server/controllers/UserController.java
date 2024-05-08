@@ -69,9 +69,9 @@ public class UserController {
         }
     }
     @GetMapping("/{user_id}/post")
-    public ResponseEntity<Object> get_post_by_user(@PathVariable String user_id){
+    public ResponseEntity<Object> get_post_by_user(@PathVariable String user_id, @AuthenticationPrincipal Account account){
         try {
-            List<PostDTO> data = service.get_post_by_user(user_id);
+            List<PostDTO> data = service.get_post_by_user(user_id, account.getId());
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
