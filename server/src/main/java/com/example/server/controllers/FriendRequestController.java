@@ -80,6 +80,18 @@ public class FriendRequestController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
+    @GetMapping("/request/sended")
+    public ResponseEntity<Object> getListSendedFriendRequest(@AuthenticationPrincipal Account account){
+        try {
+//            System.out.println(user_id);
+            List<FriendRequestDTO> data = service.getListSendedFriendRequest(account.getId()).stream().map(FriendRequest::toDto).collect(Collectors.toList());
+            System.out.println(data);
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
 
     @DeleteMapping("/cancel/{request_id}")
     public  ResponseEntity<Object> cancel(@PathVariable String request_id) {
@@ -105,7 +117,7 @@ public class FriendRequestController {
     @PostMapping("/nearby")
     public ResponseEntity<Object> listNearByFriends(@RequestBody LocationDTO location,  @AuthenticationPrincipal Account account) {
         try {
-            List<User> data = service.listNearByFriends(location,account.getId());
+            List<DisplayUserDTO> data = service.listNearByFriends(location,account.getId());
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
@@ -115,7 +127,7 @@ public class FriendRequestController {
     @GetMapping("/suggest")
     public ResponseEntity<Object> listSuggestFriends(@AuthenticationPrincipal Account account) {
         try {
-            List<User> data = service.listSuggestFriends(account.getId());
+            List<DisplayUserDTO> data = service.listSuggestFriends(account.getId());
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){

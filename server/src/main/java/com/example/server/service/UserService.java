@@ -7,6 +7,7 @@ import com.example.server.models.Entity.Profile;
 import com.example.server.models.Entity.User;
 import com.example.server.models.Enum.AccountStatus;
 import com.example.server.repositories.AccountRepository;
+import com.example.server.repositories.FriendRequestRepository;
 import com.example.server.repositories.PostRepository;
 import com.example.server.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class UserService {
     private final UserRepository repository;
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
+    private final FriendRequestRepository friendRepository;;
     public List<User> getAll (){
         return repository.findAll();
     }
@@ -28,7 +30,7 @@ public class UserService {
         User user =  repository.findById(id).orElseThrow();
         UserDTO dto = user.toDto();
         User me = repository.findByAccount_Id(acc_id).orElseThrow();
-        if (me.getFriends().contains(user) || user.getFriends().contains(me)){
+        if (friendRepository.isFriend(id, me.getId())) {
             dto.setFriend(true);
         }
         else {

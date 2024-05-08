@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.server.DTO.DisplayUserDTO;
+import com.example.server.DTO.FriendRequestDTO;
+
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,9 +20,11 @@ public interface FriendRequestRepository extends Neo4jRepository<FriendRequest, 
 
     @Query("MATCH (u:User)<-[s:RECEIVE_FRIEND_REQUEST]-(r:FriendRequest) WHERE u.id = $userId RETURN r")
     List<FriendRequest> getReceivedFriendRequests(@Param("userId") String userId);
+    @Query("MATCH (u:User)-[s:SENT_FRIEND_REQUEST]->(r:FriendRequest) WHERE u.id = $userId RETURN r.id ")
+    List<String> getSendedFriendRequests(@Param("userId") String userId);
 //    @Query("MATCH (f:FriendRequest)-[:RECEIVE_FRIEND_REQUEST]->(u:User{id: $user_id}) RETURN f,other")
     List<FriendRequest> findByReceiverId( String user_id);
-    @Query("MATCH (user1:User)-[r:Friend]->(user2:User) " +
+    @Query("MATCH (user1:User)-[r:FRIEND]->(user2:User) " +
             "WHERE ( user1.id = $id1 AND user2.id = $id2 ) OR ( user1.id = $id2 AND user2.id = $id1 ) " +
             "DETACH DELETE r")
     void deleteByUserId(@Param("id1") String id1,@Param("id2") String id2);
@@ -33,5 +37,9 @@ public interface FriendRequestRepository extends Neo4jRepository<FriendRequest, 
             "WHERE user.id = $id\n" +
             "RETURN friend.id AS id, friend.firstname + ' ' + friend.lastname AS fullname, profile.avatar_url AS avatar_url, friend.username AS username")
     List<DisplayUserDTO> getListDisplayUsers(@Param("id") String id);
-
+        @Query("Match (user1:User {id: $id1 }),(user2:User{id: $id2}) Merge (user1)-[r:FRIEND]->(user2)")
+        void addFriend(@Param("id1") String id1,@Param("id2") String id2);
+        @Query("Match (user1:User {id: $id1 })-[r:FRIEND]-(user2:User{id: $id2}) Return COUNT(r) >= 1")
+        boolean isFriend(String id1, String id2);
+        
 }
