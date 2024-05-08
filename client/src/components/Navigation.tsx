@@ -25,12 +25,17 @@ import { successPopUp } from "@/app/hooks/features/popup.slice";
 import avatarDefault from "@/static/images/avatarDefault.jpg";
 import { UserType } from "@/app/types";
 import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
+import { CldUploadButton, CloudinaryUploadWidgetInfo } from "next-cloudinary";
+import { HiPhoto } from "react-icons/hi2";
+
+
 
 export default function Navigation() {
   const router = useRouter();
   const { data, isFetching } = useGetUserInfoQuery(
     getLocalStorage()?.user_id as string
   );
+  const [search, setSearch] = useState("");
 
   const dispatch = useAppDispatch();
   return (
@@ -62,8 +67,27 @@ export default function Navigation() {
               size="sm"
               startContent={<SearchIcon size={18} />}
               type="search"
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  router.push(`/search?q=${search}`);
+                }
+              }}
             />
           </div>
+          <CldUploadButton
+            options={{ maxFiles: 1 }}
+            onSuccess={(result) => {
+              const secureUrl: CloudinaryUploadWidgetInfo =
+            result?.info as CloudinaryUploadWidgetInfo;
+            if (secureUrl) {
+              router.push('/search?iq=' + secureUrl.secure_url);
+            }
+            }}
+            uploadPreset="s2lo0hgq"
+          >
+            <HiPhoto size={30} className="text-sky-500" />
+          </CldUploadButton>
         </div>
         <ul className="hidden lg:flex items-center px-2 justify-evenly">
           <li>
