@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
 import java.util.List;
 
 @RestController
@@ -107,9 +108,10 @@ public class UserController {
         }
     }
     @GetMapping("/search")
-    public ResponseEntity<Object> listSuggestFriends(@RequestParam String query ,@AuthenticationPrincipal Account account) {
+    public ResponseEntity<Object> listSearch(@RequestParam String query ,@AuthenticationPrincipal Account account) {
         try {
-            List<DisplayUserDTO> data = service.search(account.getId(), query);
+            String name = URLDecoder.decode(query, "UTF-8");
+            List<DisplayUserDTO> data = service.search(account.getId(), name);
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
