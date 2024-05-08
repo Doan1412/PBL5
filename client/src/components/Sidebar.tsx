@@ -52,8 +52,8 @@ const Sidebar: React.FC = () => {
             <div className="profileImage">
               <Image
                 src={
-                  data?.data.profile.avatar_url != ""
-                    ? `${data?.data.profile.avatar_url}`
+                  data?.data?.profile?.avatar_url != ""
+                    ? `${data?.data?.profile?.avatar_url}`
                     : avatarDefault.src
                 }
                 alt=""
@@ -65,10 +65,10 @@ const Sidebar: React.FC = () => {
                   href={`/profile?id_user=${getLocalStorage()?.user_id}`}
                   className="name dark:text-white"
                 >
-                  {data?.data.firstname} {data?.data.lastname}
+                  {data?.data?.firstname} {data?.data?.lastname}
                 </Link>
                 <div className="username dark:text-white">
-                  @{data?.data.username}
+                  @{data?.data?.username}
                 </div>
               </div>
             </div>

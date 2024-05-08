@@ -51,13 +51,18 @@ public class FriendRequest {
     public FriendRequestDTO toDto() {
         FriendRequestDTO dto = new FriendRequestDTO();
         dto.setId(this.id);
+        System.out.println(this.id +": ");
+        System.out.println(this.sender.getId());
         dto.setSenderId(this.sender.getId());
         dto.setSenderName(this.sender.getFirstname() + " " + this.sender.getLastname());
         dto.setSenderAvatar(this.sender.getProfile().getAvatar_url());
+        dto.setReceiverId(this.receiver.getId());
+        dto.setReceiverName(this.receiver.getFirstname() + " " + this.receiver.getLastname());
+        dto.setReceiverAvatar(this.receiver.getProfile().getAvatar_url());
         dto.setStatus(this.status);
         dto.setCreatedAt(this.created_at);
         dto.setSenderUsername(this.sender.getUsername() );
-        
+        dto.setReceiverUsername(this.receiver.getUsername());
         return dto;
     }
     @Override

@@ -43,18 +43,18 @@ public class User {
     @JsonIgnore
     private Account account;
 
-    @Relationship(type = "FRIEND", direction = Relationship.Direction.OUTGOING)
-    @JsonIgnore
-    private Set<User> friends;
+    // @Relationship(type = "FRIEND", direction = Relationship.Direction.OUTGOING)
+    // @JsonIgnore
+    // private Set<User> friends;
 
-    public void addFriend(User friend) {
-        this.friends.add(friend);
-    }
+    // public void addFriend(User friend) {
+    //     this.friends.add(friend);
+    // }
 
-    // Phương thức xóa bạn bè
-    public void removeFriend(User friend) {
-        this.friends.remove(friend);
-    }
+    // // Phương thức xóa bạn bè
+    // public void removeFriend(User friend) {
+    //     this.friends.remove(friend);
+    // }
     public UserDTO toDto(){
         UserDTO userDTO = new UserDTO();
         userDTO.setId(this.id);

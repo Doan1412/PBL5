@@ -37,7 +37,7 @@ public class FriendRequestService {
         User user_2 = repository.findById(friendRequest.getReceiverrId()).orElseThrow();
         System.out.println(user_1);
 ////        System.out.println(user_2);
-        user_1.addFriend(user_2);
+        friendRequestRepository.addFriend(user_1.getId(), user_2.getId());
 //        user_2.addFriend(user_1);
         friendRequestRepository.save(friendRequest);
         friendRequestRepository.deleteFriendRequestByUser(user_1.getId(),user_2.getId());
@@ -60,8 +60,6 @@ public class FriendRequestService {
         User user_2 = repository.findById(id2).orElseThrow();
         friendRequestRepository.deleteByUserId(user_1.getId(), user_2.getId());
         friendRequestRepository.deleteFriendRequestByUser(user_1.getId(),user_2.getId());
-        user_1.getFriends().remove(user_2);
-        user_2.getFriends().remove(user_1);
         repository.save(user_1);
         repository.save(user_2);
         List<DisplayUserDTO> data = friendRequestRepository.getListDisplayUsers(user_1.getId());
@@ -101,29 +99,44 @@ public class FriendRequestService {
         System.out.println(data.toString());
         return data;
     }
+    public List<FriendRequest> getListSendedFriendRequest(String acc_id){
+        User user = repository.findByAccount_Id(acc_id).orElseThrow();
+//        System.out.println(user_id);
+        List<String> list = friendRequestRepository.getSendedFriendRequests(user.getId());
+        List<FriendRequest> data = new ArrayList<>();
+        for (String id : list) {
+            FriendRequest friendRequest = friendRequestRepository.findById(id).orElseThrow();
+            data.add(friendRequest);
+        }
+        return data;
+    }
 
-    public List<User> listNearByFriends(LocationDTO location, String acc_id) throws IOException {
+    public List<DisplayUserDTO> listNearByFriends(LocationDTO location, String acc_id) throws IOException {
         User user = repository.findByAccount_Id(acc_id).orElseThrow();
         List<String> fidList = new ArrayList<>();
-        List<User> data = new ArrayList<>();
+        List<DisplayUserDTO> data = new ArrayList<>();
         location.setUser_id(user.getId());
         //Tra ve list id tai day
         fidList = aIService.nearbyFidList(location);
         for(String id : fidList){
             User friend = repository.findById(id).orElseThrow();
-            data.add(friend);
+            DisplayUserDTO dto = new DisplayUserDTO();
+            dto.loadFromEntity(friend);
+            data.add(dto);
         }
         return data;
     }
-    public List<User> listSuggestFriends(String acc_id) throws IOException {
+    public List<DisplayUserDTO> listSuggestFriends(String acc_id) throws IOException {
         User user = repository.findByAccount_Id(acc_id).orElseThrow();
         List<String> fidList = new ArrayList<>();
-        List<User> data = new ArrayList<>();
+        List<DisplayUserDTO> data = new ArrayList<>();
         //Tra ve list id tai day
         fidList = aIService.find_friend(user.getId());
         for(String id : fidList){
             User friend = repository.findById(id).orElseThrow();
-            data.add(friend);
+            DisplayUserDTO dto = new DisplayUserDTO();
+            dto.loadFromEntity(friend);
+            data.add(dto);
         }
         return data;
     }
