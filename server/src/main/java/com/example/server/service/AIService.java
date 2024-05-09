@@ -122,6 +122,25 @@ public class AIService {
         List<String> data = parseResponseToList(responseBody);
         return data;
     }
+    public List<String> suggestPost(String user_id) throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> requestEntity = new HttpEntity<>("{\"user_id\": \""+user_id+"\"}",headers);
+        String apiUrl = uri+"/post/suggest";
+        ResponseEntity<String> responseEntity = restTemplate.exchange(
+            apiUrl,
+            HttpMethod.POST,
+            requestEntity,
+            String.class
+        );
+        HttpStatusCode statusCode = responseEntity.getStatusCode();
+        if(statusCode != HttpStatusCode.valueOf(200)) {
+            throw new RuntimeException("Failed : Can't call to AI");
+        }// Change the data type to HttpStatusCode
+        String responseBody = responseEntity.getBody();
+        List<String> data = parseResponseToList(responseBody);
+        return data;
+    }
     public List<String> find_user(String user_id, String query) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -162,4 +181,5 @@ public class AIService {
         }
         return false;
     }
+    
 }

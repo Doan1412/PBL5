@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import AddFriendButton from "./AddFriendButton";
 import { Button } from "@nextui-org/react";
 import { IoMdPersonAdd } from "react-icons/io";
@@ -24,7 +24,10 @@ export default function FriendCard({
     const httpPrivate = useHttp();
     const controller = useMemo(() => new AbortController(), []);
     const dispatch = useAppDispatch();
-
+    const [responed, setResponed] = useState(false);
+    function handleDelete() {
+        setResponed(true);
+    }
     const handleFriendButtonClick = async () => {
         try {
             const response = await httpPrivate.post(
@@ -44,7 +47,9 @@ export default function FriendCard({
             // Xử lý logic khi gặp lỗi
         }
     };
-
+    if (responed) {
+        return null;
+      }
     return (
         <div className="flex flex-col justify-center border outline-none shadow-xl rounded-xl w-72 h-fit overflow-hidden hover:opacity-80">
             <div className="flex flex-col justify-center">
@@ -74,10 +79,9 @@ export default function FriendCard({
                     <Button
                         size="sm"
                         className="bg-blue-600 text-white w-1/2" // Thiết lập kích thước cho button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleFriendButtonClick();
-                        }}
+                        onClick={
+                            handleFriendButtonClick
+                        }
                     >
                         <div className="flex items-center">
                             <IoMdPersonAdd />
@@ -89,6 +93,7 @@ export default function FriendCard({
                         size="sm"
                         className="bg-gray-200 text-red-600 w-1/2" // Thiết lập kích thước cho button
                         startContent={<FaRegUser />}
+                        onClick={handleDelete}
                     >
                         Delete
                     </Button>
