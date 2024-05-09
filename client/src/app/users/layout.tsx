@@ -1,5 +1,5 @@
 "use client";
-import Navigation from "@/components/Navigation";
+import Navigation from "@/components/Navigation/Navigation";
 import SidebarMess from "@/components/SidebarMess/SidebarMess";
 import UserList from "@/components/UserList";
 

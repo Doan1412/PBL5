@@ -2,7 +2,7 @@
 import React, { useState, useRef, useMemo } from "react";
 import Sidebar from "@/components/Sidebar";
 import Post from "@/components/Post/Post";
-import Navigation from "@/components/Navigation";
+import Navigation from "@/components/Navigation/Navigation";
 import SkeletonPost from "@/components/SkeletonPost/SkeletonPost";
 import { FaCheck, FaEllipsisH, FaRegPaperPlane } from "react-icons/fa";
 import { HiOutlineBookmark } from "react-icons/hi2";
@@ -335,7 +335,7 @@ export default function SharePost(props: PropsSharePost) {
           <Post
             postData={dataSharePost?.originalPost}
             setPosts={setOriginalPosts}
-            hiddenComment = {true}
+            hiddenComment={true}
           />
         </div>
         <div className="postFooter flex flex-col">

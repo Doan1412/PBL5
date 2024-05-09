@@ -36,13 +36,13 @@ export function useListSendedFriendReq(
                     const postsData = response.data.data;
                     // console.log(postsData);
                     setRequests(postsData);
-                    setLoading(false);
+                    // setLoading(false);
                 } else {
                     dispatch(failPopUp(response.data.message));
                 }
             } catch (error) {
                 // console.error("Error:", error);
-                setLoading(false);
+                // setLoading(false);
             }
         }
         fetchListFriendRequest();
