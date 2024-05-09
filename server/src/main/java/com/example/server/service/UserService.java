@@ -1,5 +1,6 @@
 package com.example.server.service;
 
+import com.example.server.DTO.DisplayUserDTO;
 import com.example.server.DTO.PostDTO;
 import com.example.server.DTO.UserDTO;
 import com.example.server.models.Entity.Post;
@@ -7,11 +8,13 @@ import com.example.server.models.Entity.Profile;
 import com.example.server.models.Entity.User;
 import com.example.server.models.Enum.AccountStatus;
 import com.example.server.repositories.AccountRepository;
+import com.example.server.repositories.FriendRequestRepository;
 import com.example.server.repositories.PostRepository;
 import com.example.server.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,6 +24,8 @@ public class UserService {
     private final UserRepository repository;
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
+    private final FriendRequestRepository friendRepository;
+    private final AIService aIService;
     public List<User> getAll (){
         return repository.findAll();
     }
@@ -28,7 +33,7 @@ public class UserService {
         User user =  repository.findById(id).orElseThrow();
         UserDTO dto = user.toDto();
         User me = repository.findByAccount_Id(acc_id).orElseThrow();
-        if (me.getFriends().contains(user) || user.getFriends().contains(me)){
+        if (friendRepository.isFriend(id, me.getId())) {
             dto.setFriend(true);
         }
         else {
@@ -96,5 +101,19 @@ public class UserService {
     public void updateUserStatus(String userId) {
         accountRepository.updateUserStatus(userId,AccountStatus.BANNED.name());
         accountRepository.banAccount(userId);
+    }
+    public List<DisplayUserDTO> search(String acc_id, String query) throws IOException {
+        User user = repository.findByAccount_Id(acc_id).orElseThrow();
+        List<String> idList = new ArrayList<>();
+        List<DisplayUserDTO> data = new ArrayList<>();
+        //Tra ve list id tai day
+        idList = aIService.find_user(user.getId(),query);
+        for(String id : idList){
+            User friend = repository.findById(id).orElseThrow();
+            DisplayUserDTO dto = new DisplayUserDTO();
+            dto.loadFromEntity(friend);
+            data.add(dto);
+        }
+        return data;
     }
 }

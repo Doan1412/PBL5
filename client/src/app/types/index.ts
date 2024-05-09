@@ -53,6 +53,8 @@ export type UserType = {
   };
 };
 
+
+
 export type FullMessageType = MessageType & {
   sender: UserType;
   seen: UserType[];
@@ -93,6 +95,10 @@ export interface FriendRequest {
   status?: string;
   createdAt?: string;
   senderUsername?: string;
+  receiverId?: string;
+  receiverName?: string;
+  receiverAvatar?: string;
+  receiverUsername?: string;
 }
 
 export interface Attachment {

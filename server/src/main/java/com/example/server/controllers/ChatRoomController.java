@@ -6,6 +6,8 @@ import com.example.server.service.ChatRoomService;
 import com.example.server.utils.Respond;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,16 +26,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ChatRoomController {
     @Autowired
     private final ChatRoomService service;
-    @PostMapping("")
-    public ResponseEntity<Object> addOne(@RequestBody RoomDTO roomDTO) {
+    @PostMapping("/addmember")
+    public ResponseEntity<Object> addMemberToChatRoom(@RequestParam String room_id, @RequestParam String user_id) {
         try {
-            Object data = service.create(roomDTO);
+            Object data = service.addMemberToChatRoom(room_id, user_id);
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
+    @PostMapping("/create")
+    public ResponseEntity<Object> createRoom(@RequestBody RoomDTO entity) {
+        try {
+            Object data = service.create(entity);
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    
     @GetMapping("")
     public ResponseEntity<Object> getChatRooms(@AuthenticationPrincipal Account account) {
         try {
