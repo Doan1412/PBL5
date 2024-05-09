@@ -20,7 +20,7 @@ import avatarDefault from "@/static/images/avatarDefault.jpg";
 
 interface PropFriendForm {
   data: ListFriendType;
-  setFiends: React.Dispatch<React.SetStateAction<ListFriendType[]>>;
+  setFiends?: React.Dispatch<React.SetStateAction<ListFriendType[]>>;
 }
 
 const items = [
@@ -74,7 +74,10 @@ export default function FriendForm({ data, setFiends }: PropFriendForm) {
             );
             controller.abort();
             if (response.data.status === 200) {
-              setFiends([...response.data.data]);
+              {
+                setFiends && setFiends([...response.data.data]);
+              }
+              // setFiends([...response.data.data]);
               dispatch(successPopUp("Hủy kết bạn thành công! 😒"));
             } else {
               dispatch(failPopUp(response.data.message));

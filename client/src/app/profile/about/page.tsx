@@ -1,5 +1,5 @@
 "use client";
-import Navigation from "@/components/Navigation";
+import Navigation from "@/components/Navigation/Navigation";
 import React, {
   createContext,
   useContext,

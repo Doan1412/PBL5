@@ -1,5 +1,5 @@
 "use client";
-import Navigation from "@/components/Navigation";
+import Navigation from "@/components/Navigation/Navigation";
 import React, { useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import HeaderProfile from "@/components/Profile/HeaderProfile";
@@ -40,7 +40,7 @@ export default function Photo() {
         <HeaderProfile data={data!} isFetching={isFetching} />
         {/* {pathname === "/profile"}( */}
         <div className="hidden md:flex justify-center">
-          <PhotoProfile  data={images}/>
+          <PhotoProfile data={images} />
         </div>
       </div>
     </Widget>

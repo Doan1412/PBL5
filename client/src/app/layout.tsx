@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 import RefreshToken from "./actions/refreshToken";
 import { useMemo } from "react";
 import { AuthProvider } from "./context/AuthProvider";
+import { SearchFunctionsProvider } from "./context/SearchProvider ";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} dark:bg-medium bg-[#f0f2f5]`}>
         <Providers>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <SearchFunctionsProvider>{children}</SearchFunctionsProvider>
+          </AuthProvider>
         </Providers>
       </body>
     </html>

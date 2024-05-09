@@ -19,7 +19,7 @@ import { columns, users } from "./data/data";
 import { EyeIcon } from "./icon/EyeIcon";
 import { EditIcon } from "./icon/EditIcon";
 import { DeleteIcon } from "./icon/DeleteIcon";
-import Navigation from "@/components/Navigation";
+import Navigation from "@/components/Navigation/Navigation";
 import { useRouter } from "next/navigation";
 import { UserType } from "../types";
 import Widget from "../widget";

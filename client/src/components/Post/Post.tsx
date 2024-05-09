@@ -796,8 +796,7 @@ const Post: React.FC<PostProps> = ({
                               </div>
                               <div className="flex justify-center items-center gap-3 mr-3 relative">
                                 <div className="option">
-                                  <CldUploadButton
-                                    options={{ maxFiles: 5 }}
+                                  <CldUploadButton  options={{ maxFiles: 5 }}
                                     onSuccess={(result: any) => {
                                       const secureUrl =
                                         result?.info?.secure_url;
@@ -809,7 +808,8 @@ const Post: React.FC<PostProps> = ({
                                       }
                                     }}
                                     uploadPreset="s2lo0hgq"
-                                  >
+                                  >CldUploadButton
+                                  
                                     <IoMdImages
                                       size={25}
                                       className="text-green-700 cursor-pointer"

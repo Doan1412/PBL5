@@ -3,7 +3,6 @@ import React, { useState, useRef, Fragment, useEffect, useMemo } from "react";
 import Sidebar from "@/components/Sidebar";
 import userData from "../data/UserData";
 import Post from "@/components/Post/Post";
-import Navigation from "@/components/Navigation";
 import ListPost from "@/components/SatatusPost";
 import { FriendRequest, PostType, User } from "../types";
 import Widget from "../widget";
@@ -19,6 +18,7 @@ import { useAppDispatch } from "../hooks/store";
 import { useSearchParams } from "next/navigation";
 import useHttp from "../hooks/customs/useAxiosPrivate";
 import { failPopUp } from "../hooks/features/popup.slice";
+import Navigation from "@/components/Navigation/Navigation";
 
 const Home: React.FC = () => {
   const [isFocused, setIsFocused] = useState<boolean>(false);

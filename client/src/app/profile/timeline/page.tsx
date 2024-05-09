@@ -1,5 +1,5 @@
 "use client";
-import Navigation from "@/components/Navigation";
+import Navigation from "@/components/Navigation/Navigation";
 import { Avatar, AvatarGroup, Image, Skeleton } from "@nextui-org/react";
 import React, {
   createContext,
@@ -137,7 +137,14 @@ export default function Timeline() {
                 ) : (
                   <div>
                     {posts.map((post: PostType, index: number) => {
-                      return <Post key={index} postData={post} setPosts={setPosts} hiddenComment = {false}/>;
+                      return (
+                        <Post
+                          key={index}
+                          postData={post}
+                          setPosts={setPosts}
+                          hiddenComment={false}
+                        />
+                      );
                     })}
                   </div>
                 )}

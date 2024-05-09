@@ -6,7 +6,7 @@ class Http {
   constructor() {
     this.instance = axios.create({
       baseURL: process.env.BACKEND_URL,
-      timeout: 20000,
+      timeout: 120000,
       // headers: {
       //   Authorization: `${getLocalStorage()?.token}`,
       // },

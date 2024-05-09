@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef, useMemo } from "react";
 import Sidebar from "@/components/Sidebar";
-import Navigation from "@/components/Navigation";
+import Navigation from "@/components/Navigation/Navigation";
 import { FriendRequest, SharePostType, User } from "../types";
 import SkeletonPost from "@/components/SkeletonPost/SkeletonPost";
 import { useListFriendRequests } from "../actions/custom/useListFriendRequest";
@@ -23,11 +23,8 @@ export default function Share() {
   const [originalPosts, setOriginalPosts] = useState<PostType[]>([]);
   const dispatch = useAppDispatch();
 
-
   useListPostShare(setPosts, setOriginalPosts, setLoading);
   useListFriendRequests(setRequests, setLoading);
-
- 
 
   return (
     <>
@@ -57,7 +54,11 @@ export default function Share() {
                 <div>
                   {posts.map((post: SharePostType, index: number) => {
                     return (
-                      <SharePost  key={index} dataSharePost = {post} dataPostOrigin = {originalPosts}/>
+                      <SharePost
+                        key={index}
+                        dataSharePost={post}
+                        dataPostOrigin={originalPosts}
+                      />
                     );
                   })}
                 </div>

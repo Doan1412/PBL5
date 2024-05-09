@@ -1,5 +1,5 @@
 "use client";
-import Navigation from "@/components/Navigation";
+import Navigation from "@/components/Navigation/Navigation";
 import { Avatar, AvatarGroup, Image, Skeleton } from "@nextui-org/react";
 import React, {
   createContext,

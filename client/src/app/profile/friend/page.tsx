@@ -1,5 +1,5 @@
 "use client";
-import Navigation from "@/components/Navigation";
+import Navigation from "@/components/Navigation/Navigation";
 import React, { useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import HeaderProfile from "@/components/Profile/HeaderProfile";

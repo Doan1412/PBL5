@@ -2,9 +2,6 @@ import React from "react";
 import { MdSettings } from "react-icons/md";
 import {
   FaBell,
-  FaBookmark,
-  FaBrush,
-  FaCompass,
   FaEnvelope,
   FaHome,
 } from "react-icons/fa";

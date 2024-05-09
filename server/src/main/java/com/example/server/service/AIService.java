@@ -45,6 +45,7 @@ public class AIService {
     public List<String> searchPost(String type, String query, String id) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        System.out.println(type+" "+query);
         // Tạo đối tượng HttpEntity chứa headers và payload
         if (type.equals("image")) {
             HttpEntity<String> requestEntity = new HttpEntity<>("{\"uri\": \""+query+"\", \"user_id\": \""+id+"\"}",headers);
