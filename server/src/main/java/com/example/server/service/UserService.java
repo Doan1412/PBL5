@@ -68,7 +68,8 @@ public class UserService {
     public void delete(String id) {
         repository.deleteById(id);
     }
-    public List<PostDTO> get_post_by_user (String user_id){
+    public List<PostDTO> get_post_by_user (String user_id, String acc_id){
+        User u = repository.findByAccount_Id(acc_id).orElseThrow();
         List<String> post_ids = postRepository.findByUserId(user_id);
         List<Post> list = new ArrayList<>();
         for (String postId : post_ids) {
@@ -92,7 +93,7 @@ public class UserService {
 //                like.add(userDTO);
 //            });
             PostDTO p = new PostDTO();
-            p.loadFromEntity(post,share_count,post.getUser());
+            p.loadFromEntity(post,share_count,u);
             data.add(p);
         }));
         return data;
