@@ -1,5 +1,6 @@
 package com.example.server.service;
 
+import java.io.IOException;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -268,5 +269,17 @@ public class PostService {
         }
         return data;
     }
-    // public List<PostDTO> getListSuggestPost(String account_id)
+    public List<PostDTO> getListSuggestPost(String account_id) throws IOException{
+        User user = userRepository.findByAccount_Id(account_id).orElseThrow();
+        List<String> data_id = aiService.suggestPost(user.getId());
+        List<PostDTO> data = new ArrayList<>();
+        for (String post_id : data_id) {
+            Post post = repository.findById(post_id).orElseThrow();
+            int share_count = repository.getShareCount(post_id);
+            PostDTO p = new PostDTO();
+            p.loadFromEntity(post,share_count,user);
+            data.add(p);
+        }
+        return data;
+    }
 }
