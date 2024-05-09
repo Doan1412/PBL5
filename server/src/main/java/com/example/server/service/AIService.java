@@ -42,12 +42,12 @@ public class AIService {
 
         return resultList;
     }
-    public List<String> searchPost(String type, String query) throws IOException {
+    public List<String> searchPost(String type, String query, String id) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         // Tạo đối tượng HttpEntity chứa headers và payload
         if (type.equals("image")) {
-            HttpEntity<String> requestEntity = new HttpEntity<>("{\"uri\": \""+query+"\"}",headers);
+            HttpEntity<String> requestEntity = new HttpEntity<>("{\"uri\": \""+query+"\", \"user_id\": \""+id+"\"}",headers);
             String apiUrl = uri+"/searchimage";
             ResponseEntity<String> responseEntity = restTemplate.exchange(
                 apiUrl,
@@ -176,7 +176,7 @@ public class AIService {
             throw new RuntimeException("Failed : Can't call to AI");
         }// Change the data type to HttpStatusCode
         String responseBody = responseEntity.getBody();
-        if (responseBody.equals("true")) {
+        if (responseBody.equals("1")) {
             return true;
         }
         return false;
