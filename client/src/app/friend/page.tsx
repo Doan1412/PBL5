@@ -16,6 +16,7 @@ import RequestWidget from "@/components/RequestWidget";
 import SendedRequestWidget from "@/components/SendedRequestWidget";
 import { useListSendedFriendReq } from "../actions/custom/useListSendedFriendReq";
 
+
 interface Location {
     latitude: number;
     longitude: number;

@@ -70,7 +70,7 @@ export default function FriendCard({
                     </span>
                     <span className="italic truncate">{username}</span>
                 </div>
-                <div className="flex justify-around p-2">
+                <div className="flex justify-around p-2 gap-2">
                     <Button
                         size="sm"
                         className="bg-blue-600 text-white w-1/2" // Thiết lập kích thước cho button
