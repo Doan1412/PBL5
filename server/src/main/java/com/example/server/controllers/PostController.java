@@ -212,4 +212,14 @@ public class PostController {
             return Respond.fail(500,"E001",e.getMessage());
         }
     }
+    @GetMapping("/suggest")
+    public ResponseEntity<Object> suggestPost(@AuthenticationPrincipal Account account) {
+        try {
+            List<PostDTO> data = service.getListSuggestPost(account.getId());
+            return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
 }
