@@ -82,7 +82,7 @@ const Post: React.FC<PostProps> = ({
   hiddenComment,
 }: PostProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [text, setText] = useState("");
+  const [text, setText] = useState<string>();
   const [showComment, setShowComment] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const httpPrivate = useHttp();
@@ -314,11 +314,11 @@ const Post: React.FC<PostProps> = ({
           attachments: imageCmt,
           postId: postData?.id,
         },
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         setListCmt((prev) => [response.data.data, ...prev]);
         setLoading(false);

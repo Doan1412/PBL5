@@ -1,5 +1,6 @@
 package com.example.server.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +22,8 @@ public class PostAttachmentService {
 
     public List<String> getImgByUserId(String userId) {
         System.out.println("userId: " + userId);
-        return repository.getImgByUserId(userId);
+        List<String> imgList = repository.getImgByUserId(userId);
+        Collections.reverse(imgList);
+        return imgList;
     }
 }

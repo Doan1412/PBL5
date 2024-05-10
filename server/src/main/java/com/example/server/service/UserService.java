@@ -77,7 +77,8 @@ public class UserService {
             list.add(p);
         }
         list = list.stream()
-                .sorted(Comparator.comparing(Post::getCreated_at))
+                .sorted(Comparator.comparing(Post::getCreated_at).reversed()
+                )
                 .collect(Collectors.toList());;
         List<PostDTO> data = new ArrayList<>();
         list.forEach((post -> {

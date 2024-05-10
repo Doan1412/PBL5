@@ -202,7 +202,7 @@ export default function Navigation({
                           if (secureUrl) {
                             setImagePost({ url: secureUrl, type: "image" });
                             setSearchValue(secureUrl);
-                            setSearch({ type:"image", query: secureUrl });
+                            setSearch({ type: "image", query: secureUrl });
                           }
                         }}
                         uploadPreset="s2lo0hgq"
@@ -228,14 +228,14 @@ export default function Navigation({
                         } else if (searchPost && setFriends) {
                           setFriends([]);
                           // searchPost(imagePost!);
-                          if(imagePost ) {
+                          if (imagePost) {
                             console.log("t1");
                             searchPost(search!);
                           } else {
                             console.log("t2");
 
-                            setSearch({type: "text", query: searchValue});
-                            searchPost({type: "text", query: searchValue});
+                            setSearch({ type: "text", query: searchValue });
+                            searchPost({ type: "text", query: searchValue });
                           }
                           setSearchValue("");
                         }
@@ -278,6 +278,44 @@ export default function Navigation({
                   className="icon"
                 >
                   <path d="M946.5 505L560.1 118.8l-25.9-25.9a31.5 31.5 0 0 0-44.4 0L77.5 505a63.9 63.9 0 0 0-18.8 46c.4 35.2 29.7 63.3 64.9 63.3h42.5V940h691.8V614.3h43.4c17.1 0 33.2-6.7 45.3-18.8a63.6 63.6 0 0 0 18.7-45.3c0-17-6.7-33.1-18.8-45.2zM568 868H456V664h112v204zm217.9-325.7V868H632V640c0-22.1-17.9-40-40-40H432c-22.1 0-40 17.9-40 40v228H238.1V542.3h-96l370-369.7 23.1 23.1L882 542.3h-96.1z"></path>
+                </svg>
+              </button>
+            </div>
+          </li>
+          <li>
+            <div
+              id="home"
+              className="tooltip active w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg dark:hover:bg-medium dark:hover:border-none"
+              data-tooltip="Home"
+            >
+              <button
+                className="button dark:text-white hover:translate-y-[-3px]"
+                onClick={() => {
+                  router.push("/post_suggestion");
+                }}
+              >
+                <svg
+                  width="2em"
+                  height="2em"
+                  viewBox="0 0 21 21"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g
+                    fill="none"
+                    fill-rule="evenodd"
+                    stroke="#000000"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    transform="translate(3 4)"
+                  >
+                    <path d="m2.5.5h10c1.1045695 0 2 .8954305 2 2v8c0 1.1045695-.8954305 2-2 2h-10c-1.1045695 0-2-.8954305-2-2v-8c0-1.1045695.8954305-2 2-2z" />
+
+                    <path d="m10.5 2.5h1c.5522847 0 1 .44771525 1 1v1c0 .55228475-.4477153 1-1 1h-1c-.55228475 0-1-.44771525-1-1v-1c0-.55228475.44771525-1 1-1z" />
+
+                    <path d="m2.5 7.5h5" />
+
+                    <path d="m2.5 9.5h5" />
+                  </g>
                 </svg>
               </button>
             </div>
