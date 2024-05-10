@@ -64,7 +64,7 @@ public class AIService {
             return data;
         }
         else if (type.equals("text")) {
-            HttpEntity<String> requestEntity = new HttpEntity<>("{\"text\": \""+query+"\"}",headers);
+            HttpEntity<String> requestEntity = new HttpEntity<>("{\"text\": \""+query+"\", \"user_id\": \""+id+"\"}",headers);
             String apiUrl = uri+"/searchtext";
             ResponseEntity<String> responseEntity = restTemplate.exchange(
                 apiUrl,

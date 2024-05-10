@@ -77,21 +77,11 @@ public class UserService {
             list.add(p);
         }
         list = list.stream()
-                .sorted(Comparator.comparing(Post::getCreated_at))
+                .sorted(Comparator.comparing(Post::getCreated_at).reversed())
                 .collect(Collectors.toList());;
         List<PostDTO> data = new ArrayList<>();
         list.forEach((post -> {
             int share_count = postRepository.getShareCount(post.getId());
-//            Set<DisplayUserDTO> like = new HashSet<>();
-//            post.getLikes().forEach(user -> {
-//                DisplayUserDTO userDTO = DisplayUserDTO.builder()
-//                        .id(user.getId())
-//                        .avatar_url(user.getProfile().getAvatar_url())
-//                        .fullname(user.getFirstname()+" "+user.getLastname())
-//                        .username(user.getUsername())
-//                        .build();
-//                like.add(userDTO);
-//            });
             PostDTO p = new PostDTO();
             p.loadFromEntity(post,share_count,u);
             data.add(p);
