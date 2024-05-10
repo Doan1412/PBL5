@@ -206,7 +206,7 @@ public class PostService {
             User user = userRepository.findByAccount_Id(account_id).orElseThrow();
             //Goi api o day
             //Tra ve list id post ở đây list = ...
-            list = aiService.searchPost(type, query);
+            list = aiService.searchPost(type, query, user.getId());
             List<PostDTO> data = new ArrayList<>();
             list.forEach((post_id -> {
                 Post post = repository.findById(post_id).orElseThrow();
