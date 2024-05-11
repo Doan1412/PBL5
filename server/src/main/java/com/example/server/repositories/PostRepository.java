@@ -35,11 +35,11 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
                 "     profile.avatar_url AS avatarUrl, \r\n" + //
                 "     COLLECT(DISTINCT like) AS likes,\r\n" + //
                 "     count(like) AS like_count, count(share) AS share_count,  \r\n" + //
-                "     COLLECT(DISTINCT { url: attachment.url, type: attachment.type }) AS attachments \r\n" + //
+                "REDUCE(s = \"\", url IN COLLECT(attachment.url) | s + url + \", \") AS attachments_url\r\n" + //"
                 "ORDER BY post.timestamp DESC\r\n" + //
                 "SKIP $skip LIMIT $limit\r\n" + //
                 "RETURN id, content, created_at, updated_at, userId, username, fullName, avatarUrl, \r\n" + //
-                "       like_count, share_count, attachments,\r\n" + //
+                "       like_count, share_count, attachments_url,\r\n" + //
                 "       CASE WHEN u IN likes THEN true ELSE false END AS isLike\r\n" + //
                 "")
     List<PostDTO> getTimelinePosts(String id, int skip, int limit);

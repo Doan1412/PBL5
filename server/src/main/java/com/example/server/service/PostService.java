@@ -140,6 +140,22 @@ public class PostService {
         User user = userRepository.findByAccount_Id(acc_id).orElseThrow(()->new NotFoundException("User not found"));
         System.out.println("on");
         List<PostDTO> data = repository.getTimelinePosts(user.getId(), skip, limit);
+        for (PostDTO post : data) {
+            List<String> urls = Arrays.asList(post.getAttachments_url().split(","));
+            // System.out.println(urls.toString());
+            Set<PostAttachment> attachments = new HashSet<>();
+            for (String url : urls) {
+                url = url.trim();
+                System.out.println(url);
+                if (!url.isEmpty()) {
+                    PostAttachment attachment = new PostAttachment();
+                    attachment.setUrl(url);
+                    attachments.add(attachment);
+                }
+            }
+    
+            post.setAttachments(attachments);
+        }
         // List<String> list = repository.getTimelinePosts(user.getId(), skip, limit);
         // System.out.println(list);
         // List<PostDTO> data = new ArrayList<>();
