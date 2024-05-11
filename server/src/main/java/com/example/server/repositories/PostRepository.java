@@ -33,7 +33,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
                 "     COLLECT(DISTINCT like) AS likes,\r\n" + //
                 "     count(like) AS like_count, count(share) AS share_count,  \r\n" + //
                 "     REDUCE(s = \"\", url IN COLLECT(attachment.url) | s + url + \",\") AS attachments_url\r\n" + //
-                "ORDER BY post.timestamp DESC\r\n" + //
+                "ORDER BY post.created_at DESC\r\n" + //
                 "SKIP 0 LIMIT 10\r\n" + //
                 "RETURN id, content, created_at, updated_at, userId, username, fullName, avatarUrl, \r\n" + //
                 "       like_count, share_count, attachments_url,\r\n" + //
@@ -54,7 +54,7 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
                 "     COLLECT(DISTINCT like) AS likes,\r\n" + //
                 "     count(like) AS like_count, count(share) AS share_count,  \r\n" + //
                 "REDUCE(s = \"\", url IN COLLECT(attachment.url) | s + url + \", \") AS attachments_url\r\n" + //"
-                "ORDER BY post.timestamp DESC\r\n" + //
+                "ORDER BY post.created_at DESC\r\n" + //
                 "SKIP $skip LIMIT $limit\r\n" + //
                 "RETURN id, content, created_at, updated_at, userId, username, fullName, avatarUrl, \r\n" + //
                 "       like_count, share_count, attachments_url,\r\n" + //

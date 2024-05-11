@@ -103,7 +103,6 @@ public class UserService {
         //     p.loadFromEntity(post,share_count,u);
         //     data.add(p);
         // }));
-        Collections.reverse(data);
         return data;
     }
 
