@@ -103,7 +103,8 @@ public class UserService {
         //     p.loadFromEntity(post,share_count,u);
         //     data.add(p);
         // }));
-        return data.reversed();
+        Collections.reverse(data);
+        return data;
     }
 
     public void updateUserStatus(String userId) {
