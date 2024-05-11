@@ -3,12 +3,14 @@ package com.example.server.repositories;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 
+import com.example.server.DTO.PostDTO;
 import com.example.server.models.Entity.Comment;
 import com.example.server.models.Entity.Post;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface PostRepository extends Neo4jRepository<Post, String> {
@@ -20,13 +22,28 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
             "WHERE NOT (p)<-[:COMMENTED_ON]-(:Post) AND NOT (p)<-[:COMMENTED_ON]-(:Share_post)" +
             "RETURN p.id")
     List<String> findByUserId(@Param("user_id") String user_id);
-    @Query("MATCH (u:User {id : $id})-[:FRIEND]-(user:User)-[p:POSTED_BY]->(post:Post) " +
-            "WHERE NOT (post)<-[:COMMENTED_ON]-(:Post) AND NOT (post)<-[:COMMENTED_ON]-(:Share_post)" +
-            "WITH DISTINCT post " +
-            "RETURN post.id " +
-            "ORDER BY post.timestamp DESC " +
-            "SKIP $skip LIMIT $limit")
-    List<String> getTimelinePosts(String id, int skip, int limit);
+    @Query("MATCH (u:User {id : $id})-[:FRIEND]-(user:User)-[:POSTED_BY]->(post:Post)\r\n" + //
+                "WHERE NOT (post)<-[:COMMENTED_ON]-(:Post) AND NOT (post)<-[:COMMENTED_ON]-(:Share_post)\r\n" + //
+                "MATCH (user)-[:HAS_PROFILE]-(profile:Profile)\r\n" + //
+                "WITH DISTINCT post, user, profile, u\r\n" + //
+                "OPTIONAL MATCH (post)-[:LIKED_BY]-(like:User) \r\n" + //
+                "OPTIONAL MATCH (post)-[:SHARED_POST]-(share:Share_post) \r\n" + //
+                "OPTIONAL MATCH (post)-[:CONTAINS]->(attachment:Post_attachment) \r\n" + //
+                "WITH post, user, profile, u,\r\n" + //
+                "     post.id AS id, post.content AS content, post.created_at AS created_at, post.updated_at AS updated_at,\r\n" + //
+                "     user.id AS userId , user.username AS username, user.firstname + \" \"+ user.lastname AS fullName, \r\n" + //
+                "     profile.avatar_url AS avatarUrl, \r\n" + //
+                "     COLLECT(DISTINCT like) AS likes,\r\n" + //
+                "     count(like) AS like_count, count(share) AS share_count,  \r\n" + //
+                "REDUCE(s = \"\", url IN COLLECT(attachment.url) | s + url + \", \") AS attachments_url\r\n" + //"
+                "ORDER BY post.timestamp DESC\r\n" + //
+                "SKIP $skip LIMIT $limit\r\n" + //
+                "RETURN id, content, created_at, updated_at, userId, username, fullName, avatarUrl, \r\n" + //
+                "       like_count, share_count, attachments_url,\r\n" + //
+                "       CASE WHEN u IN likes THEN true ELSE false END AS isLike\r\n" + //
+                "")
+    List<PostDTO> getTimelinePosts(String id, int skip, int limit);
+
 
     @Query("MATCH (p1:Post {id: $postId}), (p2:Post {id: $commentId}) CREATE (p1)-[:COMMENTED_ON]->(p2)")
     void addCommentToPost(@Param("postId") String postId,@Param("commentId") String commentId);

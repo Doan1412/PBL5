@@ -139,16 +139,33 @@ public class PostService {
         System.out.println(acc_id);
         User user = userRepository.findByAccount_Id(acc_id).orElseThrow(()->new NotFoundException("User not found"));
         System.out.println("on");
-        List<String> list = repository.getTimelinePosts(user.getId(), skip, limit);
-        System.out.println(list);
-        List<PostDTO> data = new ArrayList<>();
-        list.forEach((post_id -> {
-            Post post = repository.findById(post_id).orElseThrow();
-            int share_count = repository.getShareCount(post_id);
-            PostDTO p = new PostDTO();
-            p.loadFromEntity(post,share_count,user);
-            data.add(p);
-        }));
+        List<PostDTO> data = repository.getTimelinePosts(user.getId(), skip, limit);
+        for (PostDTO post : data) {
+            List<String> urls = Arrays.asList(post.getAttachments_url().split(","));
+            // System.out.println(urls.toString());
+            Set<PostAttachment> attachments = new HashSet<>();
+            for (String url : urls) {
+                url = url.trim();
+                System.out.println(url);
+                if (!url.isEmpty()) {
+                    PostAttachment attachment = new PostAttachment();
+                    attachment.setUrl(url);
+                    attachments.add(attachment);
+                }
+            }
+    
+            post.setAttachments(attachments);
+        }
+        // List<String> list = repository.getTimelinePosts(user.getId(), skip, limit);
+        // System.out.println(list);
+        // List<PostDTO> data = new ArrayList<>();
+        // list.forEach((post_id -> {
+        //     Post post = repository.findById(post_id).orElseThrow();
+        //     int share_count = repository.getShareCount(post_id);
+        //     PostDTO p = new PostDTO();
+        //     p.loadFromEntity(post,share_count,user);
+        //     data.add(p);
+        // }));
         return data;
     }
     public List<PostDTO> getCommentsForPost(String postId, String acc_id) {

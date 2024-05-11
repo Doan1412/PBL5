@@ -29,6 +29,7 @@ public class PostDTO {
     private int like_count;
     private int share_count;
     private boolean isLike;
+    private String attachments_url;
     private Set<PostAttachment> attachments = new HashSet<>();
     public void loadFromEntity(Post post, int share_count,User user) {
         this.userId =post.getUser().getId();
