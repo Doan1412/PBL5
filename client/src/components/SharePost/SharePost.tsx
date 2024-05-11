@@ -243,11 +243,11 @@ export default function SharePost(props: PropsSharePost) {
           attachments: imageCmt,
           postId: dataSharePost?.id,
         },
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         setListCmt((prev) => [response.data.data, ...prev]);
         setLoading(false);

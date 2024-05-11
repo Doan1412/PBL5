@@ -24,10 +24,10 @@ export default function useRoutes() {
         active: pathname === "/users",
       },
       {
-        label: "Logout",
-        href: "#",
+        label: "Home",
+        href: "/home",
         icon: HiArrowLeftOnRectangle,
-        onClick: () => signOut(),
+        active: pathname === "/home",
       },
     ],
     [pathname, conversationId]

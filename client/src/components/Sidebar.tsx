@@ -4,6 +4,7 @@ import {
   FaBell,
   FaEnvelope,
   FaHome,
+  FaUserFriends,
 } from "react-icons/fa";
 import Link from "next/link";
 import { Image, Skeleton } from "@nextui-org/react";
@@ -88,12 +89,12 @@ const Sidebar: React.FC = () => {
           </div>
           <h3>Messages</h3>
         </div>
-        <div className="link">
+        <div className="link"  onClick={() => router.push("/friend")}>
           <div className="icon">
             {" "}
-            <FaBell />
+            <FaUserFriends />
           </div>
-          <h3>Notifications</h3>
+          <h3>Friends</h3>
         </div>
       </div>
 

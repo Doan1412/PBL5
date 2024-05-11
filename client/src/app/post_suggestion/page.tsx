@@ -1,13 +1,10 @@
 "use client";
 import React, { useState, useRef, Fragment, useEffect, useMemo } from "react";
 import Sidebar from "@/components/Sidebar";
-import userData from "../data/UserData";
 import Post from "@/components/Post/Post";
-import ListPost from "@/components/SatatusPost";
 import { FriendRequest, PostType, User } from "../types";
 import Widget from "../widget";
 import { useListPost } from "../actions/custom/useListPost";
-import useRefreshToken from "../actions/refreshToken";
 import { getLocalStorage } from "../actions/localStorage_State";
 import SatatusPost from "@/components/SatatusPost";
 import SkeletonPost from "@/components/SkeletonPost/SkeletonPost";
@@ -19,8 +16,9 @@ import { useSearchParams } from "next/navigation";
 import useHttp from "../hooks/customs/useAxiosPrivate";
 import { failPopUp } from "../hooks/features/popup.slice";
 import Navigation from "@/components/Navigation/Navigation";
+import { useListSuggestPost } from "../actions/custom/useListSuggestPost";
 
-const Home: React.FC = () => {
+export default function PostSuggest ()  {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
   //   useClickOutside(() => setIsFocused(false), ref);
@@ -31,6 +29,7 @@ const Home: React.FC = () => {
   const [offset, setOffset] = useState<number>(0);
 
   const dispatch = useAppDispatch();
+  const params = useSearchParams();
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
 
@@ -39,7 +38,7 @@ const Home: React.FC = () => {
     if (!token) return;
     try {
       const response = await httpPrivate.get(
-        `/post/homepage?skip=${offset + 1}&limit=20`
+        `/post/suggest`
 
         // {
         //   headers: {
@@ -63,10 +62,9 @@ const Home: React.FC = () => {
   };
   // const refresh = useRefreshToken();
 
-  useListPost(setPosts, setLoading, offset);
+  useListSuggestPost(setPosts, setLoading);
   useListFriendRequests(setRequests, setLoading);
 
-  console.log(offset);
   return (
     <>
       <nav className="fixed z-40 w-full">
@@ -109,7 +107,7 @@ const Home: React.FC = () => {
                   <InfiniteScroll
                     dataLength={posts.length} // Số lượng dữ liệu hiện có
                     next={() => {
-                      setOffset((prevOffset) => prevOffset + 1);
+                    //   setOffset((prevOffset) => prevOffset + 1);
                       lazyPost();
                     }} // Tăng offset khi kéo xuống cuối trang
                     hasMore={true} // Bật cờ này nếu còn dữ liệu để tải thêm
@@ -155,4 +153,3 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;

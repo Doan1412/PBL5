@@ -82,7 +82,7 @@ const Post: React.FC<PostProps> = ({
   hiddenComment,
 }: PostProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [text, setText] = useState("");
+  const [text, setText] = useState<string>();
   const [showComment, setShowComment] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const httpPrivate = useHttp();
@@ -173,7 +173,6 @@ const Post: React.FC<PostProps> = ({
       // console.error("Error:", error);
     }
   };
-
 
   const toggleComment = () => {
     if (!isClicked) {
@@ -313,12 +312,12 @@ const Post: React.FC<PostProps> = ({
           content: comment,
           attachments: imageCmt,
           postId: postData?.id,
-        },
-        {
-          signal: controller.signal,
         }
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         setListCmt((prev) => [response.data.data, ...prev]);
         setLoading(false);
@@ -796,7 +795,8 @@ const Post: React.FC<PostProps> = ({
                               </div>
                               <div className="flex justify-center items-center gap-3 mr-3 relative">
                                 <div className="option">
-                                  <CldUploadButton  options={{ maxFiles: 5 }}
+                                  <CldUploadButton
+                                    options={{ maxFiles: 5 }}
                                     onSuccess={(result: any) => {
                                       const secureUrl =
                                         result?.info?.secure_url;
@@ -808,8 +808,8 @@ const Post: React.FC<PostProps> = ({
                                       }
                                     }}
                                     uploadPreset="s2lo0hgq"
-                                  >CldUploadButton
-                                  
+                                  >
+                                    CldUploadButton
                                     <IoMdImages
                                       size={25}
                                       className="text-green-700 cursor-pointer"
