@@ -4,6 +4,7 @@ import com.example.server.DTO.DisplayUserDTO;
 import com.example.server.DTO.PostDTO;
 import com.example.server.DTO.UserDTO;
 import com.example.server.models.Entity.Post;
+import com.example.server.models.Entity.PostAttachment;
 import com.example.server.models.Entity.Profile;
 import com.example.server.models.Entity.User;
 import com.example.server.models.Enum.AccountStatus;
@@ -70,22 +71,38 @@ public class UserService {
     }
     public List<PostDTO> get_post_by_user (String user_id, String acc_id){
         User u = repository.findByAccount_Id(acc_id).orElseThrow();
-        List<String> post_ids = postRepository.findByUserId(user_id);
-        List<Post> list = new ArrayList<>();
-        for (String postId : post_ids) {
-            Post p = postRepository.findById(postId).orElseThrow();
-            list.add(p);
+        List<PostDTO> data = postRepository.findByUserId(user_id, u.getId());
+        for (PostDTO post : data) {
+            List<String> urls = Arrays.asList(post.getAttachments_url().split(","));
+            // System.out.println(urls.toString());
+            Set<PostAttachment> attachments = new HashSet<>();
+            for (String url : urls) {
+                url = url.trim();
+                System.out.println(url);
+                if (!url.isEmpty()) {
+                    PostAttachment attachment = new PostAttachment();
+                    attachment.setUrl(url);
+                    attachments.add(attachment);
+                }
+            }
+    
+            post.setAttachments(attachments);
         }
-        list = list.stream()
-                .sorted(Comparator.comparing(Post::getCreated_at).reversed())
-                .collect(Collectors.toList());;
-        List<PostDTO> data = new ArrayList<>();
-        list.forEach((post -> {
-            int share_count = postRepository.getShareCount(post.getId());
-            PostDTO p = new PostDTO();
-            p.loadFromEntity(post,share_count,u);
-            data.add(p);
-        }));
+        // List<Post> list = new ArrayList<>();
+        // for (String postId : post_ids) {
+        //     Post p = postRepository.findById(postId).orElseThrow();
+        //     list.add(p);
+        // }
+        // list = list.stream()
+        //         .sorted(Comparator.comparing(Post::getCreated_at).reversed())
+        //         .collect(Collectors.toList());;
+        // List<PostDTO> data = new ArrayList<>();
+        // list.forEach((post -> {
+        //     int share_count = postRepository.getShareCount(post.getId());
+        //     PostDTO p = new PostDTO();
+        //     p.loadFromEntity(post,share_count,u);
+        //     data.add(p);
+        // }));
         return data;
     }
 
