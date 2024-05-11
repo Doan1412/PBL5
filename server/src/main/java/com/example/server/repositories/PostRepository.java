@@ -18,10 +18,28 @@ public interface PostRepository extends Neo4jRepository<Post, String> {
     List<String> getLikeUser(@Param("postId") String postId);
     @Query("MATCH (p:Post)-[:SHARED_BY]->(u:User) WHERE id(p) = $postId RETURN count(u) AS shareCount")
     int getShareCount(@Param("postId") String postId);
-    @Query("MATCH (p:Post)<-[:POSTED_BY]-(:User{id : $user_id}) " +
-            "WHERE NOT (p)<-[:COMMENTED_ON]-(:Post) AND NOT (p)<-[:COMMENTED_ON]-(:Share_post)" +
-            "RETURN p.id")
-    List<String> findByUserId(@Param("user_id") String user_id);
+    @Query("MATCH (post:Post)<-[:POSTED_BY]-(u:User{id : $user_id})\r\n" + //
+                "WHERE NOT (post)<-[:COMMENTED_ON]-(:Post) AND NOT (post)<-[:COMMENTED_ON]-(:Share_post)\r\n" + //
+                "MATCH (user)-[:HAS_PROFILE]-(profile:Profile)\r\n" + //
+                "MATCH (me:User{id: $me_id})\r\n" + //
+                "WITH DISTINCT post, user, profile, u, me\r\n" + //
+                "OPTIONAL MATCH (post)-[:LIKED_BY]-(like:User) \r\n" + //
+                "OPTIONAL MATCH (post)-[:SHARED_POST]-(share:Share_post) \r\n" + //
+                "OPTIONAL MATCH (post)-[:CONTAINS]->(attachment:Post_attachment) \r\n" + //
+                "WITH post, user, profile, u, me,\r\n" + //
+                "     post.id AS id, post.content AS content, post.created_at AS created_at, post.updated_at AS updated_at,\r\n" + //
+                "     user.id AS userId , user.username AS username, user.firstname + \" \"+ user.lastname AS fullName, \r\n" + //
+                "     profile.avatar_url AS avatarUrl, \r\n" + //
+                "     COLLECT(DISTINCT like) AS likes,\r\n" + //
+                "     count(like) AS like_count, count(share) AS share_count,  \r\n" + //
+                "     COLLECT( { url: attachment.url, type: attachment.type, id : attachment.id, create_at:attachment.created_at }) AS attachments\r\n" + //
+                "ORDER BY post.timestamp DESC\r\n" + //
+                "SKIP 1 LIMIT 10\r\n" + //
+                "RETURN id, content, created_at, updated_at, userId, username, fullName, avatarUrl, \r\n" + //
+                "       like_count, share_count, attachments,\r\n" + //
+                "       CASE WHEN me IN likes THEN true ELSE false END AS isLike\r\n" + //
+                "")
+    List<PostDTO> findByUserId(@Param("user_id") String user_id, String me_id);
     @Query("MATCH (u:User {id : $id})-[:FRIEND]-(user:User)-[:POSTED_BY]->(post:Post)\r\n" + //
                 "WHERE NOT (post)<-[:COMMENTED_ON]-(:Post) AND NOT (post)<-[:COMMENTED_ON]-(:Share_post)\r\n" + //
                 "MATCH (user)-[:HAS_PROFILE]-(profile:Profile)\r\n" + //
