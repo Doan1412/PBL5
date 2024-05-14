@@ -43,17 +43,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Object> update( @RequestBody  UserDTO user) {
-        try {
-            System.out.println(user);
-            User u = service.updateInfo(user);
-            return Respond.success(200,"I001",u);
-        }
-        catch (Exception e){
-            return Respond.fail(500,"E001",e.getMessage());
-        }
-    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable String id) {
