@@ -48,10 +48,8 @@ export default function AboutProfile({ data, id_user }: PropsAboutProfile) {
     const token = getLocalStorage()?.token;
     if (!token) return;
     try {
-      const response = await httpPrivate.delete(`/user/${id}`, {
-        signal: controller.signal,
-      });
-      controller.abort();
+      const response = await httpPrivate.delete(`/user/${id}`);
+      // controller.abort();
       if (response.data.status === 200) {
         localStorage.clear();
         router.push("/login");

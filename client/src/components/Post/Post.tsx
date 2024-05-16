@@ -145,11 +145,11 @@ const Post: React.FC<PostProps> = ({
         {
           content: currentCmt?.content,
         },
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status == 200) {
         const handler = (cmtObj: CommentType[]) => {
           return cmtObj.map((cmt) => {
@@ -219,10 +219,8 @@ const Post: React.FC<PostProps> = ({
     const token = getLocalStorage()?.token;
     if (!token) return;
     try {
-      const response = await httpPrivate.delete(`/post/${postData?.id}`, {
-        signal: controller.signal,
-      });
-      controller.abort();
+      const response = await httpPrivate.delete(`/post/${postData?.id}`);
+      // controller.abort();
       if (response.data.status == 200) {
         setPosts((prevPosts) => {
           return prevPosts.filter((post) => post.id != postData.id);
@@ -243,16 +241,16 @@ const Post: React.FC<PostProps> = ({
     try {
       const response = await httpPrivate.post(
         `/post/${postData?.id}/unlike`,
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
         // {
         //   headers: {
         //     Authorization: `Bearer ${token}`,
         //   },
         // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         setLoading(false);
       } else {
@@ -267,10 +265,8 @@ const Post: React.FC<PostProps> = ({
   const like = async () => {
     // like post
     try {
-      const response = await httpPrivate.post(`/post/${postData?.id}/like`, {
-        signal: controller.signal,
-      });
-      controller.abort();
+      const response = await httpPrivate.post(`/post/${postData?.id}/like`);
+      // controller.abort();
       if (response.data.status === 200) {
         setLoading(false);
       } else {
@@ -287,9 +283,7 @@ const Post: React.FC<PostProps> = ({
     if (!localStorage.getItem("access_token")) return;
     const token = localStorage.getItem("access_token")?.toString();
     try {
-      const response = await httpPrivate.get(`/comment/post/${postData?.id}`, {
-        signal: controller.signal,
-      });
+      const response = await httpPrivate.get(`/comment/post/${postData?.id}`);
       if (response.data.status === 200) {
         const listCmt = response.data.data;
         setListCmt(listCmt);
@@ -317,7 +311,7 @@ const Post: React.FC<PostProps> = ({
         //   signal: controller.signal,
         // }
       );
-      // controller.abort();
+      // // controller.abort();
       if (response.data.status === 200) {
         setListCmt((prev) => [response.data.data, ...prev]);
         setLoading(false);
@@ -335,13 +329,15 @@ const Post: React.FC<PostProps> = ({
     if (!token) return;
     try {
       const response = await httpPrivate.post(
-        `/post/${postData?.id}/share?caption="${encodeURIComponent(text)}"`,
+        `/post/${postData?.id}/share?caption="${encodeURIComponent(
+          text as string
+        )}"`,
         null,
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         // setPosts((prevPosts) => [...prevPosts, response.data.data]);
         dispatch(successPopUp("Share bài thành công! 😘"));

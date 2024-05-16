@@ -23,16 +23,16 @@ export function useListPostShare(
       try {
         const response = await httpPrivate.get(
           `post/share/homepage?skip=0&limit=20`,
-          {
-            signal: controller.signal,
-          }
+          // {
+          //   signal: controller.signal,
+          // }
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,
           //   },
           // }
         );
-        controller.abort();
+        // controller.abort();
         if (response.data.status === 200) {
           const postsData = response.data.data;
           const originPostsData = response.data.data.originalPost;
@@ -49,5 +49,13 @@ export function useListPostShare(
       }
     }
     fetchListPostShare();
-  }, [params, dispatch, httpPrivate, setSharePosts, setLoading, controller, setOriginPosts]);
+  }, [
+    params,
+    dispatch,
+    httpPrivate,
+    setSharePosts,
+    setLoading,
+    controller,
+    setOriginPosts,
+  ]);
 }

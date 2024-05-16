@@ -44,17 +44,17 @@ export default function Admin() {
       if (!token) return;
       try {
         const response = await httpPrivate.get(
-          `/report`,
-          {
-            signal: controller.signal,
-          }
+          `/report`
+          // {
+          //   signal: controller.signal,
+          // }
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,
           //   },
           // }
         );
-        controller.abort();
+        // // controller.abort();
         if (response.data.status === 200) {
           const reportsData = response.data.data;
           console.log(reportsData);

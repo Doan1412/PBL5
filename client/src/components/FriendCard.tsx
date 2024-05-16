@@ -50,11 +50,11 @@ export default function FriendCard({
     try {
       const response = await httpPrivate.post(
         `/friend/send_friend_request/${id}`,
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         setIsWaitingConfirmation(true);
         // Xử lý logic khi thêm bạn thành công
@@ -82,7 +82,6 @@ export default function FriendCard({
           <div className="flex items-center justify-center overflow-hidden w-75 h-50">
             <Image
               src={avatar ? avatar : avatarDefault.src}
-             
               alt={username}
               title={username}
               className="object-cover h-[250px] w-full"

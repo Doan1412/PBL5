@@ -75,7 +75,7 @@ export default function MessageBox({
   //         //   },
   //         // }
   //       );
-  //       controller.abort();
+  //       // controller.abort();
   //       if (response.data.status === 200) {
   //         const listMessenger = response.data.data;
   //         // console.log(friendsData);
@@ -103,7 +103,7 @@ export default function MessageBox({
   //       const response = await httpPrivate.get(`room/${conversationId}`, {
   //         signal: controller.signal,
   //       });
-  //       controller.abort();
+  //       // controller.abort();
   //       if (response.data.status === 200) {
   //         setBoxMessage(response.data.data);
   //       } else {

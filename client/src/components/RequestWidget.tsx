@@ -20,11 +20,11 @@ export default function RequestWidget({ request }: RequestProps) {
     try {
       const response = await httpPrivate.post(
         `/friend/add_friend/${request?.id}`,
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         setResponed(true);
         dispatch(successPopUp("Friend request accepted"));
@@ -38,10 +38,8 @@ export default function RequestWidget({ request }: RequestProps) {
   };
   const handleReject = async () => {
     try {
-      const response = await httpPrivate.post(`/friend/reject/${request?.id}`, {
-        signal: controller.signal,
-      });
-      controller.abort();
+      const response = await httpPrivate.post(`/friend/reject/${request?.id}`);
+      // controller.abort();
       if (response.data.status === 200) {
         setResponed(true);
         dispatch(successPopUp("Friend request rejected"));

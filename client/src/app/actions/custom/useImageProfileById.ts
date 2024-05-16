@@ -23,16 +23,16 @@ export function useImageProfileById(
       try {
         const response = await httpPrivate.get(
           `/user/${id_user}/img`,
-          {
-            signal: controller.signal,
-          }
+          // {
+          //   signal: controller.signal,
+          // }
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,
           //   },
           // }
         );
-        controller.abort();
+        // controller.abort();
         if (response.data.status === 200) {
           const imgsData = response.data.data;
           setImages(imgsData);

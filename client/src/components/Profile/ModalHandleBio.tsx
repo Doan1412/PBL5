@@ -54,7 +54,6 @@ export default function ModalHandleBio({
     params.get("id_user") as string
   );
 
-
   const {
     bio,
     linkImageCover,
@@ -94,21 +93,21 @@ export default function ModalHandleBio({
           avatar_url: linkImageAvatar,
           cover_url: linkImageCover,
           bio,
-          relationship:love,
+          relationship: love,
           study_at: study,
           work_at: work,
           from,
         },
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
         // {
         //   headers: {
         //     Authorization: `Bearer ${token}`,
         //   },
         // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         dispatch(successPopUp("Cập nhật thông tin thành công!"));
       } else {

@@ -108,16 +108,16 @@ export default function ModalHandleInfo({
           gender: sex,
           birth,
         },
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
         // {
         //   headers: {
         //     Authorization: `Bearer ${token}`,
         //   },
         // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         dispatch(successPopUp("Cập nhật thông tin thành công!"));
       } else {

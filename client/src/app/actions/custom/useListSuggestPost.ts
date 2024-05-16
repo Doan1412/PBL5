@@ -8,14 +8,13 @@ import { failPopUp } from "../../hooks/features/popup.slice";
 
 export function useListSuggestPost(
   setPosts: React.Dispatch<React.SetStateAction<PostType[]>>,
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
   // offset: number
 ) {
   const dispatch = useAppDispatch();
   const params = useSearchParams();
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
-
 
   useEffect(() => {
     async function fetchListPost() {
@@ -24,16 +23,16 @@ export function useListSuggestPost(
       try {
         const response = await httpPrivate.get(
           `/post/suggest`,
-          {
-            signal: controller.signal,
-          }
+          // {
+          //   signal: controller.signal,
+          // }
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,
           //   },
           // }
         );
-        controller.abort();
+        // controller.abort();
         if (response.data.status === 200) {
           const postsData = response.data.data;
           // console.log(postsData);
@@ -48,5 +47,5 @@ export function useListSuggestPost(
       }
     }
     fetchListPost();
-  }, [ params, dispatch, httpPrivate, setPosts, setLoading, controller]);
+  }, [params, dispatch, httpPrivate, setPosts, setLoading, controller]);
 }

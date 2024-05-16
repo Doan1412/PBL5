@@ -17,7 +17,9 @@ export default function Profile() {
     }
   });
 
-  return <></>;
+  return <>
+  Loading...
+  </>;
 }
 
 // import Navigation from "@/components/Navigation";

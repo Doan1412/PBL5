@@ -148,7 +148,7 @@ export default function Navigation({
 
   return (
     <div>
-      <nav className="hidden lg:flex bg-white p-0 dark:bg-[#242526] justify-between">
+      <nav className="hidden lg:flex bg-white p-0 dark:bg-[#242526] justify-between dark:text-white">
         <div className="flex">
           <div>
             <Image
@@ -295,31 +295,45 @@ export default function Navigation({
                 }}
               >
                 <svg
-                  width="2em"
-                  height="2em"
-                  viewBox="0 0 21 21"
+                  width="1.6em"
+                  height="1.6em"
+                  version="1.1"
+                  id="Layer_1"
                   xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 512 512"
+                  fill="currentColor"
+                  stroke="currentColor"
+                  className="icon"
                 >
+                  <g id="SVGRepo_bgCarrier" stroke-width="0" />
+
                   <g
-                    fill="none"
-                    fill-rule="evenodd"
-                    stroke="#000000"
+                    id="SVGRepo_tracerCarrier"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    transform="translate(3 4)"
-                  >
-                    <path d="m2.5.5h10c1.1045695 0 2 .8954305 2 2v8c0 1.1045695-.8954305 2-2 2h-10c-1.1045695 0-2-.8954305-2-2v-8c0-1.1045695.8954305-2 2-2z" />
+                  />
 
-                    <path d="m10.5 2.5h1c.5522847 0 1 .44771525 1 1v1c0 .55228475-.4477153 1-1 1h-1c-.55228475 0-1-.44771525-1-1v-1c0-.55228475.44771525-1 1-1z" />
-
-                    <path d="m2.5 7.5h5" />
-
-                    <path d="m2.5 9.5h5" />
+                  <g id="SVGRepo_iconCarrier">
+                    {" "}
+                    <g>
+                      {" "}
+                      <g>
+                        {" "}
+                        <g>
+                          {" "}
+                          <path d="M490.667,149.337h-5.956L446.905,35.922c-3.726-11.177-15.807-17.218-26.985-13.492L39.198,149.337H21.333 C9.551,149.337,0,158.889,0,170.671v298.667c0,11.782,9.551,21.333,21.333,21.333h469.333c11.782,0,21.333-9.551,21.333-21.333 V170.671C512,158.889,502.449,149.337,490.667,149.337z M413.174,69.653l26.561,79.682H174.129L413.174,69.653z M469.333,448.004 H42.667v-21.335c11.782,0,21.333-9.551,21.333-21.333c0-11.782-9.551-21.333-21.333-21.333v-42.667 c11.782,0,21.333-9.551,21.333-21.333c0-11.782-9.551-21.333-21.333-21.333v-42.667c11.782,0,21.333-9.551,21.333-21.333 c0-11.782-9.551-21.333-21.333-21.333v-21.331h426.667V448.004z" />{" "}
+                          <path d="M234.667,405.335c11.782,0,21.333-9.551,21.333-21.333v-128c0-11.782-9.551-21.333-21.333-21.333 c-11.782,0-21.333,9.551-21.333,21.333v128C213.333,395.784,222.885,405.335,234.667,405.335z" />{" "}
+                          <path d="M298.667,341.337h128c11.782,0,21.333-9.551,21.333-21.333v-85.333c0-11.782-9.551-21.333-21.333-21.333h-128 c-11.782,0-21.333,9.551-21.333,21.333v85.333C277.333,331.786,286.885,341.337,298.667,341.337z M320,256.004h85.333v42.667H320 V256.004z" />{" "}
+                          <path d="M426.667,362.669h-85.333c-11.782,0-21.333,9.551-21.333,21.333s9.551,21.333,21.333,21.333h85.333 c11.782,0,21.333-9.551,21.333-21.333S438.449,362.669,426.667,362.669z" />{" "}
+                        </g>{" "}
+                      </g>{" "}
+                    </g>{" "}
                   </g>
                 </svg>
               </button>
             </div>
           </li>
+
           <li>
             <div className="w-24 h-12 flex justify-center items-center hover:bg-gray-300 hover:border rounded-lg shrink dark:hover:bg-medium dark:hover:border-none">
               <button
