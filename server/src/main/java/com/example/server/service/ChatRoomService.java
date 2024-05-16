@@ -30,11 +30,11 @@ public class ChatRoomService {
         return chatRoomRepository.save(chatRoom);
     }
 
-    public void removeMemberFromChatRoom(String chatRoomId, String userId) {
+    public void removeMemberFromChatRoom(String chatRoomId, String accId) {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                 .orElseThrow(() -> new NotFoundException("Chat room not found"));
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByAccount_Id(accId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         chatRoom.getMembers().remove(user);
