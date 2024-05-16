@@ -63,16 +63,16 @@ export default function FriendForm({ data, setFiends }: PropFriendForm) {
           try {
             const response = await httpPrivate.post(
               `/friend/unfriend/${id}`,
-              {
-                signal: controller.signal,
-              }
+              // {
+              //   signal: controller.signal,
+              // }
               // {
               //   headers: {
               //     Authorization: `Bearer ${token}`,
               //   },
               // }
             );
-            controller.abort();
+            // controller.abort();
             if (response.data.status === 200) {
               {
                 setFiends && setFiends([...response.data.data]);

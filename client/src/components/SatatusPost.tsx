@@ -73,11 +73,11 @@ export default function SatatusPost({
           content: text,
           attachments: imagePost,
         },
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         setPosts((prevPosts) => [...prevPosts, response.data.data]);
         dispatch(successPopUp("Đăng bài thành công! 😘"));

@@ -24,16 +24,16 @@ export function useListPostShareOfUser(
       try {
         const response = await httpPrivate.get(
           `/post/share/user/${id_user}`,
-          {
-            signal: controller.signal,
-          }
+          // {
+          //   signal: controller.signal,
+          // }
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,
           //   },
           // }
         );
-        controller.abort();
+        // controller.abort();
         if (response.data.status === 200) {
           const postsData = response.data.data;
           const originPostsData = response.data.data.originalPost;
@@ -50,5 +50,14 @@ export function useListPostShareOfUser(
       }
     }
     fetchListPostShare();
-  }, [params, dispatch, httpPrivate, setSharePosts, setLoading, controller, setOriginPosts, id_user]);
+  }, [
+    params,
+    dispatch,
+    httpPrivate,
+    setSharePosts,
+    setLoading,
+    controller,
+    setOriginPosts,
+    id_user,
+  ]);
 }

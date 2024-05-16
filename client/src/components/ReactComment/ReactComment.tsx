@@ -93,11 +93,11 @@ export default function ReactComment({
         {
           content: currentCmt?.content,
         },
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status == 200) {
         const handler = (cmtObj: CommentType[]) => {
           return cmtObj.map((cmt) => {
@@ -138,16 +138,16 @@ export default function ReactComment({
     try {
       const response = await httpPrivate.post(
         `/post/${dataComment?.id}/unlike`,
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
         // {
         //   headers: {
         //     Authorization: `Bearer ${token}`,
         //   },
         // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
       } else {
         dispatch(failPopUp(response.data.message));
@@ -160,10 +160,8 @@ export default function ReactComment({
   const like = async () => {
     // like post
     try {
-      const response = await httpPrivate.post(`/post/${dataComment?.id}/like`, {
-        signal: controller.signal,
-      });
-      controller.abort();
+      const response = await httpPrivate.post(`/post/${dataComment?.id}/like`);
+      // controller.abort();
       if (response.data.status === 200) {
       } else {
         dispatch(failPopUp(response.data.message));
@@ -180,9 +178,9 @@ export default function ReactComment({
     try {
       const response = await httpPrivate.get(
         `/comment/post/${dataComment?.id}`,
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
       if (response.data.status === 200) {
         const listCmt = response.data.data;
@@ -207,11 +205,11 @@ export default function ReactComment({
           attachments: imageCmt,
           postId: dataComment?.id,
         },
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         setListCmt((prev) => [response.data.data, ...prev]);
         setLoading(false);

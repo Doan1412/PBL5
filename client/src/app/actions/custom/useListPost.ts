@@ -16,7 +16,6 @@ export function useListPost(
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
 
-
   useEffect(() => {
     async function fetchListPost() {
       const token = getLocalStorage()?.token;
@@ -24,16 +23,16 @@ export function useListPost(
       try {
         const response = await httpPrivate.get(
           `/post/homepage?skip=${offset}&limit=20`,
-          {
-            signal: controller.signal,
-          }
+          // {
+          //   signal: controller.signal,
+          // }
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,
           //   },
           // }
         );
-        controller.abort();
+        // controller.abort();
         if (response.data.status === 200) {
           const postsData = response.data.data;
           // console.log(postsData);

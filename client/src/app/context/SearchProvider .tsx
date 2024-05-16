@@ -74,9 +74,9 @@ export const SearchFunctionsProvider: React.FC<{
     try {
       const response = await httpPrivate.get(
         `/post/search?type=${search?.type}&query=${search?.query}`,
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
       if (response.data.status === 200) {
         const posts = response.data.data;

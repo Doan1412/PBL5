@@ -80,7 +80,7 @@ export default function CommentForm({
       const response = await httpPrivate.delete(`/post/${id_Cmt}`, {
         signal: controller.signal,
       });
-      controller.abort();
+      // controller.abort();
       if (response.data.status == 200) {
         setListCmt((prevCmt) => {
           return prevCmt.filter((cmt) => cmt.id != id_Cmt);
@@ -111,7 +111,7 @@ export default function CommentForm({
   //         signal: controller.signal,
   //       }
   //     );
-  //     controller.abort();
+  //     // controller.abort();
   //     if (response.data.status == 200) {
   //       const handler = (cmtObj: CommentType[]) => {
   //         return cmtObj.map((cmt) => {
@@ -251,7 +251,6 @@ export default function CommentForm({
               </Modal>
             </div>
           ))}
-     
         </div>
       </div>
     </div>

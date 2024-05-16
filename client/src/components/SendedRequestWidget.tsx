@@ -1,10 +1,10 @@
-import useHttp from '@/app/hooks/customs/useAxiosPrivate';
-import { failPopUp, successPopUp } from '@/app/hooks/features/popup.slice';
-import { useAppDispatch } from '@/app/hooks/store';
-import { FriendRequest } from '@/app/types';
+import useHttp from "@/app/hooks/customs/useAxiosPrivate";
+import { failPopUp, successPopUp } from "@/app/hooks/features/popup.slice";
+import { useAppDispatch } from "@/app/hooks/store";
+import { FriendRequest } from "@/app/types";
 import { Button, Image } from "@nextui-org/react";
-import React, { useMemo, useState } from 'react'
-import { FaRegUser } from 'react-icons/fa';
+import React, { useMemo, useState } from "react";
+import { FaRegUser } from "react-icons/fa";
 interface RequestProps {
   request: FriendRequest;
 }
@@ -16,10 +16,13 @@ export default function SendedRequestWidget({ request }: RequestProps) {
   const [responed, setResponed] = useState(false);
   const handleDelete = async () => {
     try {
-      const response = await httpPrivate.delete(`/friend/cancel/${request?.id}`, {
-        signal: controller.signal,
-      });
-      controller.abort();
+      const response = await httpPrivate.delete(
+        `/friend/cancel/${request?.id}`
+        // {
+        //   signal: controller.signal,
+        // }
+      );
+      // controller.abort();
       if (response.data.status === 200) {
         setResponed(true);
         dispatch(successPopUp("Friend request cancel successfully!!!"));
@@ -30,7 +33,7 @@ export default function SendedRequestWidget({ request }: RequestProps) {
       console.error("Error:", error);
       setLoading(false);
     }
-  }
+  };
   if (responed) {
     return null;
   }

@@ -23,16 +23,16 @@ export function useListFriend(
       try {
         const response = await httpPrivate.get(
           `/friend/list/${id_user}`,
-          {
-            signal: controller.signal,
-          }
+          // {
+          //   signal: controller.signal,
+          // }
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,
           //   },
           // }
         );
-        controller.abort();
+        // controller.abort();
         if (response.data.status === 200) {
           const friendsData = response.data.data;
           // console.log(friendsData);

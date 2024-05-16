@@ -39,7 +39,7 @@ export default function Body({ conversationId }: BodyProps) {
   const { payloadData } = useStompClient();
   const [isOwnList, setIsOwnList] = useState<boolean[]>([]);
 
-  console.log(payloadData)
+  console.log(payloadData);
 
   useEffect(() => {
     console.log("test1");
@@ -71,16 +71,16 @@ export default function Body({ conversationId }: BodyProps) {
       try {
         const response = await httpPrivate.get(
           `/room/${conversationId}/messages?page=${offset + 1}&size=10`,
-          {
-            signal: controller.signal,
-          }
+          // {
+          //   signal: controller.signal,
+          // }
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,
           //   },
           // }
         );
-        controller.abort();
+        // controller.abort();
         if (response.data.status === 200) {
           const listMessenger = response.data.data;
           // console.log(friendsData);
@@ -105,10 +105,8 @@ export default function Body({ conversationId }: BodyProps) {
   useEffect(() => {
     async function getListBoxChat() {
       try {
-        const response = await httpPrivate.get(`room/${conversationId}`, {
-          signal: controller.signal,
-        });
-        controller.abort();
+        const response = await httpPrivate.get(`room/${conversationId}`);
+        // controller.abort();
         if (response.data.status === 200) {
           setBoxMessage(response.data.data);
         } else {

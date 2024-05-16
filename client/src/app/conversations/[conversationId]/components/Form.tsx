@@ -47,10 +47,8 @@ export default function Form({ conversationId }: FormProps) {
   useEffect(() => {
     async function getListBoxChat() {
       try {
-        const response = await httpPrivate.get(`room/${conversationId}`, {
-          signal: controller.signal,
-        });
-        controller.abort();
+        const response = await httpPrivate.get(`room/${conversationId}`);
+        // controller.abort();
         if (response.data.status === 200) {
           setBoxMessage(response.data.data);
         } else {

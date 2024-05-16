@@ -22,16 +22,16 @@ export function useListFriendRequests(
       try {
         const response = await httpPrivate.get(
           `/friend/request`,
-          {
-            signal: controller.signal,
-          }
+          // {
+          //   signal: controller.signal,
+          // }
           // {
           //   headers: {
           //     Authorization: `Bearer ${token}`,
           //   },
           // }
         );
-        controller.abort();
+        // controller.abort();
         if (response.data.status === 200) {
           const postsData = response.data.data;
           // console.log(postsData);

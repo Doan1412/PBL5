@@ -93,16 +93,16 @@ export default function SharePost(props: PropsSharePost) {
     try {
       const response = await httpPrivate.post(
         `/post/share/${dataSharePost?.id}/unlike`,
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
         // {
         //   headers: {
         //     Authorization: `Bearer ${token}`,
         //   },
         // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         setLoading(false);
       } else {
@@ -119,11 +119,11 @@ export default function SharePost(props: PropsSharePost) {
     try {
       const response = await httpPrivate.post(
         `/post/share/${dataSharePost?.id}/like`,
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         setLoading(false);
       } else {
@@ -153,9 +153,9 @@ export default function SharePost(props: PropsSharePost) {
     try {
       const response = await httpPrivate.get(
         `/comment/share/${dataSharePost?.id}`,
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
       if (response.data.status === 200) {
         const listCmt = response.data.data;
@@ -204,11 +204,11 @@ export default function SharePost(props: PropsSharePost) {
         {
           content: currentCmt?.content,
         },
-        {
-          signal: controller.signal,
-        }
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status == 200) {
         const handler = (cmtObj: CommentType[]) => {
           return cmtObj.map((cmt) => {
@@ -242,12 +242,12 @@ export default function SharePost(props: PropsSharePost) {
           content: comment,
           attachments: imageCmt,
           postId: dataSharePost?.id,
-        },
+        }
         // {
         //   signal: controller.signal,
         // }
       );
-      // controller.abort();
+      // // controller.abort();
       if (response.data.status === 200) {
         setListCmt((prev) => [response.data.data, ...prev]);
         setLoading(false);

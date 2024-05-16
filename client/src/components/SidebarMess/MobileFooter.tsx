@@ -18,7 +18,7 @@ export default function MobileFooter() {
           href={router.href}
           active={router.active}
           icon={router.icon}
-          onClick={router.onClick}
+          // onClick={router.onClick}
         />
       ))}
     </div>

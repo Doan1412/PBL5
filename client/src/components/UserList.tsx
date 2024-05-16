@@ -21,7 +21,7 @@ export default function UserList() {
         const response = await httpPrivate.get(`/room`, {
           signal: controller.signal,
         });
-        controller.abort();
+        // controller.abort();
         if (response.data.status === 200) {
           setListBoxMessage(response.data.data);
         } else {

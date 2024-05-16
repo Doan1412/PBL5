@@ -107,12 +107,12 @@ export default function HeaderProfile({ data, isFetching }: LinkProfile) {
   const handleFriendButtonClick = async () => {
     try {
       const response = await httpPrivate.post(
-        `/friend/send_friend_request/${data?.data?.id}`,
-        {
-          signal: controller.signal,
-        }
+        `/friend/send_friend_request/${data?.data?.id}`
+        // {
+        //   signal: controller.signal,
+        // }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         setIsWaitingConfirmation(true);
         setLoading(false);

@@ -49,7 +49,7 @@ export default function Friend() {
           signal: controller.signal,
         }
       );
-      controller.abort();
+      // controller.abort();
       if (response.data.status === 200) {
         const postsData = response.data;
         setNearbyFriend(postsData.data);
@@ -95,7 +95,7 @@ export default function Friend() {
           //   },
           // }
         );
-        // controller.abort();
+        // // controller.abort();
         if (response.data.status === 200) {
           const postsData = response.data;
           console.log(postsData);
