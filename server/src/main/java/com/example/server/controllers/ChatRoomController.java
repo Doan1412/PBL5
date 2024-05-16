@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +32,16 @@ public class ChatRoomController {
         try {
             Object data = service.addMemberToChatRoom(room_id, user_id);
             return Respond.success(200,"I001",data);
+        }
+        catch (Exception e){
+            return Respond.fail(500,"E001",e.getMessage());
+        }
+    }
+    @DeleteMapping("/out")
+    public ResponseEntity<Object> outChatRoom(@RequestParam String room_id, @AuthenticationPrincipal Account acc) {
+        try {
+            service.removeMemberFromChatRoom(room_id, acc.getId());
+            return Respond.success(200,"I001","");
         }
         catch (Exception e){
             return Respond.fail(500,"E001",e.getMessage());
