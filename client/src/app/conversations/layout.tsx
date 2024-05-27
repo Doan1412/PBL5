@@ -8,6 +8,7 @@ import { failPopUp } from "../hooks/features/popup.slice";
 import { useGetUserInfoQuery } from "../hooks/services/user_info.service";
 import { getLocalStorage } from "../actions/localStorage_State";
 import { StompClientProvider } from "./useContextStorm";
+import { ChatProvider } from "../context/ListBoxMessageContext";
 
 var stompClient: any = null;
 export default function ConversationsLayout({
@@ -75,12 +76,14 @@ export default function ConversationsLayout({
 
   return (
     <StompClientProvider>
-      <SidebarMess>
-        <div className="h-full bg-white">
-          <ConversationsList/>
-          {children}
-        </div>
-      </SidebarMess>
+      <ChatProvider>
+        <SidebarMess>
+          <div className="h-full bg-white">
+            <ConversationsList />
+            {children}
+          </div>
+        </SidebarMess>
+      </ChatProvider>
     </StompClientProvider>
   );
 }
