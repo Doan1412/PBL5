@@ -20,6 +20,8 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Checkbox,
+  CheckboxGroup,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -29,7 +31,9 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  ModalFooter,
   ModalHeader,
+  RadioGroup,
   Textarea,
   User,
   useDisclosure,
@@ -58,12 +62,7 @@ import { CldUploadButton } from "next-cloudinary";
 import { IoMdImages } from "react-icons/io";
 import ReactComment from "../ReactComment/ReactComment";
 import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
-
-interface UserData {
-  profilePic: string;
-  name: string;
-  postImg: string;
-}
+import { CustomRadio } from "../CustomRadio";
 
 interface PostProps {
   postData: PostType;
@@ -82,6 +81,11 @@ const Post: React.FC<PostProps> = ({
   hiddenComment,
 }: PostProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isReportPost,
+    onOpen: onOpenReport,
+    onOpenChange: onOpenChangeReport,
+  } = useDisclosure();
   const [text, setText] = useState<string>();
   const [showComment, setShowComment] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
@@ -94,6 +98,53 @@ const Post: React.FC<PostProps> = ({
   const [listCmt, setListCmt] = useState<CommentType[]>([]);
   const [currentCmt, setCurrentCmt] = useState<CommentType | null>(null);
   const [imagePost, setImagePost] = useState<PostAttachment[]>([]);
+  const [selectedRadio, setSelectedRadio] = useState<string>("");
+
+  const handleRadioChange = (value: string) => {
+    setSelectedRadio(value);
+  };
+
+  const listReport = [
+    {
+      title: "Bạo lực",
+      color: "success",
+    },
+    {
+      title: "Ảnh khỏa thân",
+      color: "danger",
+    },
+
+    {
+      title: "Spam",
+      color: "default",
+    },
+
+    {
+      title: "Ngôn từ gây thù ghét",
+      color: "primary",
+    },
+
+    {
+      title: "Chất cấm, chất gây nghiện",
+      color: "secondary",
+    },
+    {
+      title: "Khủng bố",
+      color: "warning",
+    },
+    {
+      title: "Thông tin sai sự thật",
+      color: "danger",
+    },
+    {
+      title: "Tự tử hoặc gây thương tích",
+      color: "secondary",
+    },
+    {
+      title: "Quấy rối",
+      color: "warning",
+    },
+  ];
 
   const {
     isOpen: isShareModalOpen,
@@ -144,7 +195,7 @@ const Post: React.FC<PostProps> = ({
         `/post/${findIdComment(listCmt)}`,
         {
           content: currentCmt?.content,
-        },
+        }
         // {
         //   signal: controller.signal,
         // }
@@ -240,7 +291,7 @@ const Post: React.FC<PostProps> = ({
     // unlike post
     try {
       const response = await httpPrivate.post(
-        `/post/${postData?.id}/unlike`,
+        `/post/${postData?.id}/unlike`
         // {
         //   signal: controller.signal,
         // }
@@ -332,7 +383,7 @@ const Post: React.FC<PostProps> = ({
         `/post/${postData?.id}/share?caption="${encodeURIComponent(
           text as string
         )}"`,
-        null,
+        null
         // {
         //   signal: controller.signal,
         // }
@@ -351,6 +402,43 @@ const Post: React.FC<PostProps> = ({
     }
   };
 
+  const handleReportPost = async () => {
+    const token = getLocalStorage()?.token;
+    if (!token) return;
+    try {
+      const response = await httpPrivate.post(
+        `/report/reportPost`,
+        {
+          postId: postData?.id,
+          reason: selectedRadio,
+        }
+
+        // {
+        //   signal: controller.signal,
+        // }
+      );
+      // controller.abort();
+      if (response.data.status === 200) {
+        // setPosts((prevPosts) => [...prevPosts, response.data.data]);
+        dispatch(
+          successPopUp(
+            "Báo cáo bài thành công! Cảm ơn bạn đã chung tay vì một cộng đồng lành mạnh 😘"
+          )
+        );
+      } else {
+        dispatch(
+          failPopUp(
+            "Error:" +
+              response.data.message +
+              "Báo cáo bài viết không thành công! Xin vui lòng thử lại 😢"
+          )
+        );
+      }
+    } catch (error) {
+      // console.error("Error:", error);
+    }
+  };
+
   var settings = {
     dots: true,
     infinite: true,
@@ -358,6 +446,8 @@ const Post: React.FC<PostProps> = ({
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+
+  console.log(selectedRadio);
 
   return (
     <Widget>
@@ -415,13 +505,77 @@ const Post: React.FC<PostProps> = ({
                 </DropdownMenu>
               ) : (
                 <DropdownMenu aria-label="Example with disabled actions">
-                  <DropdownItem key="report">Báo cáo</DropdownItem>
+                  <DropdownItem key="report" onClick={onOpenReport}>
+                    Báo cáo
+                  </DropdownItem>
                 </DropdownMenu>
               )}
             </Dropdown>
-            {/* <div className="option ">
-              <FaEllipsisH />
-            </div> */}
+            <Modal
+              isOpen={isReportPost}
+              onOpenChange={onOpenChangeReport}
+              isDismissable={false}
+              isKeyboardDismissDisabled={true}
+            >
+              <ModalContent>
+                {(onClose) => (
+                  <>
+                    <ModalHeader className="flex flex-col gap-1">
+                      Báo cáo
+                    </ModalHeader>
+                    <ModalBody>
+                      <p>
+                        Nếu bạn nhận thấy ai đó đang gặp nguy hiểm, đừng chần
+                        chừ mà hãy tìm ngay sự giúp đỡ trước khi báo cáo với
+                        Return
+                      </p>
+                      <div>
+                        <div className="flex flex-col gap-1 w-full">
+                          <RadioGroup
+                            classNames={{
+                              base: "w-full",
+                            }}
+                          >
+                            {listReport.map((item, index) => (
+                              <CustomRadio
+                                key={index}
+                                title={item.title}
+                                onChange={() => handleRadioChange(item.title)}
+                                statusColor={
+                                  item.color as
+                                    | "success"
+                                    | "danger"
+                                    | "default"
+                                    | "primary"
+                                    | "secondary"
+                                    | "warning"
+                                    | undefined
+                                }
+                                // checked={selectedRadio === item.title} // Đánh dấu radio nếu nó được chọn
+                              />
+                            ))}
+                          </RadioGroup>
+                        </div>
+                      </div>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="danger" variant="light" onPress={onClose}>
+                        Close
+                      </Button>
+                      <Button
+                        color="primary"
+                        onClick={() => {
+                          handleReportPost();
+                          onClose();
+                        }}
+                      >
+                        Report
+                      </Button>
+                    </ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
           </div>
         </div>
         <div className="feeling">

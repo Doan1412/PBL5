@@ -27,6 +27,7 @@ import { IoCreateOutline } from "react-icons/io5";
 import { useListFriend } from "@/app/actions/custom/useListFriend";
 import { getLocalStorage } from "@/app/actions/localStorage_State";
 import Widget from "@/app/widget";
+import { useChatContext } from "@/app/context/ListBoxMessageContext";
 
 export default function ConversationsList() {
   const httpPrivate = useHttp();
@@ -36,31 +37,33 @@ export default function ConversationsList() {
   const { isOpen: isOpenCreateGroup, onOpen, onOpenChange } = useDisclosure();
 
   const { conversationId, isOpen } = useConversation();
-  const [listBoxMessage, setListBoxMessage] = useState<MessageBoxType[]>([]);
+  // const [listBoxMessage, setListBoxMessage] = useState<MessageBoxType[]>([]);
   const [friends, setFiends] = useState<ListFriendType[]>([]);
   const [loading, setLoading] = useState(true);
   const params = useSearchParams();
   const [selectedFriends, setSelectedFriends] = useState<string>();
   const [nameGroup, setNameGroup] = useState<string>("");
 
+  const { listBoxMessage, setListBoxMessage } = useChatContext();
+
   useListFriend(setFiends, setLoading, getLocalStorage()?.user_id as string);
 
-  useEffect(() => {
-    async function getListBoxChat() {
-      try {
-        const response = await httpPrivate.get(`/room`);
-        // controller.abort();
-        if (response.data.status === 200) {
-          setListBoxMessage(response.data.data);
-        } else {
-          dispatch(failPopUp(response.data.message));
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    }
-    getListBoxChat();
-  }, [controller, dispatch, httpPrivate]);
+  // useEffect(() => {
+  //   async function getListBoxChat() {
+  //     try {
+  //       const response = await httpPrivate.get(`/room`);
+  //       // controller.abort();
+  //       if (response.data.status === 200) {
+  //         setListBoxMessage(response.data.data);
+  //       } else {
+  //         dispatch(failPopUp(response.data.message));
+  //       }
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   }
+  //   getListBoxChat();
+  // }, [controller, dispatch, httpPrivate]);
 
   const HandleAddMember = async () => {
     const token = getLocalStorage()?.token;
@@ -219,6 +222,7 @@ export default function ConversationsList() {
                             color="primary"
                             onClick={() => {
                               HandleAddMember();
+                              setNameGroup("")
                               onClose();
                             }}
                           >

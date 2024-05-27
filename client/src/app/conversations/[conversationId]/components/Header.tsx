@@ -1,6 +1,7 @@
 "use client";
 import { useListFriend } from "@/app/actions/custom/useListFriend";
 import { getLocalStorage } from "@/app/actions/localStorage_State";
+import { useChatContext } from "@/app/context/ListBoxMessageContext";
 import useHttp from "@/app/hooks/customs/useAxiosPrivate";
 import { failPopUp, successPopUp } from "@/app/hooks/features/popup.slice";
 import { useGetUserInfoQuery } from "@/app/hooks/services/user_info.service";
@@ -30,7 +31,9 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
+import { HiLogout } from "react-icons/hi";
 import { HiChevronLeft, HiEllipsisHorizontal } from "react-icons/hi2";
+import { IoIosLogOut } from "react-icons/io";
 import { IoCreateOutline, IoPersonAddSharp } from "react-icons/io5";
 
 interface HeaderProps {
@@ -38,7 +41,11 @@ interface HeaderProps {
 }
 
 export default function Header({ conversationId }: HeaderProps) {
-  const { isOpen: isOpenCreateGroup, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isOpenCreateGroup,
+    onOpen: onOpenCreateGroup,
+    onOpenChange: onChangeCreateGroup,
+  } = useDisclosure();
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
   const router = useRouter();
@@ -51,12 +58,15 @@ export default function Header({ conversationId }: HeaderProps) {
   const [friends, setFiends] = useState<ListFriendType[]>([]);
   const [selectedFriends, setSelectedFriends] = useState<string>();
   const [loading, setLoading] = useState(true);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const { data, isFetching } = useGetUserInfoQuery(
     getLocalStorage()?.user_id as string
   );
 
   useListFriend(setFiends, setLoading, getLocalStorage()?.user_id as string);
+
+  const { listBoxMessage, setListBoxMessage } = useChatContext();
 
   useEffect(() => {
     async function getListBoxChat() {
@@ -131,6 +141,35 @@ export default function Header({ conversationId }: HeaderProps) {
     }
   };
 
+  const HandleLogout = async () => {
+    const token = getLocalStorage()?.token;
+
+    if (!token) return;
+    try {
+      const userId = getLocalStorage()?.user_id;
+
+      const response = await httpPrivate.delete(
+        `room/out?room_id=${conversationId}`
+      );
+
+      if (response.data.status === 200) {
+        console.log(response.data.data);
+        setListBoxMessage((prev) =>
+          prev.filter((message) => message.id !== conversationId)
+        );
+        dispatch(successPopUp("Bạn đã rời khỏi cuộc trò chuyện!"));
+      } else {
+        dispatch(
+          failPopUp(
+            `Error: ${response.data.message} Bạn không thể rời khỏi cuộc trò chuyện! 😢`
+          )
+        );
+      }
+    } catch (error) {
+      // console.error("Error:", error);
+    }
+  };
+
   return (
     <div className="bg-white w-full flex border-b-[1px] sm:px-4 py-3 px-4 lg:px-6 justify-between items-center shadow-sm">
       <div className="flex gap-3 items-center">
@@ -164,97 +203,141 @@ export default function Header({ conversationId }: HeaderProps) {
           </div>
         </div>
       </div>
-      <button onClick={onOpen}>
-        <IoPersonAddSharp
-          size={20}
-          className="cursor-pointer hover:text-sky-600 transition"
-        />
-      </button>
-      <Modal
-        isOpen={isOpenCreateGroup}
-        onOpenChange={onOpenChange}
-        placement="top-center"
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex justify-center gap-1">
-                <div className="flex items-center">
-                  <IoCreateOutline />
-                </div>
-                Thêm thành viên
-              </ModalHeader>
-              <ModalBody>
-                <Select
-                  items={friends}
-                  label="Assigned to"
-                  placeholder="Select a user"
-                  labelPlacement="outside"
-                  // value={selectedFriends.map((friend) => friend.id)}
-                  onChange={(event) => {
-                    setSelectedFriends(event.target.value);
-                  }}
-                  classNames={{
-                    base: "w-full",
-                    trigger: "h-12",
-                  }}
-                  renderValue={(items: SelectedItems<ListFriendType>) => {
-                    return items.map((item) => (
-                      <div key={item.key} className="flex items-center gap-2">
-                        <Avatar
-                          alt="avatar"
-                          className="flex-shrink-0"
-                          size="sm"
-                          src={item.data?.avatar_url}
-                        />
-                        <div className="flex flex-col">
-                          <span>{item.data?.fullname}</span>
-                          <span className="text-default-500 text-tiny">
-                            ({item.data?.username})
-                          </span>
+      <div>
+        <button onClick={onOpenCreateGroup}>
+          <IoPersonAddSharp
+            size={20}
+            className="cursor-pointer hover:text-sky-600 transition"
+          />
+        </button>
+        <Modal
+          isOpen={isOpenCreateGroup}
+          onOpenChange={onChangeCreateGroup}
+          placement="top-center"
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex justify-center gap-1">
+                  <div className="flex items-center">
+                    <IoCreateOutline />
+                  </div>
+                  Thêm thành viên
+                </ModalHeader>
+                <ModalBody>
+                  <Select
+                    items={friends}
+                    label="Assigned to"
+                    placeholder="Select a user"
+                    labelPlacement="outside"
+                    // value={selectedFriends.map((friend) => friend.id)}
+                    onChange={(event) => {
+                      setSelectedFriends(event.target.value);
+                    }}
+                    classNames={{
+                      base: "w-full",
+                      trigger: "h-12",
+                    }}
+                    renderValue={(items: SelectedItems<ListFriendType>) => {
+                      return items.map((item) => (
+                        <div key={item.key} className="flex items-center gap-2">
+                          <Avatar
+                            alt="avatar"
+                            className="flex-shrink-0"
+                            size="sm"
+                            src={item.data?.avatar_url}
+                          />
+                          <div className="flex flex-col">
+                            <span>{item.data?.fullname}</span>
+                            <span className="text-default-500 text-tiny">
+                              ({item.data?.username})
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    ));
-                  }}
-                >
-                  {(user) => (
-                    <SelectItem key={user.id} textValue={user.fullname}>
-                      <div className="flex gap-2 items-center">
-                        <Avatar
-                          alt="avatar"
-                          className="flex-shrink-0"
-                          size="sm"
-                          src={user.avatar_url}
-                        />
-                        <div className="flex flex-col">
-                          <span className="text-small">{user.fullname}</span>
-                          <span className="text-tiny text-default-400">
-                            {user.username}
-                          </span>
+                      ));
+                    }}
+                  >
+                    {(user) => (
+                      <SelectItem key={user.id} textValue={user.fullname}>
+                        <div className="flex gap-2 items-center">
+                          <Avatar
+                            alt="avatar"
+                            className="flex-shrink-0"
+                            size="sm"
+                            src={user.avatar_url}
+                          />
+                          <div className="flex flex-col">
+                            <span className="text-small">{user.fullname}</span>
+                            <span className="text-tiny text-default-400">
+                              {user.username}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    </SelectItem>
-                  )}
-                </Select>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="flat" onPress={onClose}>
-                  Cancel
-                </Button>
-                <Button
-                  color="primary"
-                  onClick={() => {
-                    HandleAddMember();
-                    onClose();
-                  }}
-                >
-                  Thêm
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+                      </SelectItem>
+                    )}
+                  </Select>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="flat" onPress={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      HandleAddMember();
+                      onClose();
+                    }}
+                  >
+                    Thêm
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+        <button className="ml-4" onClick={onOpen}>
+          <HiLogout
+            size={20}
+            className="cursor-pointer hover:text-sky-600 transition"
+          />
+        </button>
+        <Modal
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+          isDismissable={false}
+          isKeyboardDismissDisabled={true}
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  Bạn có muốn rời khỏi cuộc trò chuyện nhóm không?
+                </ModalHeader>
+                <ModalBody>
+                  <p>
+                    Bạn sẽ không còn nhận được tin nhắn từ chủ đề này nữa và
+                    những người tham gia khác sẽ thấy rằng bạn đã rời đi.
+                  </p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      HandleLogout();
+                      onClose();
+                    }}
+                  >
+                    Rời khỏi cuộc trò chuyện
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      </div>
     </div>
   );
 }
