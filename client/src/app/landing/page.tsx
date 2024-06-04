@@ -25,13 +25,15 @@ export default function LandingPage() {
   useEffect(() => {
     if (animationComplete) {
       const redirectTimeout = setTimeout(() => {
-        router.push("/home");
+        const role = localStorage.getItem("role");
+        if (role === "ADMIN") {
+          router.push("/admin");
+        } else {
+          router.push("/home");
+        }
       }, 3500);
-
       setRedirectTimeout(redirectTimeout);
     }
-
-    return () => clearTimeout(redirectTimeout);
   }, [animationComplete, router]);
 
   return (

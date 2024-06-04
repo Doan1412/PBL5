@@ -512,6 +512,7 @@ const Post: React.FC<PostProps> = ({
               )}
             </Dropdown>
             <Modal
+              size="4xl"
               isOpen={isReportPost}
               onOpenChange={onOpenChangeReport}
               isDismissable={false}
@@ -520,16 +521,16 @@ const Post: React.FC<PostProps> = ({
               <ModalContent>
                 {(onClose) => (
                   <>
-                    <ModalHeader className="flex flex-col gap-1">
+                    <ModalHeader className="flex flex-col gap-1 mt-3">
                       Báo cáo
                     </ModalHeader>
                     <ModalBody>
-                      <p>
+                      <p className="text-gray-600">
                         Nếu bạn nhận thấy ai đó đang gặp nguy hiểm, đừng chần
                         chừ mà hãy tìm ngay sự giúp đỡ trước khi báo cáo với
                         Return
                       </p>
-                      <div>
+                      <div className="w-full">
                         <div className="flex flex-col gap-1 w-full">
                           <RadioGroup
                             classNames={{
@@ -959,7 +960,7 @@ const Post: React.FC<PostProps> = ({
                                     }}
                                     uploadPreset="s2lo0hgq"
                                   >
-                                    CldUploadButton
+                               
                                     <IoMdImages
                                       size={25}
                                       className="text-green-700 cursor-pointer"
@@ -1041,8 +1042,8 @@ const Post: React.FC<PostProps> = ({
                   <div className="flex items-center">
                     <Avatar
                       src={
-                        postData?.avatarUrl != ""
-                          ? postData.avatarUrl
+                        data?.data?.profile?.avatar_url != ""
+                          ? data?.data?.profile?.avatar_url
                           : avatarDefault.src
                       }
                       size="sm"
