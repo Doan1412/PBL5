@@ -227,11 +227,13 @@ public class AuthenticationService {
     private ResponseEntity<Object> createAuthRes(Account acc) {
         var jwtToken = jwtService.generateToken(acc);
         var refreshToken = jwtService.generateRefreshToken(acc);
+        var role = acc.getRole();
         revokeAllUserTokens(acc);
         saveUserToken(acc, jwtToken);
         Map<String, Object> data = new HashMap<String, Object>();
         data.put("access_token",jwtToken);
         data.put("refresh_token",refreshToken);
+        data.put("role",role);
         String user_id = repository.findUserIdByAccountId(acc.getId());
         data.put("user_id",user_id);
         return Respond.success(200,"I001",data);
