@@ -12,6 +12,9 @@ import {
   Button,
   DropdownMenu,
   DropdownItem,
+  ModalHeader,
+  RadioGroup,
+  ModalFooter,
 } from "@nextui-org/react";
 import React, { useEffect, useMemo, useState } from "react";
 import avatarDefault from "@/static/images/avatarDefault.jpg";
@@ -21,6 +24,7 @@ import { getLocalStorage } from "@/app/actions/localStorage_State";
 import { failPopUp, successPopUp } from "@/app/hooks/features/popup.slice";
 import useHttp from "@/app/hooks/customs/useAxiosPrivate";
 import { useAppDispatch } from "@/app/hooks/store";
+import { CustomRadio } from "./CustomRadio";
 
 interface PropsCommentForm {
   fullName?: string;
@@ -55,11 +59,63 @@ export default function CommentForm({
   currentCmt,
   setCurrentCmt,
 }: PropsCommentForm) {
+  const {
+    isOpen: isReportPost,
+    onOpen: onOpenReport,
+    onOpenChange: onOpenChangeReport,
+  } = useDisclosure();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [id_userAuth, setId_UserAuth] = useState<string>();
   const httpPrivate = useHttp();
   const controller = useMemo(() => new AbortController(), []);
   const dispatch = useAppDispatch();
+  const [selectedRadio, setSelectedRadio] = useState<string>("");
+
+  const handleRadioChange = (value: string) => {
+    setSelectedRadio(value);
+  };
+
+  const listReport = [
+    {
+      title: "Bạo lực",
+      color: "success",
+    },
+    {
+      title: "Ảnh khỏa thân",
+      color: "danger",
+    },
+
+    {
+      title: "Spam",
+      color: "default",
+    },
+
+    {
+      title: "Ngôn từ gây thù ghét",
+      color: "primary",
+    },
+
+    {
+      title: "Chất cấm, chất gây nghiện",
+      color: "secondary",
+    },
+    {
+      title: "Khủng bố",
+      color: "warning",
+    },
+    {
+      title: "Thông tin sai sự thật",
+      color: "danger",
+    },
+    {
+      title: "Tự tử hoặc gây thương tích",
+      color: "secondary",
+    },
+    {
+      title: "Quấy rối",
+      color: "warning",
+    },
+  ];
 
   useEffect(() => {
     setId_UserAuth(getLocalStorage()?.user_id as string);
@@ -90,6 +146,43 @@ export default function CommentForm({
         dispatch(
           failPopUp(
             "Error:" + response.data.message + "Xóa comment thất bại! 😢"
+          )
+        );
+      }
+    } catch (error) {
+      // console.error("Error:", error);
+    }
+  };
+
+  const handleReportPost = async () => {
+    const token = getLocalStorage()?.token;
+    if (!token) return;
+    try {
+      const response = await httpPrivate.post(
+        `/report/reportPost`,
+        {
+          postId: id_Cmt,
+          reason: selectedRadio,
+        }
+
+        // {
+        //   signal: controller.signal,
+        // }
+      );
+      // controller.abort();
+      if (response.data.status === 200) {
+        // setPosts((prevPosts) => [...prevPosts, response.data.data]);
+        dispatch(
+          successPopUp(
+            "Báo cáo bài thành công! Cảm ơn bạn đã chung tay vì một cộng đồng lành mạnh 😘"
+          )
+        );
+      } else {
+        dispatch(
+          failPopUp(
+            "Error:" +
+              response.data.message +
+              "Báo cáo bài viết không thành công! Xin vui lòng thử lại 😢"
           )
         );
       }
@@ -193,10 +286,84 @@ export default function CommentForm({
                           </DropdownMenu>
                         ) : (
                           <DropdownMenu aria-label="Example with disabled actions">
-                            <DropdownItem key="report">Báo cáo</DropdownItem>
+                            <DropdownItem key="report" onClick={onOpenReport}>
+                              Báo cáo
+                            </DropdownItem>
                           </DropdownMenu>
                         )}
                       </Dropdown>
+                      <Modal
+                        size="4xl"
+                        isOpen={isReportPost}
+                        onOpenChange={onOpenChangeReport}
+                        isDismissable={false}
+                        isKeyboardDismissDisabled={true}
+                      >
+                        <ModalContent>
+                          {(onClose) => (
+                            <>
+                              <ModalHeader className="flex flex-col gap-1 mt-3">
+                                Báo cáo
+                              </ModalHeader>
+                              <ModalBody>
+                                <p className="text-gray-600">
+                                  Nếu bạn nhận thấy ai đó đang gặp nguy hiểm,
+                                  đừng chần chừ mà hãy tìm ngay sự giúp đỡ trước
+                                  khi báo cáo với Return
+                                </p>
+                                <div className="w-full">
+                                  <div className="flex flex-col gap-1 w-full">
+                                    <RadioGroup
+                                      classNames={{
+                                        base: "w-full",
+                                      }}
+                                    >
+                                      {listReport.map((item, index) => (
+                                        <CustomRadio
+                                          key={index}
+                                          title={item.title}
+                                          onChange={() =>
+                                            handleRadioChange(item.title)
+                                          }
+                                          statusColor={
+                                            item.color as
+                                              | "success"
+                                              | "danger"
+                                              | "default"
+                                              | "primary"
+                                              | "secondary"
+                                              | "warning"
+                                              | undefined
+                                          }
+                                          // checked={selectedRadio === item.title} // Đánh dấu radio nếu nó được chọn
+                                        />
+                                      ))}
+                                    </RadioGroup>
+                                  </div>
+                                </div>
+                              </ModalBody>
+                              <ModalFooter>
+                                <Button
+                                  color="danger"
+                                  variant="light"
+                                  onPress={onClose}
+                                >
+                                  Close
+                                </Button>
+                                <Button
+                                  color="primary"
+                                  onClick={() => {
+                                    handleReportPost();
+                                    onClose();
+                                  }}
+                                >
+                                  Report
+                                </Button>
+                              </ModalFooter>
+                            </>
+                          )}
+                        </ModalContent>
+                      </Modal>
                     </div>
                   </div>
                   <p className="text-base">{content}</p>

@@ -70,10 +70,11 @@ export default function LoginPage() {
         // }, 20 * 1000);
         localStorage.setItem("refresh_token", response.data.data.refresh_token);
         localStorage.setItem("user_id", response.data.data.user_id);
+        localStorage.setItem("role", response.data.data.role);
         // setInterval(async () => {
         //   await refresh(getLocalStorage()?.refresh_token as string);
         // }, 15 * 1000);
-        if (response.data.user_id === "") router.push("/admin");
+        if (response.data?.role === "ADMIN") router.push("/admin");
         else {
           setTimeout(() => {
             dispatch(resetPopUp());
