@@ -80,9 +80,9 @@ public class PostController {
         }
     }
     @GetMapping("/{post_id}")
-    public ResponseEntity<Object> get_by_id(@PathVariable String post_id){
+    public ResponseEntity<Object> get_by_id(@PathVariable String post_id, @AuthenticationPrincipal Account account){
         try {
-            Post data = service.get_by_id(post_id);
+            PostDTO data = service.get_by_id(post_id,account.getId());
             return Respond.success(200,"I001",data);
         }
         catch (Exception e){

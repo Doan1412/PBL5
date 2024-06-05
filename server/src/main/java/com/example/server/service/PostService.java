@@ -126,9 +126,13 @@ public class PostService {
         sharePostRepository.save(sharedPost);
         repository.save(originalPost);
     }
-    public Post get_by_id(String post_id){
+    public PostDTO get_by_id(String post_id, String account_id) {
+        User user = userRepository.findByAccount_Id(account_id).orElseThrow();
         Post post = repository.findById(post_id).orElseThrow(() -> new NotFoundException("Post not found"));
-        return post;
+        PostDTO dto = new PostDTO();
+        int share_count = repository.getShareCount(post_id);
+        dto.loadFromEntity(post,share_count,user);
+        return dto;
     }
     public void delete_post(String post_id){
         attachmentRepository.deleteByPostId(post_id);
