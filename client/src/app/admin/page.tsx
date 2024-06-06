@@ -90,7 +90,6 @@ export default function Admin() {
   }, [dispatch, controller, httpPrivate]);
 
   const getPostData_Report = async (id: string) => {
-    // getComment post
     if (!localStorage.getItem("access_token")) return;
     const token = localStorage.getItem("access_token")?.toString();
     try {
@@ -137,10 +136,10 @@ export default function Admin() {
       const response = await httpPrivate.delete(`/post/${id}`);
       // controller.abort();
       if (response.data.status == 200) {
-        setReports((prevPosts) => {
-          if(!prevPosts) return [];
-          return prevPosts.filter((post) => post.id != id);
-        });
+        // setReports((prevPosts) => {
+        //   if (!prevPosts) return [];
+        //   return prevPosts.filter((post) => post.id != id);
+        // });
         dispatch(successPopUp("Xóa bài thành công! 😘"));
       } else {
         dispatch(
@@ -403,227 +402,235 @@ export default function Admin() {
                             <tr className="hover:bg-gray-50">
                               <th className="flex gap-3 px-6 py-4 font-normal text-gray-900">
                                 <div className="text-sm">
-                                  <div
+                                  {/* <div
                                     onClick={() => {
-                                      getPostData_Report(report?.id);
+                                      getPostData_Report(report?.post?.id as string);
+                                    }}
+                                  > */}
+                                  <div
+                                    className="font-medium text-blue-600 cursor-pointer"
+                                    onClick={() => {
+                                      getPostData_Report(
+                                        report?.post?.id as string
+                                      );
+
+                                      {
+                                        report?.post?.id != undefined
+                                          ? handleOpenShareModal()
+                                          : dispatch(
+                                              successPopUp(
+                                                "Bài viết không còn tồn tại :("
+                                              )
+                                            );
+                                      }
                                     }}
                                   >
-                                    <div
-                                      className="font-medium text-blue-600 cursor-pointer"
-                                      onClick={handleOpenShareModal}
-                                    >
-                                      {report?.id}
-                                    </div>
-                                    <Modal
-                                      backdrop="opaque"
-                                      isOpen={isShareModalOpen}
-                                      onClose={onCloseShareModal}
-                                      onOpenChange={onOpenChange}
-                                      motionProps={{
-                                        variants: {
-                                          enter: {
-                                            y: 0,
-                                            opacity: 1,
-                                            transition: {
-                                              duration: 0.3,
-                                              ease: "easeOut",
-                                            },
-                                          },
-                                          exit: {
-                                            y: -20,
-                                            opacity: 0,
-                                            transition: {
-                                              duration: 0.2,
-                                              ease: "easeIn",
-                                            },
+                                    {report?.id}
+                                  </div>
+                                  <Modal
+                                    backdrop="transparent"
+                                    isOpen={isShareModalOpen}
+                                    onClose={onCloseShareModal}
+                                    onOpenChange={onOpenChange}
+                                    motionProps={{
+                                      variants: {
+                                        enter: {
+                                          y: 0,
+                                          opacity: 1,
+                                          transition: {
+                                            duration: 0.3,
+                                            ease: "easeOut",
                                           },
                                         },
-                                      }}
-                                    >
-                                      <ModalContent>
-                                        {(onClose) => (
-                                          <>
-                                            <div className="flex justify-center">
-                                              <ModalHeader className="flex gap-1">
-                                                Bài viết báo cáo
-                                              </ModalHeader>
-                                            </div>
-                                            <ModalBody className="flex justify-start">
-                                              <div className="flex">
-                                                <div className="postWrapper w-full dark:bg-[#242526]">
-                                                  <div className="header">
-                                                    <div className="left">
-                                                      <Image
-                                                        src={
-                                                          postData?.avatarUrl !=
-                                                          ""
-                                                            ? postData?.avatarUrl
-                                                            : avatarDefault.src
-                                                        }
-                                                        alt=""
-                                                        className="profileImg"
+                                        exit: {
+                                          y: -20,
+                                          opacity: 0,
+                                          transition: {
+                                            duration: 0.2,
+                                            ease: "easeIn",
+                                          },
+                                        },
+                                      },
+                                    }}
+                                  >
+                                    <ModalContent>
+                                      {(onClose) => (
+                                        <>
+                                          <div className="flex justify-center">
+                                            <ModalHeader className="flex gap-1">
+                                              Bài viết báo cáo
+                                            </ModalHeader>
+                                          </div>
+                                          <ModalBody className="flex justify-start">
+                                            <div className="flex">
+                                              <div className="postWrapper w-full dark:bg-[#242526]">
+                                                <div className="header">
+                                                  <div className="left">
+                                                    <Image
+                                                      src={
+                                                        postData?.avatarUrl !=
+                                                        ""
+                                                          ? postData?.avatarUrl
+                                                          : avatarDefault.src
+                                                      }
+                                                      alt=""
+                                                      className="profileImg"
+                                                      onClick={() =>
+                                                        router.push(
+                                                          `/profile?id_user=${postData?.userId}`
+                                                        )
+                                                      }
+                                                    />
+                                                    <div className="userDetails">
+                                                      <div
+                                                        className="name"
                                                         onClick={() =>
                                                           router.push(
                                                             `/profile?id_user=${postData?.userId}`
                                                           )
                                                         }
-                                                      />
-                                                      <div className="userDetails">
-                                                        <div
-                                                          className="name"
-                                                          onClick={() =>
-                                                            router.push(
-                                                              `/profile?id_user=${postData?.userId}`
-                                                            )
-                                                          }
-                                                        >
-                                                          {postData?.fullName}
-                                                        </div>
-                                                        <div className="feeling">
-                                                          @{postData?.username}
-                                                        </div>
-                                                        <div className="feeling">
-                                                          {postData?.created_at?.slice(
-                                                            0,
-                                                            10
-                                                          )}{" "}
-                                                          {postData?.created_at?.slice(
-                                                            11,
-                                                            19
-                                                          )}
-                                                        </div>
+                                                      >
+                                                        {postData?.fullName}
+                                                      </div>
+                                                      <div className="feeling">
+                                                        @{postData?.username}
+                                                      </div>
+                                                      <div className="feeling">
+                                                        {postData?.created_at?.slice(
+                                                          0,
+                                                          10
+                                                        )}{" "}
+                                                        {postData?.created_at?.slice(
+                                                          11,
+                                                          19
+                                                        )}
                                                       </div>
                                                     </div>
-                                                    <div className="right"></div>
                                                   </div>
-                                                  <div className="feeling">
-                                                    <p className="dark:text-white">
-                                                      {postData?.content}
-                                                    </p>
-                                                  </div>
+                                                  <div className="right"></div>
+                                                </div>
+                                                <div className="feeling">
+                                                  <p className="dark:text-white">
+                                                    {postData?.content}
+                                                  </p>
+                                                </div>
 
-                                                  <div>
-                                                    {postData?.attachments
-                                                      ?.length! > 1 ? (
-                                                      <Slider {...settings}>
-                                                        {postData?.attachments?.map(
-                                                          (items, index) => (
-                                                            console.log(items),
-                                                            (
-                                                              <div>
-                                                                <Image
-                                                                  key={index}
-                                                                  src={
-                                                                    items.url
-                                                                  }
-                                                                  alt=""
-                                                                  className="postImage"
-                                                                  onClick={
-                                                                    onOpen
-                                                                  }
-                                                                />
-                                                                <Modal
-                                                                  isOpen={
-                                                                    isOpen
-                                                                  }
-                                                                  onOpenChange={
-                                                                    onOpenChange
-                                                                  }
-                                                                  size="xl"
-                                                                >
-                                                                  <ModalContent>
-                                                                    {(
-                                                                      onClose
-                                                                    ) => (
-                                                                      <>
-                                                                        <ModalBody>
-                                                                          <Slider
-                                                                            {...settings}
-                                                                          >
-                                                                            {postData?.attachments?.map(
-                                                                              (
-                                                                                items,
-                                                                                index
-                                                                              ) => (
-                                                                                console.log(
-                                                                                  items
-                                                                                ),
-                                                                                (
-                                                                                  <div>
-                                                                                    <Image
-                                                                                      key={
-                                                                                        index
-                                                                                      }
-                                                                                      src={
-                                                                                        items.url
-                                                                                      }
-                                                                                      alt=""
-                                                                                      className="postImage"
-                                                                                      width={
-                                                                                        900
-                                                                                      }
-                                                                                    />
-                                                                                  </div>
-                                                                                )
-                                                                              )
-                                                                            )}
-                                                                          </Slider>
-                                                                        </ModalBody>
-                                                                      </>
-                                                                    )}
-                                                                  </ModalContent>
-                                                                </Modal>
-                                                              </div>
-                                                            )
-                                                          )
-                                                        )}
-                                                      </Slider>
-                                                    ) : (
-                                                      postData?.attachments?.map(
+                                                <div>
+                                                  {postData?.attachments
+                                                    ?.length! > 1 ? (
+                                                    <Slider {...settings}>
+                                                      {postData?.attachments?.map(
                                                         (items, index) => (
-                                                          <>
-                                                            <Image
-                                                              key={index}
-                                                              src={items.url}
-                                                              alt=""
-                                                              className="postImage"
-                                                              onClick={onOpen}
-                                                            />
-                                                            <Modal
-                                                              isOpen={isOpen}
-                                                              onOpenChange={
-                                                                onOpenChange
-                                                              }
-                                                              size="2xl"
-                                                            >
-                                                              <ModalContent>
-                                                                {(onClose) => (
-                                                                  <>
-                                                                    <ModalBody>
-                                                                      <Image
-                                                                        isZoomed
-                                                                        key={
-                                                                          index
-                                                                        }
-                                                                        src={
-                                                                          items.url
-                                                                        }
-                                                                        alt=""
-                                                                        className="postImage"
-                                                                      />
-                                                                    </ModalBody>
-                                                                  </>
-                                                                )}
-                                                              </ModalContent>
-                                                            </Modal>
-                                                          </>
+                                                          console.log(items),
+                                                          (
+                                                            <div>
+                                                              <Image
+                                                                key={index}
+                                                                src={items.url}
+                                                                alt=""
+                                                                className="postImage"
+                                                                onClick={onOpen}
+                                                              />
+                                                              <Modal
+                                                                isOpen={isOpen}
+                                                                onOpenChange={
+                                                                  onOpenChange
+                                                                }
+                                                                size="xl"
+                                                              >
+                                                                <ModalContent>
+                                                                  {(
+                                                                    onClose
+                                                                  ) => (
+                                                                    <>
+                                                                      <ModalBody>
+                                                                        <Slider
+                                                                          {...settings}
+                                                                        >
+                                                                          {postData?.attachments?.map(
+                                                                            (
+                                                                              items,
+                                                                              index
+                                                                            ) => (
+                                                                              console.log(
+                                                                                items
+                                                                              ),
+                                                                              (
+                                                                                <div>
+                                                                                  <Image
+                                                                                    key={
+                                                                                      index
+                                                                                    }
+                                                                                    src={
+                                                                                      items.url
+                                                                                    }
+                                                                                    alt=""
+                                                                                    className="postImage"
+                                                                                    width={
+                                                                                      900
+                                                                                    }
+                                                                                  />
+                                                                                </div>
+                                                                              )
+                                                                            )
+                                                                          )}
+                                                                        </Slider>
+                                                                      </ModalBody>
+                                                                    </>
+                                                                  )}
+                                                                </ModalContent>
+                                                              </Modal>
+                                                            </div>
+                                                          )
                                                         )
+                                                      )}
+                                                    </Slider>
+                                                  ) : (
+                                                    postData?.attachments?.map(
+                                                      (items, index) => (
+                                                        <>
+                                                          <Image
+                                                            key={index}
+                                                            src={items.url}
+                                                            alt=""
+                                                            className="postImage"
+                                                            onClick={onOpen}
+                                                          />
+                                                          <Modal
+                                                            isOpen={isOpen}
+                                                            onOpenChange={
+                                                              onOpenChange
+                                                            }
+                                                            size="2xl"
+                                                          >
+                                                            <ModalContent>
+                                                              {(onClose) => (
+                                                                <>
+                                                                  <ModalBody>
+                                                                    <Image
+                                                                      isZoomed
+                                                                      key={
+                                                                        index
+                                                                      }
+                                                                      src={
+                                                                        items.url
+                                                                      }
+                                                                      alt=""
+                                                                      className="postImage"
+                                                                    />
+                                                                  </ModalBody>
+                                                                </>
+                                                              )}
+                                                            </ModalContent>
+                                                          </Modal>
+                                                        </>
                                                       )
-                                                    )}
-                                                  </div>
+                                                    )
+                                                  )}
                                                 </div>
                                               </div>
-                                              {/* <Button
+                                            </div>
+                                            {/* <Button
                                             className="bg-[#377375] px-6 py-2 cursor-pointer rounded-full text-white hover:opacity-100 opacity-95 transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#377375] focus-within:ring-offset-2 mb-3"
                                             onClick={() => {
                                               handleSharePost();
@@ -633,33 +640,33 @@ export default function Admin() {
                                           >
                                             Post
                                           </Button> */}
-                                            </ModalBody>
-                                            <ModalFooter>
-                                              <Button
-                                                color="danger"
-                                                variant="light"
-                                                onPress={onClose}
-                                              >
-                                                Close
-                                              </Button>
-                                              <Button
-                                                color="primary"
-                                                onClick={() => {
-                                                  Ban_User(
-                                                    data?.data?.profile
-                                                      ?.id as string
-                                                  );
-                                                  onClose();
-                                                }}
-                                              >
-                                                Ban User
-                                              </Button>
-                                            </ModalFooter>
-                                          </>
-                                        )}
-                                      </ModalContent>
-                                    </Modal>
-                                  </div>
+                                          </ModalBody>
+                                          <ModalFooter>
+                                            <Button
+                                              color="danger"
+                                              variant="light"
+                                              onPress={onClose}
+                                            >
+                                              Close
+                                            </Button>
+                                            <Button
+                                              color="primary"
+                                              onClick={() => {
+                                                Ban_User(
+                                                  data?.data?.profile
+                                                    ?.id as string
+                                                );
+                                                onClose();
+                                              }}
+                                            >
+                                              Ban User
+                                            </Button>
+                                          </ModalFooter>
+                                        </>
+                                      )}
+                                    </ModalContent>
+                                  </Modal>
+                                  {/* </div> */}
                                   <div className="text-gray-400">
                                     {report?.post?.username}
                                   </div>
@@ -688,7 +695,12 @@ export default function Admin() {
                                 </div>
                               </td>
                               <td className="px-6 py-4">
-                                <div className="flex justify-center gap-4" onClick={() => {handleDeletePost(report?.id)}}>
+                                <div
+                                  className="flex justify-center gap-4"
+                                  onClick={() => {
+                                    handleDeletePost(report?.id);
+                                  }}
+                                >
                                   <a x-data="{ tooltip: 'Delete' }" href="#">
                                     <svg
                                       xmlns="http://www.w3.org/2000/svg"
